@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+{% block content %}
+<nav class="bg-transparent fixed top-0 right-10">
+    <div class="flex justify-between items-center h-16">
+        <div class="flex items-center px-4">
+            <a href="/" class="text-2xl font-bold text-blue-600">JobConnect</a>
+        </div>
+    </div>
+</nav>
+<div class="font-[sans-serif] bg-white md:h-screen">
+    <div class="grid md:grid-cols-2 items-center gap-8 h-full">
+        <div class="max-md:order-1 p-4 bg-gray-50 h-full">
+            <img src="https://readymadeui.com/signin-image.webp"
+                class="max-w-[80%] w-full h-full aspect-square object-contain block mx-auto" alt="login-image" />
+        </div>
+
+        <div class="flex items-center p-6 h-full w-full">
+            <form class="max-w-lg w-full mx-auto" method="POST">
+                {% csrf_token %}
+                <div class="mb-8">
+                    <h3 class="text-blue-500 text-2xl font-bold max-md:text-center">Create an account</h3>
+                </div>
+
+                <div>
+                    <label class="text-gray-800 text-xs block mb-2">Full Name</label>
+                    <div class="relative flex items-center">
+                        <input name="name" type="text" required
+                            class="w-full bg-transparent text-sm border-b border-gray-300 focus:border-blue-500 pl-2 pr-8 py-3 outline-none"
+                            placeholder="Enter name" />
+                    </div>
+                </div>
+
+                <!-- Username Field -->
+                <div class="mt-6">
+                    <label class="text-gray-800 text-xs block mb-2">Username</label>
+                    <div class="relative flex items-center">
+                        <input name="username" type="text" required
+                            class="w-full bg-transparent text-sm border-b border-gray-300 focus:border-blue-500 pl-2 pr-8 py-3 outline-none"
+                            placeholder="Enter username" />
+                    </div>
+                </div>
+
+                <div class="mt-6">
+                    <label class="text-gray-800 text-xs block mb-2">Email</label>
+                    <div class="relative flex items-center">
+                        <input name="email" type="email" required
+                            class="w-full bg-transparent text-sm border-b border-gray-300 focus:border-blue-500 pl-2 pr-8 py-3 outline-none"
+                            placeholder="Enter email" />
+                    </div>
+                </div>
+
+                <!-- Phone Number Field -->
+                <div class="mt-6">
+                    <label class="text-gray-800 text-xs block mb-2">Phone Number</label>
+                    <div class="relative flex items-center">
+                        <input name="phone_no" type="text"
+                            class="w-full bg-transparent text-sm border-b border-gray-300 focus:border-blue-500 pl-2 pr-8 py-3 outline-none"
+                            placeholder="Enter phone number" />
+                    </div>
+                </div>
+
+                <div class="mt-6">
+                    <label class="text-gray-800 text-xs block mb-2">Password</label>
+                    <div class="relative flex items-center">
+                        <input name="password" type="password" required
+                            class="w-full bg-transparent text-sm border-b border-gray-300 focus:border-blue-500 pl-2 pr-8 py-3 outline-none"
+                            placeholder="Enter password" />
+                    </div>
+                </div>
+
+                <!-- Role Selection Field -->
+                <div class="mt-6">
+                    <label class="text-gray-800 text-xs block mb-2">Role</label>
+                    <select name="role" required
+                        class="w-full bg-transparent text-sm border-b border-gray-300 focus:border-blue-500 pl-2 pr-8 py-3 outline-none">
+                        <option value="user" selected>User</option>
+                        <option value="admin">Admin</option>
+                        <option value="employee">Employee</option>
+                    </select>
+                </div>
+
+                <div class="flex items-center mt-6">
+                    <input id="remember-me" name="remember-me" type="checkbox" class="h-4 w-4 shrink-0 rounded" />
+                    <label for="remember-me" class="ml-3 block text-sm text-gray-800">
+                        I accept the <a href="javascript:void(0);"
+                            class="text-blue-500 font-semibold hover:underline ml-1">Terms and Conditions</a>
+                    </label>
+                </div>
+
+                <div class="mt-8">
+                    <button type="submit"
+                        class="w-full py-2.5 px-4 text-sm tracking-wider rounded bg-blue-600 hover:bg-blue-700 text-white focus:outline-none">
+                        Create an account
+                    </button>
+                    <p class="text-sm mt-6 text-gray-800">Already have an account? <a href="/accounts/login/"
+                            class="text-blue-500 font-semibold hover:underline ml-1">Login here</a></p>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock content %}

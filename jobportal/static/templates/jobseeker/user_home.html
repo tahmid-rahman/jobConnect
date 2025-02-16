@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% block content %}
+<section class="bg-blue-50 py-20">
+    <div class="max-w-7xl mx-auto px-4">
+        <div class="grid md:grid-cols-2 gap-8 items-center">
+            <div>
+                <h1 class="text-4xl md:text-5xl font-bold text-gray-800 mb-6">
+                    Find Your Next <span class="text-blue-600">Dream Job</span>
+                </h1>
+                <p class="text-lg text-gray-600 mb-8">
+                    Join thousands of companies and job seekers connecting through our platform
+                </p>
+                <button class="bg-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-700">
+                    Get Started
+                </button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="py-16">
+    <div class="max-w-7xl mx-auto px-4">
+        <h2 class="text-3xl font-bold text-center mb-12">Key Features</h2>
+        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <!-- Feature 1 -->
+            <div class="p-6 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-4">
+                    <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    </svg>
+                </div>
+                <h3 class="text-xl font-semibold mb-2">Smart Profile Builder</h3>
+                <p class="text-gray-600">Create professional profiles with resume builder and portfolio showcase</p>
+            </div>
+
+            <!-- Feature 2 -->
+            <div class="p-6 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-4">
+                    <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                </div>
+                <h3 class="text-xl font-semibold mb-2">Advanced Job Search</h3>
+                <p class="text-gray-600">Filter jobs by location, salary, experience level and job type</p>
+            </div>
+
+            <!-- Feature 3 -->
+            <div class="p-6 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-4">
+                    <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                    </svg>
+                </div>
+                <h3 class="text-xl font-semibold mb-2">Instant Job Alerts</h3>
+                <p class="text-gray-600">Get notified about relevant job openings matching your profile</p>
+            </div>
+
+            <!-- Feature 4 -->
+            <div class="p-6 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-4">
+                    <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                    </svg>
+                </div>
+                <h3 class="text-xl font-semibold mb-2">Salary Insights</h3>
+                <p class="text-gray-600">Compare salaries based on role, experience and location</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock content %}
+
+{% block footer %}
+{% endblock footer %}
