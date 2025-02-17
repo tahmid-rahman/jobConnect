@@ -17,10 +17,10 @@
 <body class="bg-gray-50 font-['Roboto'] leading-normal tracking-normal">
 
 	{% if messages %}
-	<div id="popup-messages" class="fixed top-4 left-1/2 transform -translate-x-1/2 space-y-4 z-50">
+	<div id="popup-messages"
+		class="fixed top-4 left-1/2 transform -translate-x-1/2 space-y-4 z-50 bg-blue-600 text-white rounded-2xl">
 		{% for message in messages %}
-		<div class="bg-{{ message.tags }}-100 border-l-4 border-{{ message.tags }}-500 text-{{ message.tags }}-700 p-4 rounded shadow-lg transition-opacity duration-300 opacity-0"
-			role="alert">
+		<div class="p-4 shadow-lg transition-opacity duration-300 opacity-0" role="alert">
 			<p>{{ message }}</p>
 		</div>
 		{% endfor %}

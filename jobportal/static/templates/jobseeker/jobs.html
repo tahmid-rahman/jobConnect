@@ -1,10 +1,3 @@
-{% extends 'base.html' %}
-
-{% block nav %}
-{% include 'components/main_nav.html' %}
-{% endblock nav %}
-{% block content %}
-
 <section class="py-12 bg-gray-50">
     <div class="max-w-7xl mx-auto px-4">
         <!-- Page Heading -->
@@ -59,11 +52,13 @@
 
         <!-- Job Listings -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {% for job in page_obj %}
+            <!-- Job Card 1 -->
+            {% for job in jobs %}
             <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
                 <div class="p-6">
                     <div class="flex items-center justify-between mb-4">
-                        <span class="text-sm text-gray-500 bg-green-100 px-2 py-1 rounded">{{ job.job_type }}</span>
+                        <span class="text-sm text-gray-500 bg-blue-100 px-2 py-1 rounded">{{ job.get_job_type_display
+                            }}</span>
                         <span class="text-sm text-gray-500">{{ job.posted_date|timesince }} ago</span>
                     </div>
                     <h3 class="text-xl font-semibold text-gray-800 mb-2">{{ job.title }}</h3>
@@ -71,47 +66,57 @@
                     <p class="text-gray-600 mb-4">{{ job.description|truncatechars:100 }}
                     </p>
                     <div class="flex items-center justify-between">
-                        <span class="text-md font-bold text-blue-600">${{job.salary_min}} -
-                            ${{job.salary_max}}</span>
-                        <a href="{{job.job_id}}" class="text-blue-600 hover:text-blue-700">View Details
-                            →</a>
+                        <span class="text-lg font-bold text-blue-600">${{ job.salary_min }} - ${{ job.salary_max
+                            }}</span>
+                        <a href="#" class="text-blue-600 hover:text-blue-700">View Details →</a>
                     </div>
                 </div>
             </div>
-            {% endfor %}
+            <!-- 
+            <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                <div class="p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="text-sm text-gray-500 bg-green-100 px-2 py-1 rounded">Remote</span>
+                        <span class="text-sm text-gray-500">5 days ago</span>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Product Manager</h3>
+                    <p class="text-gray-600 mb-4">Innovate Inc - Remote</p>
+                    <p class="text-gray-600 mb-4">Join our team as a Product Manager and lead exciting projects...
+                    </p>
+                    <div class="flex items-center justify-between">
+                        <span class="text-lg font-bold text-blue-600">$100,000 - $130,000</span>
+                        <a href="#" class="text-blue-600 hover:text-blue-700">View Details →</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                <div class="p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="text-sm text-gray-500 bg-purple-100 px-2 py-1 rounded">Part-Time</span>
+                        <span class="text-sm text-gray-500">1 week ago</span>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Graphic Designer</h3>
+                    <p class="text-gray-600 mb-4">Creative Studio - New York, NY</p>
+                    <p class="text-gray-600 mb-4">We need a creative Graphic Designer to work on branding
+                        projects...</p>
+                    <div class="flex items-center justify-between">
+                        <span class="text-lg font-bold text-blue-600">$50,000 - $70,000</span>
+                        <a href="#" class="text-blue-600 hover:text-blue-700">View Details →</a>
+                    </div>
+                </div>
+            </div>
+        </div> -->
+
+            <!-- Pagination -->
+            <div class="flex justify-center mt-12">
+                <nav class="inline-flex rounded-md shadow">
+                    <a href="#" class="px-4 py-2 text-blue-600 hover:bg-blue-50 rounded-l-lg">Previous</a>
+                    <a href="#" class="px-4 py-2 text-blue-600 hover:bg-blue-50">1</a>
+                    <a href="#" class="px-4 py-2 text-blue-600 hover:bg-blue-50">2</a>
+                    <a href="#" class="px-4 py-2 text-blue-600 hover:bg-blue-50">3</a>
+                    <a href="#" class="px-4 py-2 text-blue-600 hover:bg-blue-50 rounded-r-lg">Next</a>
+                </nav>
+            </div>
         </div>
-
-        <!-- Pagination -->
-        <div class="flex justify-center mt-12">
-            <nav class="inline-flex rounded-md shadow">
-                {% if page_obj.has_previous %}
-                <a href="?page={{ page_obj.previous_page_number }}"
-                    class="px-4 py-2 text-blue-600 hover:bg-blue-50 rounded-l-lg">Previous</a>
-                {% else %}
-                <span class="px-4 py-2 text-gray-400 rounded-l-lg cursor-not-allowed">Previous</span>
-                {% endif %}
-
-                {% for num in page_obj.paginator.page_range %}
-                {% if page_obj.number == num %}
-                <span class="px-4 py-2 text-white bg-blue-600">{{ num }}</span>
-                {% else %}
-                <a href="?page={{ num }}" class="px-4 py-2 text-blue-600 hover:bg-blue-50">{{ num }}</a>
-                {% endif %}
-                {% endfor %}
-
-                {% if page_obj.has_next %}
-                <a href="?page={{ page_obj.next_page_number }}"
-                    class="px-4 py-2 text-blue-600 hover:bg-blue-50 rounded-r-lg">Next</a>
-                {% else %}
-                <span class="px-4 py-2 text-gray-400 rounded-r-lg cursor-not-allowed">Next</span>
-                {% endif %}
-            </nav>
-        </div>
-    </div>
 </section>
-
-{% endblock content %}
-
-{% block footer %}
-{% include 'components/footer.html' %}
-{% endblock footer %}

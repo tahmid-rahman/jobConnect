@@ -1,0 +1,122 @@
+<nav class="bg-white shadow-lg sticky top-0">
+    <div class="max-w-7xl mx-auto px-4">
+        <div class="flex justify-between items-center h-16">
+            <!-- Logo -->
+            <a href="/jobseeker/jobs/" class="flex items-center">
+                <span class="text-2xl font-bold text-blue-600">JobConnect</span>
+            </a>
+
+            <!-- Desktop Menu -->
+            <div class="hidden md:flex space-x-8">
+                <a href="/jobseeker/jobs/"
+                    class="text-gray-700 {% if request.path == '/jobseeker/jobs/' %} text-blue-600 {% endif %} hover:text-blue-600">
+                    Jobs
+                </a>
+                <a href="/jobseeker/company/" class="text-gray-700 hover:text-blue-600">Companies</a>
+                <a href="#" class="text-gray-700 hover:text-blue-600">Career Tips</a>
+                <a href="#" class="text-gray-700 hover:text-blue-600">Salary Insights</a>
+            </div>
+
+            <!-- Right Side Icons -->
+            <div class="flex items-center space-x-4">
+                <!-- Notification Dropdown -->
+                <div class="relative">
+                    <button id="notificationButton" class="p-2 text-gray-600 hover:text-blue-600 relative">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                        </svg>
+                        <span class="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></span>
+                    </button>
+
+                    <!-- Notification Dropdown Menu -->
+                    <div id="notificationMenu"
+                        class="hidden absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-lg py-2 border transform origin-top-right">
+                        <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">New job posted: Frontend
+                            Developer</a>
+                        <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">3 new matches found</a>
+                        <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Application status
+                            updated</a>
+                    </div>
+                </div>
+
+                <!-- Profile Dropdown -->
+                <div class="relative">
+                    <button id="profileButton" class="flex items-center space-x-2 focus:outline-none">
+                        <img src="../../image/profile (1).png" alt="Profile" class="w-8 h-8 rounded-full bg-black">
+                        <span class="hidden md:block text-gray-700">{{ request.user.username }}</span>
+                        <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </button>
+
+                    <!-- Profile Dropdown Menu -->
+                    <div id="profileMenu"
+                        class="hidden absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 border transform origin-top-right">
+                        <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Profile</a>
+                        <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Settings</a>
+                        <a href="/accounts/logout/" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Logout</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Dropdown Toggle Functionality
+        const profileButton = document.getElementById('profileButton');
+        const profileMenu = document.getElementById('profileMenu');
+        const notificationButton = document.getElementById('notificationButton');
+        const notificationMenu = document.getElementById('notificationMenu');
+
+        // Toggle Profile Menu
+        profileButton.addEventListener('click', function (e) {
+            e.stopPropagation();
+            const isOpen = !profileMenu.classList.contains('hidden');
+            closeAllMenus();
+            if (!isOpen) profileMenu.classList.remove('hidden');
+        });
+
+        // Toggle Notification Menu
+        notificationButton.addEventListener('click', function (e) {
+            e.stopPropagation();
+            const isOpen = !notificationMenu.classList.contains('hidden');
+            closeAllMenus();
+            if (!isOpen) notificationMenu.classList.remove('hidden');
+        });
+
+        // Close menus when clicking outside
+        document.addEventListener('click', function (e) {
+            if (!profileButton.contains(e.target) && !profileMenu.contains(e.target)) {
+                profileMenu.classList.add('hidden');
+            }
+            if (!notificationButton.contains(e.target) && !notificationMenu.contains(e.target)) {
+                notificationMenu.classList.add('hidden');
+            }
+        });
+
+        // Close menus on ESC key
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') {
+                closeAllMenus();
+            }
+        });
+
+        // Mobile Menu Toggle (if needed)
+        // Add mobile menu button and functionality here if required
+
+        function closeAllMenus() {
+            profileMenu.classList.add('hidden');
+            notificationMenu.classList.add('hidden');
+        }
+    });
+
+    // Optional: Close dropdowns when scrolling
+    window.addEventListener('scroll', function () {
+        document.getElementById('profileMenu').classList.add('hidden');
+        document.getElementById('notificationMenu').classList.add('hidden');
+    });
+</script>

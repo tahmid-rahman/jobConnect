@@ -96,4 +96,4 @@ def user_logout(request):
     logout(request)
     print('logout success')
     messages.success(request, "You have successfully logged out.")
-    return redirect('login')  # Redirect to login page after logout
+    return redirect('landing_page')  # Redirect to login page after logout
