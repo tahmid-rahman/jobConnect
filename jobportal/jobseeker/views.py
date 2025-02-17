@@ -13,16 +13,22 @@ def user_role_required(view_func):
             return redirect('login')
         return view_func(request, *args, **kwargs)
     return wrapper
+
 @user_role_required
 @login_required
 def dashboard(request):
     jobs = Job.objects.all().order_by('-posted_date') 
     paginator = Paginator(jobs, 3)
+    print('hello')
+    print(request.path)
 
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number) 
     return render(request, 'jobseeker/user_home.html',{'page_obj': page_obj}) 
-    
+
+
+@user_role_required
+@login_required   
 def job_detail(request,job_id):
     job = Job.objects.get(job_id = job_id)
     comp = Company.objects.get(company_id = job.company.company_id)
@@ -41,4 +47,23 @@ def company_view(request):
     page_obj = paginator.get_page(page_number) 
     return render(request, 'jobseeker/company.html',{'page_obj': page_obj}) 
     
+    
+@user_role_required
+@login_required
+def setting(request):
+    return render(request, 'jobseeker/settings.html') 
+
+@user_role_required
+@login_required
+def profile(request):
+    return render(request, 'jobseeker/profile.html') 
+@user_role_required
+@login_required
+def tips(request):
+    return render(request, 'jobseeker/tips.html') 
+    
+@user_role_required
+@login_required
+def insight(request):
+    return render(request, 'jobseeker/salary_insight.html') 
     

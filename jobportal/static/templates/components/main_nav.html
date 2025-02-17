@@ -8,13 +8,18 @@
 
             <!-- Desktop Menu -->
             <div class="hidden md:flex space-x-8">
-                <a href="/jobseeker/jobs/"
-                    class="text-gray-700 {% if request.path == '/jobseeker/jobs/' %} text-blue-600 {% endif %} hover:text-blue-600">
+                <a href="/jobseeker/jobs"
+                    class="hover:text-blue-600 {% if '/jobseeker/jobs' in request.path %} text-blue-600 {% else %} text-gray-700 {% endif %} ">
                     Jobs
                 </a>
-                <a href="/jobseeker/company/" class="text-gray-700 hover:text-blue-600">Companies</a>
-                <a href="#" class="text-gray-700 hover:text-blue-600">Career Tips</a>
-                <a href="#" class="text-gray-700 hover:text-blue-600">Salary Insights</a>
+                <a href="/jobseeker/company"
+                    class="{% if '/jobseeker/company' in request.path %} text-blue-600 {% else %} text-gray-700 {% endif %} hover:text-blue-600">Companies</a>
+                <a href="/jobseeker/tips"
+                    class="{% if '/jobseeker/tips' in request.path %} text-blue-600 {% else %} text-gray-700 {% endif %} hover:text-blue-600">Career
+                    Tips</a>
+                <a href="/jobseeker/salaryinsight"
+                    class="{% if '/jobseeker/salaryinsight' in request.path %} text-blue-600 {% else %} text-gray-700 {% endif %} hover:text-blue-600">Salary
+                    Insights</a>
             </div>
 
             <!-- Right Side Icons -->
@@ -54,8 +59,9 @@
                     <!-- Profile Dropdown Menu -->
                     <div id="profileMenu"
                         class="hidden absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 border transform origin-top-right">
-                        <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Profile</a>
-                        <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Settings</a>
+                        <a href="/jobseeker/profile" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Profile</a>
+                        <a href="/jobseeker/settings"
+                            class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Settings</a>
                         <a href="/accounts/logout/" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Logout</a>
                     </div>
                 </div>

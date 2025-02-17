@@ -1,0 +1,174 @@
+{% extends 'base.html' %}
+
+{% block nav %}
+{% include 'components/main_nav.html' %}
+{% endblock nav %}
+{% block content %}
+
+<section class="py-12 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4">
+        <!-- Page Heading -->
+        <div class="text-center mb-12">
+            <h1 class="text-4xl font-bold text-gray-800 mb-4">Salary Insights</h1>
+            <p class="text-lg text-gray-600">Explore salary ranges for different roles, locations, and industries.
+            </p>
+        </div>
+
+        <!-- Salary Search Filters -->
+        <div class="bg-white p-6 rounded-lg shadow-md mb-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <!-- Job Title Filter -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Job Title</label>
+                    <input type="text" placeholder="Enter job title"
+                        class="w-full px-4 py-2 border rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                </div>
+
+                <!-- Location Filter -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Location</label>
+                    <input type="text" placeholder="City or Zip Code"
+                        class="w-full px-4 py-2 border rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                </div>
+
+                <!-- Industry Filter -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Industry</label>
+                    <select class="w-full px-4 py-2 border rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                        <option value="">All Industries</option>
+                        <option value="tech">Technology</option>
+                        <option value="finance">Finance</option>
+                        <option value="healthcare">Healthcare</option>
+                        <option value="education">Education</option>
+                    </select>
+                </div>
+            </div>
+            <div class="mt-6">
+                <button class="w-full bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700">
+                    Get Salary Insights
+                </button>
+            </div>
+        </div>
+
+        <!-- Salary Insights Results -->
+        <div class="bg-white p-8 rounded-lg shadow-md">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6">Salary Insights for "Software Engineer"</h2>
+
+            <!-- Salary Overview -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <!-- Average Salary -->
+                <div class="p-6 bg-blue-50 rounded-lg">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Average Salary</h3>
+                    <p class="text-3xl font-bold text-blue-600">$95,000</p>
+                    <p class="text-gray-600">per year</p>
+                </div>
+
+                <!-- Salary Range -->
+                <div class="p-6 bg-green-50 rounded-lg">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Salary Range</h3>
+                    <p class="text-3xl font-bold text-green-600">$75,000 - $120,000</p>
+                    <p class="text-gray-600">per year</p>
+                </div>
+
+                <!-- Top Paying Locations -->
+                <div class="p-6 bg-purple-50 rounded-lg">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Top Paying Locations</h3>
+                    <p class="text-3xl font-bold text-purple-600">San Francisco</p>
+                    <p class="text-gray-600">Average: $120,000</p>
+                </div>
+            </div>
+
+            <!-- Salary Trends Chart -->
+            <div class="mb-8">
+                <h3 class="text-xl font-semibold text-gray-800 mb-4">Salary Trends Over Time</h3>
+                <div class="bg-gray-100 p-6 rounded-lg">
+                    <img src="https://via.placeholder.com/800x300" alt="Salary Trends Chart" class="w-full rounded-lg">
+                </div>
+            </div>
+
+            <!-- Salary by Experience Level -->
+            <div class="mb-8">
+                <h3 class="text-xl font-semibold text-gray-800 mb-4">Salary by Experience Level</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <!-- Entry Level -->
+                    <div class="p-6 bg-blue-50 rounded-lg">
+                        <h4 class="text-lg font-semibold text-gray-800 mb-2">Entry Level</h4>
+                        <p class="text-2xl font-bold text-blue-600">$75,000</p>
+                        <p class="text-gray-600">per year</p>
+                    </div>
+
+                    <!-- Mid Level -->
+                    <div class="p-6 bg-green-50 rounded-lg">
+                        <h4 class="text-lg font-semibold text-gray-800 mb-2">Mid Level</h4>
+                        <p class="text-2xl font-bold text-green-600">$95,000</p>
+                        <p class="text-gray-600">per year</p>
+                    </div>
+
+                    <!-- Senior Level -->
+                    <div class="p-6 bg-purple-50 rounded-lg">
+                        <h4 class="text-lg font-semibold text-gray-800 mb-2">Senior Level</h4>
+                        <p class="text-2xl font-bold text-purple-600">$120,000</p>
+                        <p class="text-gray-600">per year</p>
+                    </div>
+
+                    <!-- Executive Level -->
+                    <div class="p-6 bg-yellow-50 rounded-lg">
+                        <h4 class="text-lg font-semibold text-gray-800 mb-2">Executive Level</h4>
+                        <p class="text-2xl font-bold text-yellow-600">$150,000</p>
+                        <p class="text-gray-600">per year</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Top Paying Companies -->
+            <div>
+                <h3 class="text-xl font-semibold text-gray-800 mb-4">Top Paying Companies</h3>
+                <div class="space-y-4">
+                    <!-- Company 1 -->
+                    <div class="flex items-center justify-between bg-white p-4 rounded-lg shadow-sm">
+                        <div class="flex items-center space-x-4">
+                            <img src="https://via.placeholder.com/40" alt="TechCorp Logo"
+                                class="w-10 h-10 rounded-full">
+                            <div>
+                                <p class="text-lg font-semibold text-gray-800">TechCorp</p>
+                                <p class="text-gray-600">San Francisco, CA</p>
+                            </div>
+                        </div>
+                        <p class="text-lg font-bold text-blue-600">$125,000</p>
+                    </div>
+
+                    <!-- Company 2 -->
+                    <div class="flex items-center justify-between bg-white p-4 rounded-lg shadow-sm">
+                        <div class="flex items-center space-x-4">
+                            <img src="https://via.placeholder.com/40" alt="Innovate Inc Logo"
+                                class="w-10 h-10 rounded-full">
+                            <div>
+                                <p class="text-lg font-semibold text-gray-800">Innovate Inc</p>
+                                <p class="text-gray-600">New York, NY</p>
+                            </div>
+                        </div>
+                        <p class="text-lg font-bold text-blue-600">$120,000</p>
+                    </div>
+
+                    <!-- Company 3 -->
+                    <div class="flex items-center justify-between bg-white p-4 rounded-lg shadow-sm">
+                        <div class="flex items-center space-x-4">
+                            <img src="https://via.placeholder.com/40" alt="DataWorks Logo"
+                                class="w-10 h-10 rounded-full">
+                            <div>
+                                <p class="text-lg font-semibold text-gray-800">DataWorks</p>
+                                <p class="text-gray-600">Austin, TX</p>
+                            </div>
+                        </div>
+                        <p class="text-lg font-bold text-blue-600">$115,000</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock content %}
+{% block footer %}
+{% include 'components/footer.html' %}
+{% endblock footer %}

@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+
+{% block nav %}
+{% include 'components/main_nav.html' %}
+{% endblock nav %}
+{% block content %}
+
+<section class="py-12 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4">
+        <!-- Profile Header -->
+        <div class="bg-white p-8 rounded-lg shadow-md mb-8">
+            <div class="flex flex-col md:flex-row items-center md:items-start space-y-4 md:space-y-0 md:space-x-6">
+                <!-- Profile Picture -->
+                <div class="w-24 h-24 bg-blue-100 rounded-full flex items-center justify-center">
+                    <span class="text-3xl font-bold text-blue-600">JD</span>
+                </div>
+                <!-- Profile Info -->
+                <div>
+                    <h1 class="text-3xl font-bold text-gray-800 mb-2">John Doe</h1>
+                    <p class="text-lg text-gray-600">Software Engineer</p>
+                    <p class="text-gray-600">San Francisco, CA</p>
+                    <div class="mt-4">
+                        <a href="#" class="text-blue-600 hover:text-blue-700">Edit Profile</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Profile Sections -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Left Column - Personal Information -->
+            <div class="lg:col-span-2">
+                <!-- About Me -->
+                <div class="bg-white p-8 rounded-lg shadow-md mb-8">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-4">About Me</h2>
+                    <p class="text-gray-600 mb-6">
+                        Experienced Software Engineer with a passion for building scalable and efficient systems.
+                        Skilled in JavaScript, Python, and cloud technologies. Always eager to learn and take on new
+                        challenges.
+                    </p>
+                    <a href="#" class="text-blue-600 hover:text-blue-700">Edit About Me</a>
+                </div>
+
+                <!-- Work Experience -->
+                <div class="bg-white p-8 rounded-lg shadow-md mb-8">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-4">Work Experience</h2>
+                    <!-- Experience 1 -->
+                    <div class="mb-6">
+                        <h3 class="text-xl font-semibold text-gray-800">Senior Software Engineer</h3>
+                        <p class="text-gray-600">TechCorp - San Francisco, CA</p>
+                        <p class="text-gray-600">Jan 2020 - Present</p>
+                        <p class="text-gray-600 mt-2">
+                            Led the development of a scalable microservices architecture. Mentored junior developers
+                            and conducted code reviews.
+                        </p>
+                    </div>
+                    <!-- Experience 2 -->
+                    <div class="mb-6">
+                        <h3 class="text-xl font-semibold text-gray-800">Software Engineer</h3>
+                        <p class="text-gray-600">Innovate Inc - New York, NY</p>
+                        <p class="text-gray-600">Jun 2016 - Dec 2019</p>
+                        <p class="text-gray-600 mt-2">
+                            Developed and maintained web applications using JavaScript and Python. Collaborated with
+                            cross-functional teams to deliver projects on time.
+                        </p>
+                    </div>
+                    <a href="#" class="text-blue-600 hover:text-blue-700">Add Experience</a>
+                </div>
+
+                <!-- Education -->
+                <div class="bg-white p-8 rounded-lg shadow-md mb-8">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-4">Education</h2>
+                    <!-- Education 1 -->
+                    <div class="mb-6">
+                        <h3 class="text-xl font-semibold text-gray-800">Bachelor of Science in Computer Science</h3>
+                        <p class="text-gray-600">Stanford University - Stanford, CA</p>
+                        <p class="text-gray-600">Graduated: May 2016</p>
+                    </div>
+                    <a href="#" class="text-blue-600 hover:text-blue-700">Add Education</a>
+                </div>
+            </div>
+
+            <!-- Right Column - Resume and Preferences -->
+            <div class="lg:col-span-1">
+                <!-- Resume -->
+                <div class="bg-white p-8 rounded-lg shadow-md mb-8">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-4">Resume</h2>
+                    <p class="text-gray-600 mb-6">Upload or update your resume to apply for jobs.</p>
+                    <button class="w-full bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700">
+                        Upload Resume
+                    </button>
+                </div>
+
+                <!-- Job Preferences -->
+                <div class="bg-white p-8 rounded-lg shadow-md mb-8">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-4">Job Preferences</h2>
+                    <div class="space-y-4">
+                        <div>
+                            <p class="text-gray-600">Job Type:</p>
+                            <p class="text-gray-800 font-semibold">Full-Time, Remote</p>
+                        </div>
+                        <div>
+                            <p class="text-gray-600">Preferred Location:</p>
+                            <p class="text-gray-800 font-semibold">San Francisco, CA</p>
+                        </div>
+                        <div>
+                            <p class="text-gray-600">Salary Expectation:</p>
+                            <p class="text-gray-800 font-semibold">$100,000 - $120,000</p>
+                        </div>
+                    </div>
+                    <a href="#" class="text-blue-600 hover:text-blue-700 mt-4 block">Edit Preferences</a>
+                </div>
+
+                <!-- Skills -->
+                <div class="bg-white p-8 rounded-lg shadow-md">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-4">Skills</h2>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="bg-blue-100 text-blue-600 px-3 py-1 rounded-full">JavaScript</span>
+                        <span class="bg-blue-100 text-blue-600 px-3 py-1 rounded-full">Python</span>
+                        <span class="bg-blue-100 text-blue-600 px-3 py-1 rounded-full">AWS</span>
+                        <span class="bg-blue-100 text-blue-600 px-3 py-1 rounded-full">React</span>
+                        <span class="bg-blue-100 text-blue-600 px-3 py-1 rounded-full">Node.js</span>
+                    </div>
+                    <a href="#" class="text-blue-600 hover:text-blue-700 mt-4 block">Add Skills</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock content %}
+{% block footer %}
+{% include 'components/footer.html' %}
+{% endblock footer %}
