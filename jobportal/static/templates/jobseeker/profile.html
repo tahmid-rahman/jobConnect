@@ -12,13 +12,13 @@
             <div class="flex flex-col md:flex-row items-center md:items-start space-y-4 md:space-y-0 md:space-x-6">
                 <!-- Profile Picture -->
                 <div class="w-24 h-24 bg-blue-100 rounded-full flex items-center justify-center">
-                    <span class="text-3xl font-bold text-blue-600">JD</span>
+                    <span class="text-3xl font-bold text-blue-600">TR</span>
                 </div>
                 <!-- Profile Info -->
                 <div>
-                    <h1 class="text-3xl font-bold text-gray-800 mb-2">John Doe</h1>
-                    <p class="text-lg text-gray-600">Software Engineer</p>
-                    <p class="text-gray-600">San Francisco, CA</p>
+                    <h1 class="text-3xl font-bold text-gray-800 mb-2">{{pro.first_name}} {{pro.last_name}}</h1>
+                    <p class="text-lg text-gray-600">{{pro.job_title}}</p>
+                    <p class="text-gray-600">{{pro.location}}</p>
                     <div class="mt-4">
                         <a href="#" class="text-blue-600 hover:text-blue-700">Edit Profile</a>
                     </div>
@@ -34,9 +34,7 @@
                 <div class="bg-white p-8 rounded-lg shadow-md mb-8">
                     <h2 class="text-2xl font-bold text-gray-800 mb-4">About Me</h2>
                     <p class="text-gray-600 mb-6">
-                        Experienced Software Engineer with a passion for building scalable and efficient systems.
-                        Skilled in JavaScript, Python, and cloud technologies. Always eager to learn and take on new
-                        challenges.
+                        {{pro.about_me}}
                     </p>
                     <a href="#" class="text-blue-600 hover:text-blue-700">Edit About Me</a>
                 </div>
@@ -44,38 +42,36 @@
                 <!-- Work Experience -->
                 <div class="bg-white p-8 rounded-lg shadow-md mb-8">
                     <h2 class="text-2xl font-bold text-gray-800 mb-4">Work Experience</h2>
-                    <!-- Experience 1 -->
+                    {% for e in exp %}
                     <div class="mb-6">
-                        <h3 class="text-xl font-semibold text-gray-800">Senior Software Engineer</h3>
-                        <p class="text-gray-600">TechCorp - San Francisco, CA</p>
-                        <p class="text-gray-600">Jan 2020 - Present</p>
+                        <h3 class="text-xl font-semibold text-gray-800">{{e.job_title}}</h3>
+                        <p class="text-gray-600">{{e.company_name}} - {{e.location}}</p>
+                        <p class="text-gray-600">
+                            {{ e.start_date }} -
+                            {% if e.end_date %}
+                            {{ e.end_date }}
+                            {% else %}
+                            Present
+                            {% endif %}
+                        </p>
                         <p class="text-gray-600 mt-2">
-                            Led the development of a scalable microservices architecture. Mentored junior developers
-                            and conducted code reviews.
+                            {{e.description}}
                         </p>
                     </div>
-                    <!-- Experience 2 -->
-                    <div class="mb-6">
-                        <h3 class="text-xl font-semibold text-gray-800">Software Engineer</h3>
-                        <p class="text-gray-600">Innovate Inc - New York, NY</p>
-                        <p class="text-gray-600">Jun 2016 - Dec 2019</p>
-                        <p class="text-gray-600 mt-2">
-                            Developed and maintained web applications using JavaScript and Python. Collaborated with
-                            cross-functional teams to deliver projects on time.
-                        </p>
-                    </div>
+                    {% endfor %}
                     <a href="#" class="text-blue-600 hover:text-blue-700">Add Experience</a>
                 </div>
 
                 <!-- Education -->
                 <div class="bg-white p-8 rounded-lg shadow-md mb-8">
                     <h2 class="text-2xl font-bold text-gray-800 mb-4">Education</h2>
-                    <!-- Education 1 -->
+                    {% for e in edu %}
                     <div class="mb-6">
-                        <h3 class="text-xl font-semibold text-gray-800">Bachelor of Science in Computer Science</h3>
-                        <p class="text-gray-600">Stanford University - Stanford, CA</p>
-                        <p class="text-gray-600">Graduated: May 2016</p>
+                        <h3 class="text-xl font-semibold text-gray-800">{{e.degree}}</h3>
+                        <p class="text-gray-600">{{e.school}} - {{e.location}}</p>
+                        <p class="text-gray-600">Graduated: {{e.graduation_date}}</p>
                     </div>
+                    {% endfor %}
                     <a href="#" class="text-blue-600 hover:text-blue-700">Add Education</a>
                 </div>
             </div>
@@ -97,15 +93,15 @@
                     <div class="space-y-4">
                         <div>
                             <p class="text-gray-600">Job Type:</p>
-                            <p class="text-gray-800 font-semibold">Full-Time, Remote</p>
+                            <p class="text-gray-800 font-semibold">{{prf.job_type}}</p>
                         </div>
                         <div>
                             <p class="text-gray-600">Preferred Location:</p>
-                            <p class="text-gray-800 font-semibold">San Francisco, CA</p>
+                            <p class="text-gray-800 font-semibold">{{prf.preferred_location}}</p>
                         </div>
                         <div>
                             <p class="text-gray-600">Salary Expectation:</p>
-                            <p class="text-gray-800 font-semibold">$100,000 - $120,000</p>
+                            <p class="text-gray-800 font-semibold">{{prf.salary_expectation}}</p>
                         </div>
                     </div>
                     <a href="#" class="text-blue-600 hover:text-blue-700 mt-4 block">Edit Preferences</a>
@@ -115,12 +111,11 @@
                 <div class="bg-white p-8 rounded-lg shadow-md">
                     <h2 class="text-2xl font-bold text-gray-800 mb-4">Skills</h2>
                     <div class="flex flex-wrap gap-2">
-                        <span class="bg-blue-100 text-blue-600 px-3 py-1 rounded-full">JavaScript</span>
-                        <span class="bg-blue-100 text-blue-600 px-3 py-1 rounded-full">Python</span>
-                        <span class="bg-blue-100 text-blue-600 px-3 py-1 rounded-full">AWS</span>
-                        <span class="bg-blue-100 text-blue-600 px-3 py-1 rounded-full">React</span>
-                        <span class="bg-blue-100 text-blue-600 px-3 py-1 rounded-full">Node.js</span>
+                        {% for s in skill %}
+                        <span class="bg-blue-100 text-blue-600 px-3 py-1 rounded-full">{{s.name}}</span>
+                        {% endfor %}
                     </div>
+
                     <a href="#" class="text-blue-600 hover:text-blue-700 mt-4 block">Add Skills</a>
                 </div>
             </div>

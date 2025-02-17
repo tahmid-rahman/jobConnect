@@ -1,0 +1,146 @@
+{% extends 'base.html' %}
+
+{% block nav %}
+{% include 'components/main_nav.html' %}
+{% endblock nav %}
+{% block content %}
+
+<section class="py-12 bg-gray-50" id="pdf-section">
+    <div class="max-w-7xl mx-auto px-4">
+        <!-- Page Heading -->
+        <div class="text-center mb-12">
+            <h1 class="text-4xl font-bold text-gray-800 mb-4">10 Resume Tips to Stand Out</h1>
+            <p class="text-lg text-gray-600">Expert advice to help you craft a resume that catches the eye of hiring
+                managers.</p>
+        </div>
+
+        <!-- Resume Tips Content -->
+        <div class="bg-white p-8 rounded-lg shadow-md">
+            <!-- Tip 1 -->
+            <div class="mb-8">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">1. Tailor Your Resume for Each Job</h2>
+                <p class="text-gray-600 mb-4">
+                    Customize your resume for each job application by highlighting the skills and experiences most
+                    relevant to the position. Use keywords from the job description to make your resume stand out to
+                    applicant tracking systems (ATS).
+                </p>
+            </div>
+
+            <!-- Tip 2 -->
+            <div class="mb-8">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">2. Use a Clean and Professional Format</h2>
+                <p class="text-gray-600 mb-4">
+                    Choose a clean, easy-to-read format with consistent fonts, headings, and bullet points. Avoid
+                    clutter and ensure your resume is well-organized.
+                </p>
+            </div>
+
+            <!-- Tip 3 -->
+            <div class="mb-8">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">3. Start with a Strong Summary</h2>
+                <p class="text-gray-600 mb-4">
+                    Begin your resume with a compelling summary that highlights your key qualifications,
+                    achievements, and career goals. Keep it concise and impactful.
+                </p>
+            </div>
+
+            <!-- Tip 4 -->
+            <div class="mb-8">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">4. Quantify Your Achievements</h2>
+                <p class="text-gray-600 mb-4">
+                    Use numbers and metrics to demonstrate your accomplishments. For example, "Increased sales by
+                    20% in six months" is more impactful than "Improved sales."
+                </p>
+            </div>
+
+            <!-- Tip 5 -->
+            <div class="mb-8">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">5. Focus on Relevant Experience</h2>
+                <p class="text-gray-600 mb-4">
+                    Highlight your most relevant work experience and achievements. If you have extensive experience,
+                    focus on the last 10-15 years and keep older roles brief.
+                </p>
+            </div>
+
+            <!-- Tip 6 -->
+            <div class="mb-8">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">6. Include Keywords from the Job Description</h2>
+                <p class="text-gray-600 mb-4">
+                    Many companies use ATS to screen resumes. Incorporate keywords and phrases from the job
+                    description to increase your chances of passing the initial screening.
+                </p>
+            </div>
+
+            <!-- Tip 7 -->
+            <div class="mb-8">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">7. Keep It Concise</h2>
+                <p class="text-gray-600 mb-4">
+                    Aim for a one-page resume if you have less than 10 years of experience. For more experienced
+                    professionals, two pages are acceptable, but avoid unnecessary details.
+                </p>
+            </div>
+
+            <!-- Tip 8 -->
+            <div class="mb-8">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">8. Use Action Verbs</h2>
+                <p class="text-gray-600 mb-4">
+                    Start each bullet point with a strong action verb, such as "managed," "developed," "led," or
+                    "implemented." This makes your resume more dynamic and engaging.
+                </p>
+            </div>
+
+            <!-- Tip 9 -->
+            <div class="mb-8">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">9. Proofread for Errors</h2>
+                <p class="text-gray-600 mb-4">
+                    Typos and grammatical errors can make a bad impression. Proofread your resume carefully and
+                    consider asking a friend or mentor to review it.
+                </p>
+            </div>
+
+            <!-- Tip 10 -->
+            <div class="mb-8">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">10. Include a Call to Action</h2>
+                <p class="text-gray-600 mb-4">
+                    End your resume with a call to action, such as "Looking forward to discussing how I can
+                    contribute to your team." This shows enthusiasm and initiative.
+                </p>
+            </div>
+
+            <!-- Download Resume Templates -->
+            <div class="mt-12">
+                <button class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700" onclick="downloadPDF()">
+                    Download This Tips
+                </button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    function downloadPDF() {
+        // Get the section to convert to PDF
+        var element = document.getElementById('pdf-section');
+
+        // Optional configuration
+        var opt = {
+            margin: 0.5,
+            filename: 'tips.pdf',
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { scale: 2 },
+            jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+        };
+
+        // Convert and download as PDF
+        html2pdf().from(element).set(opt).save();
+    }
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
+
+
+{% endblock content %}
+
+{% block footer %}
+{% include 'components/footer.html' %}
+{% endblock footer %}

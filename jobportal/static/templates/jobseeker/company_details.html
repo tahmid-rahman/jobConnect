@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+
+{% block nav %}
+{% include 'components/main_nav.html' %}
+{% endblock nav %}
+{% block content %}
+
+<section class="py-12 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4">
+        <!-- Company Header -->
+        <div class="bg-white p-8 rounded-lg shadow-md mb-8">
+            <div class="flex flex-col md:flex-row items-center md:items-start space-y-4 md:space-y-0 md:space-x-6">
+                <img src="https://via.placeholder.com/100" alt="TechCorp Logo" class="w-20 h-20 rounded-full">
+                <div>
+                    <h1 class="text-3xl font-bold text-gray-800 mb-2">{{compa.name}}</h1>
+                    <p class="text-lg text-gray-600">{{compa.location}}</p>
+                    <p class="text-gray-600 mt-2">
+                        {{compa.description}}
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Job Listings -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Job Card 1 -->
+            {% for item in page_obj %}
+            <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                <div class="p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="text-sm text-gray-500 {% if item.job_type == 'Full-Time' %}bg-purple-100 {% elif item.job_type == 'Part-Time' %} bg-green-100 {% elif item.job_type == 'Contract' %}
+                        bg-yellow-100 {% else %} bg-red-100 {% endif %}px-2 py-1 rounded">{{item.job_type}}</span>
+                        <span class="text-sm text-gray-500">2 days ago</span>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">{{item.title}}</h3>
+                    <p class="text-gray-600 mb-4">{{item.location}}</p>
+                    <p class="text-gray-600 mb-4">
+                        {{item.description}}
+                    </p>
+                    <div class="flex items-center justify-between">
+                        <span class="text-lg font-bold text-blue-600">${{item.salary_min}} - ${{item.salary_max}}</span>
+                        <a href="/jobseeker/jobs/{{item.job_id}}" class="text-blue-600 hover:text-blue-700">View Details
+                            →</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+
+        </div>
+
+        <!-- Pagination -->
+        <div class="flex justify-center mt-12">
+            <nav class="inline-flex rounded-md shadow">
+                {% if page_obj.has_previous %}
+                <a href="?page={{ page_obj.previous_page_number }}"
+                    class="px-4 py-2 text-blue-600 hover:bg-blue-50 rounded-l-lg">Previous</a>
+                {% else %}
+                <span class="px-4 py-2 text-gray-400 rounded-l-lg cursor-not-allowed">Previous</span>
+                {% endif %}
+
+                {% for num in page_obj.paginator.page_range %}
+                {% if page_obj.number == num %}
+                <span class="px-4 py-2 text-white bg-blue-600">{{ num }}</span>
+                {% else %}
+                <a href="?page={{ num }}" class="px-4 py-2 text-blue-600 hover:bg-blue-50">{{ num }}</a>
+                {% endif %}
+                {% endfor %}
+
+                {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}"
+                    class="px-4 py-2 text-blue-600 hover:bg-blue-50 rounded-r-lg">Next</a>
+                {% else %}
+                <span class="px-4 py-2 text-gray-400 rounded-r-lg cursor-not-allowed">Next</span>
+                {% endif %}
+            </nav>
+        </div>
+    </div>
+</section>
+
+{% endblock content %}
+
+{% block footer %}
+{% include 'components/footer.html' %}
+{% endblock footer %}
