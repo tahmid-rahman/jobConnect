@@ -2,7 +2,7 @@ from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.core.paginator import Paginator
-
+from django.contrib.auth import update_session_auth_hash
 from .models import Job,Company,Profile,JobPreference,Experience,Education,Skill
 from accounts.models import CustomUser
 
@@ -61,6 +61,58 @@ def company_detail(request,company_id):
 @login_required
 def setting(request):
     return render(request, 'jobseeker/settings.html') 
+
+@user_role_required
+@login_required
+def update_account(request):
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        uname = request.POST.get('username')
+        email = request.POST.get('email')
+        p_no = request.POST.get('phone_no')
+
+    if CustomUser.objects.filter(email=email).exclude(id=request.user.id).exists():
+        messages.error(request, f"This '{email}' email is already registered.")
+        return redirect('jobseeker:setting') 
+    
+    if CustomUser.objects.filter(username=uname).exclude(id=request.user.id).exists():
+        messages.error(request, f"This '{uname}' username is already registered.")
+        return redirect('jobseeker:setting') 
+    
+    data = request.user
+    data.name = name
+    data.username = uname
+    data.email = email
+    data.phone_no = p_no
+    data.save()
+    messages.error(request, "Updated Successfully.")
+
+    return redirect('jobseeker:setting') 
+
+@user_role_required
+@login_required
+def change_password(request):
+    if request.method == 'POST':
+        current_password = request.POST['current_password']
+        new_password = request.POST['new_password']
+        confirm_new_password = request.POST['confirm_new_password']
+
+        if new_password != confirm_new_password:
+            messages.error(request, "New passwords do not match.")
+            return redirect('jobseeker:setting')
+
+        user = request.user
+        if not user.check_password(current_password):
+            messages.error(request, "Current password is incorrect.")
+            return redirect('jobseeker:setting')
+
+        user.set_password(new_password)
+        user.save()
+        update_session_auth_hash(request, user)  # Keep the user logged in
+        messages.success(request, "Your password has been successfully updated.")
+        return redirect('jobseeker:setting')
+
+    return redirect('jobseeker:setting')
 
 @user_role_required
 @login_required

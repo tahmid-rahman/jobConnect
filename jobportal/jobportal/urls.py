@@ -18,6 +18,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from .views import landing_page
+from jobportal.views import custom_404_view
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -26,6 +27,6 @@ urlpatterns = [
     path('adminpanel/', include('adminpanel.urls', namespace='adminpanel')),
     path('accounts/', include('accounts.urls')),
     path('', landing_page, name='landing_page'),
-
 ]
 
+handler404 = custom_404_view

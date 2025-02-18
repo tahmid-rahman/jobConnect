@@ -10,3 +10,7 @@ def landing_page(request):
         elif request.user.role == 'employee':
             return redirect('employee:employee_home')
     return render(request, 'components/landing.html')
+
+
+def custom_404_view(request, exception):
+    return redirect('')

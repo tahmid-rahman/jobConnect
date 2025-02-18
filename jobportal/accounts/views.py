@@ -44,9 +44,10 @@ def register(request):
             role=role,
             password=password1
         )
-        Profile.objects.create(user=user)
-        prf = Profile.objects.get(user = user)
-        JobPreference.objects.create(profile=prf)
+        if user.role =="user" :
+            Profile.objects.create(user=user)
+            prf = Profile.objects.get(user = user)
+            JobPreference.objects.create(profile=prf)
         # Log the user in immediately after registration
         login(request, user)
         messages.success(request, "Registration successful.")
@@ -75,7 +76,7 @@ def user_login(request):
         if user is not None:
             print('success')
             login(request, user)
-            messages.success(request, f"Welcome, {user.username}!")
+            messages.success(request, f"Welcome back, {user.username}! ")
 
             # Redirect based on user role
             if user.role == 'admin':
