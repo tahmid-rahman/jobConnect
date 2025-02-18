@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.core.paginator import Paginator
 
-from .models import Job,Company,Profile,JobPreference
+from .models import Job,Company,Profile,JobPreference,Experience,Education,Skill
 from accounts.models import CustomUser
 
 
@@ -75,6 +75,170 @@ def profile(request):
     #     print(e.job_title)
     
     return render(request, 'jobseeker/profile.html',{'pro': pro,'edu':edu, 'exp':exp, 'skill':skill,'prf':prf}) 
+
+@user_role_required
+@login_required
+def update_profile(request):
+    if request.method == 'POST':
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+        job_title = request.POST.get('job_title')
+        location = request.POST.get('location')
+
+        # Assuming the profile is linked to the user
+        pro = request.user.profile
+        pro.first_name = first_name
+        pro.last_name = last_name
+        pro.job_title = job_title
+        pro.location = location
+        pro.save()
+
+        return redirect('jobseeker:profile') 
+
+    return render(request, 'jobseeker/profile.html')
+
+
+@login_required
+@user_role_required
+def update_about_me(request):
+    if request.method == 'POST':
+        about_me = request.POST.get('about_me')
+
+        pro = request.user.profile
+        pro.about_me = about_me
+        pro.save()
+
+        return redirect('jobseeker:profile')  # Redirect to the profile page after updating
+
+    return render(request, 'jobseeker/profile.html')
+
+@user_role_required
+@login_required
+def add_work_experience(request):
+    if request.method == 'POST':
+        job_title = request.POST.get('job_title')
+        company_name = request.POST.get('company_name')
+        location = request.POST.get('location')
+        start_date = request.POST.get('start_date')
+        end_date = request.POST.get('end_date')
+        description = request.POST.get('description')
+
+        prf = Profile.objects.get(user =request.user)
+
+        Experience.objects.create(
+            profile= prf,
+            job_title=job_title,
+            company_name=company_name,
+            location=location,
+            start_date=start_date,
+            end_date=end_date if end_date else None,
+            description=description
+        )
+
+    return redirect('jobseeker:profile')
+
+
+@user_role_required
+@login_required
+def update_work_experience(request, id):
+    prf = Profile.objects.get(user =request.user)
+
+    if request.method == 'POST':
+        work_experience = Experience.objects.get(exp_id=id, profile= prf)
+        work_experience.job_title = request.POST.get('job_title')
+        work_experience.company_name = request.POST.get('company_name')
+        work_experience.location = request.POST.get('location')
+        work_experience.start_date = request.POST.get('start_date')
+        work_experience.end_date = request.POST.get('end_date')
+        work_experience.description = request.POST.get('description')
+        work_experience.save()
+
+    return redirect('jobseeker:profile')
+
+
+@user_role_required
+@login_required
+def delete_work_experience(request, id):
+    prf = Profile.objects.get(user =request.user)
+    if request.method == 'POST':
+        work_experience = Experience.objects.get(exp_id=id, profile= prf)
+        work_experience.delete()
+
+    return redirect('jobseeker:profile')
+
+@user_role_required
+@login_required
+def add_education(request):
+    if request.method == 'POST':
+        degree = request.POST.get('degree')
+        school = request.POST.get('school')
+        location = request.POST.get('location')
+        graduation_date = request.POST.get('graduation_date')
+        prf = Profile.objects.get(user =request.user)
+        Education.objects.create(
+            profile= prf,
+            degree=degree,
+            school=school,
+            location=location,
+            graduation_date=graduation_date
+        )
+
+    return redirect('jobseeker:profile')
+
+@user_role_required
+@login_required
+def update_education(request, id):
+    if request.method == 'POST':
+        education = Education.objects.get(edu_id=id, profile=Profile.objects.get(user=request.user))
+        education.degree = request.POST.get('degree')
+        education.school = request.POST.get('school')
+        education.location = request.POST.get('location')
+        education.graduation_date = request.POST.get('graduation_date')
+        education.save()
+
+    return redirect('jobseeker:profile')
+@user_role_required
+@login_required
+def delete_education(request, id):
+    if request.method == 'POST':
+        education = Education.objects.get(edu_id=id, profile=Profile.objects.get(user=request.user))
+        education.delete()
+
+    return redirect('jobseeker:profile')
+
+
+@user_role_required
+@login_required
+def update_job_preferences(request):
+    if request.method == 'POST':
+        job_type = request.POST.get('job_type')
+        preferred_location = request.POST.get('preferred_location')
+        salary_expectation = request.POST.get('salary_expectation')
+
+
+        job_pre = JobPreference.objects.get(profile=Profile.objects.get(user=request.user))
+        job_pre.job_type = job_type
+        job_pre.preferred_location = preferred_location
+        job_pre.salary_expectation = salary_expectation
+        job_pre.save()
+
+    return redirect('jobseeker:profile')
+
+
+@user_role_required
+@login_required
+def add_skills(request):
+    if request.method == 'POST':
+        skill_name = request.POST.get('skill_name')
+
+        # Create a new Skill instance linked to the current user's profile
+        Skill.objects.create(
+            profile=request.user.profile,
+            name=skill_name
+        )
+
+    return redirect('jobseeker:profile')
+
 
 @user_role_required
 @login_required

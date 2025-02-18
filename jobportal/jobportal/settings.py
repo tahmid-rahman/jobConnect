@@ -25,7 +25,7 @@ SECRET_KEY = "django-insecure-0$62^hzb+!es&e1l0-nb+q8gl=m#m9!qk+$n1sexpi*)q0$d_2
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -125,6 +125,8 @@ AUTH_PASSWORD_VALIDATORS = [
 
 INTERNAL_IPS = [
     "127.0.0.1",
+    "192.168.0.102",
+    "localhost",
 ]
 
 # NPM_BIN_PATH = '/usr/local/bin/npm'

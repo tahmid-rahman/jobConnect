@@ -57,6 +57,7 @@ class Profile(models.Model):
 
 class Experience(models.Model):
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='experiences')
+    exp_id =models.AutoField(primary_key=True)
     job_title = models.CharField(max_length=100)
     company_name = models.CharField(max_length=100)
     location = models.CharField(max_length=100)
@@ -69,6 +70,7 @@ class Experience(models.Model):
 
 class Education(models.Model):
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='educations')
+    edu_id =models.AutoField(primary_key=True)
     degree = models.CharField(max_length=100)
     school = models.CharField(max_length=100)
     location = models.CharField(max_length=100)
