@@ -8,7 +8,7 @@ def landing_page(request):
         elif request.user.role == 'user':
             return redirect('jobseeker:dashboard')
         elif request.user.role == 'employee':
-            return redirect('employee:employee_home')
+            return redirect('employer:company_dashboard')
     return render(request, 'components/landing.html')
 
 

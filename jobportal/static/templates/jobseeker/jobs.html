@@ -52,7 +52,7 @@
 
         <!-- Job Listings -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <!-- Job Card 1 -->
+            <!-- Job Card -->
             {% for job in jobs %}
             <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
                 <div class="p-6">
@@ -66,57 +66,24 @@
                     <p class="text-gray-600 mb-4">{{ job.description|truncatechars:100 }}
                     </p>
                     <div class="flex items-center justify-between">
-                        <span class="text-lg font-bold text-blue-600">${{ job.salary_min }} - ${{ job.salary_max
-                            }}</span>
+                        <span class="text-lg font-bold text-blue-600">${{ job.salary_min }} - ${{ job.salary_max}}
+                        </span>
                         <a href="#" class="text-blue-600 hover:text-blue-700">View Details →</a>
                     </div>
                 </div>
             </div>
-            <!-- 
-            <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
-                <div class="p-6">
-                    <div class="flex items-center justify-between mb-4">
-                        <span class="text-sm text-gray-500 bg-green-100 px-2 py-1 rounded">Remote</span>
-                        <span class="text-sm text-gray-500">5 days ago</span>
-                    </div>
-                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Product Manager</h3>
-                    <p class="text-gray-600 mb-4">Innovate Inc - Remote</p>
-                    <p class="text-gray-600 mb-4">Join our team as a Product Manager and lead exciting projects...
-                    </p>
-                    <div class="flex items-center justify-between">
-                        <span class="text-lg font-bold text-blue-600">$100,000 - $130,000</span>
-                        <a href="#" class="text-blue-600 hover:text-blue-700">View Details →</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
-                <div class="p-6">
-                    <div class="flex items-center justify-between mb-4">
-                        <span class="text-sm text-gray-500 bg-purple-100 px-2 py-1 rounded">Part-Time</span>
-                        <span class="text-sm text-gray-500">1 week ago</span>
-                    </div>
-                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Graphic Designer</h3>
-                    <p class="text-gray-600 mb-4">Creative Studio - New York, NY</p>
-                    <p class="text-gray-600 mb-4">We need a creative Graphic Designer to work on branding
-                        projects...</p>
-                    <div class="flex items-center justify-between">
-                        <span class="text-lg font-bold text-blue-600">$50,000 - $70,000</span>
-                        <a href="#" class="text-blue-600 hover:text-blue-700">View Details →</a>
-                    </div>
-                </div>
-            </div>
-        </div> -->
-
-            <!-- Pagination -->
-            <div class="flex justify-center mt-12">
-                <nav class="inline-flex rounded-md shadow">
-                    <a href="#" class="px-4 py-2 text-blue-600 hover:bg-blue-50 rounded-l-lg">Previous</a>
-                    <a href="#" class="px-4 py-2 text-blue-600 hover:bg-blue-50">1</a>
-                    <a href="#" class="px-4 py-2 text-blue-600 hover:bg-blue-50">2</a>
-                    <a href="#" class="px-4 py-2 text-blue-600 hover:bg-blue-50">3</a>
-                    <a href="#" class="px-4 py-2 text-blue-600 hover:bg-blue-50 rounded-r-lg">Next</a>
-                </nav>
-            </div>
+            {% endfor %}
         </div>
+
+        <!-- Pagination -->
+        <div class="flex justify-center mt-12">
+            <nav class="inline-flex rounded-md shadow">
+                <a href="#" class="px-4 py-2 text-blue-600 hover:bg-blue-50 rounded-l-lg">Previous</a>
+                <a href="#" class="px-4 py-2 text-blue-600 hover:bg-blue-50">1</a>
+                <a href="#" class="px-4 py-2 text-blue-600 hover:bg-blue-50">2</a>
+                <a href="#" class="px-4 py-2 text-blue-600 hover:bg-blue-50">3</a>
+                <a href="#" class="px-4 py-2 text-blue-600 hover:bg-blue-50 rounded-r-lg">Next</a>
+            </nav>
+        </div>
+    </div>
 </section>

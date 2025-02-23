@@ -26,6 +26,4 @@ admin.site.register(JobPreference)
 
 
 # Register your models here.
-admin.site.register(Job)
-admin.site.register(Company)
 

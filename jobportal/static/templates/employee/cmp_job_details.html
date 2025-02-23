@@ -1,0 +1,142 @@
+{% extends 'base.html' %}
+
+{% block nav %}
+{% include 'components/company_nav.html' %}
+{% endblock nav %}
+{% block content %}
+
+
+<!-- Main Job Details Content -->
+<div class="max-w-7xl mx-auto px-4 py-8">
+    <!-- Job Details Header -->
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
+        <div class="mb-4 md:mb-0">
+            <h1 class="text-2xl font-bold text-gray-900">{{ job.title }}</h1>
+            <div class="flex items-center space-x-4 jystify-center">
+                <p class="text-sm text-gray-600">{{ job.posted_date|timesince }} ago</p>
+                <p class="text-gray-600">
+                    <span
+                        class="px-2 py-1 {% if job.status == 'Draft' %}bg-gray-200{% elif job.status == 'Active' %}bg-green-200{% elif job.status == 'Closed' %}bg-red-200{% endif %} text-gray-800 rounded-full text-sm">{{job.status}}</span>
+                </p>
+            </div>
+
+        </div>
+        <div class="flex space-x-3">
+            <a href="{% url 'employer:edit_job' job.job_id %}"
+                class="bg-green-600 hover:bg-green-700 text-white px-5 py-2.5 rounded-lg flex items-center">
+                <i class="fas fa-edit mr-2"></i>Edit Job
+            </a>
+            <a href="{% url 'employer:delete_job' job.job_id %}"
+                class="bg-red-600 hover:bg-red-700 text-white px-5 py-2.5 rounded-lg flex items-center">
+                <i class="fas fa-trash mr-2"></i>Delete Job
+            </a>
+        </div>
+    </div>
+
+    <!-- Job Details Section -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Job Information -->
+        <div class="lg:col-span-2 bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+            <div class="space-y-4">
+                <div>
+                    <p class="text-sm text-gray-500">Location</p>
+                    <p class="text-lg font-medium text-gray-800">{{ job.location }}</p>
+                </div>
+                <div>
+                    <p class="text-sm text-gray-500">Job Type</p>
+                    <p class="text-lg font-medium text-gray-800">{{ job.job_type }}</p>
+                </div>
+                <div>
+                    <p class="text-sm text-gray-500">Category</p>
+                    <p class="text-gray-800 text-lg font-medium">{{ job.catagory }}</p>
+                </div>
+                <div>
+                    <p class="text-sm text-gray-500">Salary Range</p>
+                    <p class="text-lg font-medium text-gray-800">${{ job.salary_min }} - ${{ job.salary_max }}</p>
+                </div>
+                <div>
+                    <p class="text-sm text-gray-500">Experience Needed</p>
+                    <p class="text-lg font-medium text-gray-800">{{ job.exp_need }}+ years</p>
+                </div>
+                <div>
+                    <p class="text-sm text-gray-500">Description</p>
+                    <p class="text-gray-600">{{ job.description }}</p>
+                </div>
+                <div>
+                    <p class="text-sm text-gray-500">Responsibilities</p>
+                    <p class="text-gray-600">
+                    <ul class="list-disc list-inside">
+                        {% for item in res_list%}
+                        <li>{{ item }}</li>
+                        {% endfor %}
+                    </ul>
+                    </p>
+                </div>
+                <div>
+                    <p class="text-sm text-gray-500">Requirements</p>
+                    <p class="text-gray-600">
+                    <ul class="list-disc list-inside">
+                        {% for item in req_list%}
+                        <li>{{ item }}</li>
+                        {% endfor %}
+                    </ul>
+                    </p>
+                </div>
+                <div>
+                    <p class="text-sm text-gray-500">Benefits</p>
+                    <p class="text-gray-600">
+                    <ul class="list-disc list-inside">
+                        {% for item in ben_list%}
+                        <li>{{ item }}</li>
+                        {% endfor %}
+                    </ul>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Candidates Section -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+            <h2 class="text-xl font-semibold text-gray-900 mb-4">Candidates (15 Applications)</h2>
+            <div class="overflow-y-auto max-h-[calc(100vh-300px)]">
+                <!-- Candidate Card -->
+                <div class="flex items-center space-x-4 p-4 hover:bg-gray-50 rounded-lg cursor-pointer">
+                    <div class="h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center">
+                        <i class="fas fa-user text-gray-600"></i>
+                    </div>
+                    <div class="flex-1">
+                        <p class="font-medium">John Doe</p>
+                        <p class="text-sm text-gray-600">Senior Frontend Developer</p>
+                        <p class="text-xs text-gray-500 mt-1">Applied 2 days ago</p>
+                    </div>
+                    <span class="bg-green-100 text-green-600 px-2 py-1 rounded-full text-xs">New</span>
+                </div>
+
+                <!-- Candidate Card -->
+                <div class="flex items-center space-x-4 p-4 hover:bg-gray-50 rounded-lg cursor-pointer">
+                    <div class="h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center">
+                        <i class="fas fa-user text-gray-600"></i>
+                    </div>
+                    <div class="flex-1">
+                        <p class="font-medium">Jane Smith</p>
+                        <p class="text-sm text-gray-600">Product Manager</p>
+                        <p class="text-xs text-gray-500 mt-1">Applied 4 days ago</p>
+                    </div>
+                </div>
+
+                <!-- Add more candidate cards here -->
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+{% endblock content %}
+
+{% block footer %}
+<div class="my-2 w-full md:hidden">&nbsp;</div>
+<div class="footer-container hidden md:block">
+    {% include 'components/footer.html' %}
+</div>
+{% endblock footer %}

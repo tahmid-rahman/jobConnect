@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+
+{% block nav %}
+{% include 'components/company_nav.html' %}
+{% endblock nav %}
+{% block content %}
+
+<!-- Main Profile Content -->
+<div class="max-w-7xl mx-auto px-4 py-8">
+    <!-- Profile Header -->
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
+        <div class="mb-4 md:mb-0">
+            <h1 class="text-2xl font-bold text-gray-900">Company Profile</h1>
+            <p class="text-gray-600 mt-1">Manage your company details and employee information.</p>
+        </div>
+        <div class="flex space-x-3">
+            <button class="bg-green-600 hover:bg-green-700 text-white px-5 py-2.5 rounded-lg flex items-center">
+                <i class="fas fa-edit mr-2"></i>Edit Profile
+            </button>
+        </div>
+    </div>
+
+    <!-- Company Details Section -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-8">
+        <h2 class="text-xl font-semibold text-gray-900 mb-4">Company Information</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+                <p class="text-sm text-gray-500">Company Name</p>
+                <p class="text-lg font-medium text-gray-800">TechCorp Inc.</p>
+            </div>
+            <div>
+                <p class="text-sm text-gray-500">Industry</p>
+                <p class="text-lg font-medium text-gray-800">Technology</p>
+            </div>
+            <div>
+                <p class="text-sm text-gray-500">Location</p>
+                <p class="text-lg font-medium text-gray-800">San Francisco, CA</p>
+            </div>
+            <div>
+                <p class="text-sm text-gray-500">Website</p>
+                <a href="#" class="text-lg font-medium text-green-600 hover:text-green-700">www.techcorp.com</a>
+            </div>
+            <div>
+                <p class="text-sm text-gray-500">Founded</p>
+                <p class="text-lg font-medium text-gray-800">2015</p>
+            </div>
+            <div>
+                <p class="text-sm text-gray-500">Company Size</p>
+                <p class="text-lg font-medium text-gray-800">150 Employees</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Employee Details Section -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+        <h2 class="text-xl font-semibold text-gray-900 mb-4">Employee Details</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Employee Card -->
+            <div class="bg-gray-50 p-4 rounded-lg">
+                <div class="flex items-center space-x-4">
+                    <div class="h-12 w-12 rounded-full bg-gray-200 flex items-center justify-center">
+                        <i class="fas fa-user text-gray-600"></i>
+                    </div>
+                    <div>
+                        <p class="text-lg font-medium text-gray-800">John Doe</p>
+                        <p class="text-sm text-gray-600">Senior Frontend Developer</p>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <p class="text-sm text-gray-500">Email</p>
+                    <p class="text-sm text-gray-800">john.doe@techcorp.com</p>
+                </div>
+                <div class="mt-2">
+                    <p class="text-sm text-gray-500">Phone</p>
+                    <p class="text-sm text-gray-800">+1 (555) 123-4567</p>
+                </div>
+            </div>
+
+            <!-- Employee Card -->
+            <div class="bg-gray-50 p-4 rounded-lg">
+                <div class="flex items-center space-x-4">
+                    <div class="h-12 w-12 rounded-full bg-gray-200 flex items-center justify-center">
+                        <i class="fas fa-user text-gray-600"></i>
+                    </div>
+                    <div>
+                        <p class="text-lg font-medium text-gray-800">Jane Smith</p>
+                        <p class="text-sm text-gray-600">Product Manager</p>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <p class="text-sm text-gray-500">Email</p>
+                    <p class="text-sm text-gray-800">jane.smith@techcorp.com</p>
+                </div>
+                <div class="mt-2">
+                    <p class="text-sm text-gray-500">Phone</p>
+                    <p class="text-sm text-gray-800">+1 (555) 987-6543</p>
+                </div>
+            </div>
+
+            <!-- Add more employee cards here -->
+        </div>
+    </div>
+</div>
+
+
+{% endblock content %}
+
+{% block footer %}
+<div class="my-2 w-full md:hidden">&nbsp;</div>
+<div class="footer-container hidden md:block">
+    {% include 'components/footer.html' %}
+</div>
+{% endblock footer %}

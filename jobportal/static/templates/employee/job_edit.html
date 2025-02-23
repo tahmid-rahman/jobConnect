@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+
+{% block nav %}
+{% include 'components/company_nav.html' %}
+{% endblock nav %}
+{% block content %}
+
+
+<div class="max-w-7xl mx-auto px-4 py-8">
+    <h1 class="text-2xl font-bold text-gray-900">Edit Job</h1>
+    <form method="post">
+        {% csrf_token %}
+        <div class="space-y-4">
+            <div>
+                <label for="title" class="block text-sm font-medium text-gray-700">Title</label>
+                <input type="text" id="title" name="title" value="{{ job.title }}"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+            </div>
+            <div>
+                <label for="location" class="block text-sm font-medium text-gray-700">Location</label>
+                <input type="text" id="location" name="location" value="{{ job.location }}"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+            </div>
+            <div>
+                <label for="job_type" class="block text-sm font-medium text-gray-700">Job Type</label>
+                <select id="job_type" name="job_type" class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+                    <option value="Full-Time" {% if job.job_type == "Full-Time" %}selected{% endif %}>Full-Time
+                    </option>
+                    <option value="Part-Time" {% if job.job_type == "Part-Time" %}selected{% endif %}>Part-Time</option>
+                    <option value="Contract" {% if job.job_type == "Contract" %}selected{% endif %}>Contract</option>
+                    <option value="Internship" {% if job.job_type == " Internship" %}selected{% endif %}>Internship
+                    </option>
+
+                </select>
+            </div>
+            <div>
+                <label for="salary_min" class="block text-sm font-medium text-gray-700">Minimum Salary</label>
+                <input type="number" id="salary_min" name="salary_min" value="{{ job.salary_min }}"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+            </div>
+            <div>
+                <label for="salary_max" class="block text-sm font-medium text-gray-700">Maximum Salary</label>
+                <input type="number" id="salary_max" name="salary_max" value="{{ job.salary_max }}"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+            </div>
+            <div>
+                <label for="exp_need" class="block text-sm font-medium text-gray-700">Experience Needed</label>
+                <input type="number" id="exp_need" name="exp_need" value="{{ job.exp_need }}"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+            </div>
+            <div>
+                <label for="description" class="block text-sm font-medium text-gray-700">Description</label>
+                <textarea id="description" name="description"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-lg">{{ job.description }}</textarea>
+            </div>
+            <div>
+                <label for="responsibilities" class="block text-sm font-medium text-gray-700">Responsibilities</label>
+                <textarea id="responsibilities" name="responsibilities"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-lg">{{ job.responsibilities }}</textarea>
+            </div>
+            <div>
+                <label for="requirements" class="block text-sm font-medium text-gray-700">Requirements</label>
+                <textarea id="requirements" name="requirements"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-lg">{{ job.requirements }}</textarea>
+            </div>
+            <div>
+                <label for="benefits" class="block text-sm font-medium text-gray-700">Benefits</label>
+                <textarea id="benefits" name="benefits"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-lg">{{ job.benefits }}</textarea>
+            </div>
+            <div>
+                <label for="status" class="block text-sm font-medium text-gray-700">Status</label>
+                <select id="status" name="status" class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+                    <option value="Active" {% if job.status == 'Active' %}selected{% endif %}>Active</option>
+                    <option value="Draft" {% if job.status == 'Draft' %}selected{% endif %}>Draft</option>
+                    <option value="Closed" {% if job.status == 'Closed' %}selected{% endif %}>Closed</option>
+                </select>
+            </div>
+            <div>
+                <label for="category" class="block text-sm font-medium text-gray-700">Category</label>
+                <select id="category" name="category" class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+                    <option value="engineering" {% if job.category == 'engineering' %}selected{% endif %}>Engineering
+                    </option>
+                    <option value="design" {% if job.category == 'design' %}selected{% endif %}>Design</option>
+                    <option value="marketing" {% if job.category == 'marketing' %}selected{% endif %}>Marketing</option>
+                </select>
+            </div>
+            <button type="submit" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg">Update
+                Job</button>
+        </div>
+    </form>
+</div>
+
+
+{% endblock content %}
+
+{% block footer %}
+<div class="my-2 w-full md:hidden">&nbsp;</div>
+<div class="footer-container hidden md:block">
+    {% include 'components/footer.html' %}
+</div>
+{% endblock footer %}

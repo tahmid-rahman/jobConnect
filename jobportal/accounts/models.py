@@ -31,6 +31,10 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         ('user', 'User'),
         ('employee', 'Employee'),
     ], default='user')
+    status = models.CharField(max_length=50, choices=[
+        ('approved','Approved'),
+        ('pending', 'Pending'),
+    ],default='pending')
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
 

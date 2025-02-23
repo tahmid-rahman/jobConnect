@@ -1,0 +1,151 @@
+{% extends 'base.html' %}
+
+{% block nav %}
+{% include 'components/company_nav.html' %}
+{% endblock nav %}
+{% block content %}
+
+<!-- Main Dashboard Content -->
+<div class="max-w-7xl mx-auto px-4 py-8">
+    <!-- Dashboard Header -->
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
+        <div class="mb-4 md:mb-0">
+            <h1 class="text-2xl font-bold text-gray-900">TechCorp Inc. Dashboard</h1>
+            <p class="text-gray-600 mt-1">Last login: Today at 09:42 AM</p>
+        </div>
+        <!-- <div class="flex space-x-3">
+            <button class="bg-green-600 hover:bg-green-700 text-white px-5 py-2.5 rounded-lg flex items-center">
+                <i class="fas fa-plus mr-2"></i>New Job Post
+            </button>
+            <button
+                class="bg-white border border-gray-300 hover:border-gray-400 text-gray-700 px-5 py-2.5 rounded-lg flex items-center">
+                <i class="fas fa-search mr-2"></i>Find Talent
+            </button>
+        </div> -->
+    </div>
+
+    <!-- Insights Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-5 mb-8">
+        <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-100">
+            <div class="flex justify-between items-center">
+                <div>
+                    <p class="text-sm text-gray-500 mb-1">Active Listings</p>
+                    <p class="text-2xl font-bold">{{active_jobs_count}}</p>
+                </div>
+                <div class="bg-green-100 p-3 rounded-lg">
+                    <i class="fas fa-briefcase text-green-600"></i>
+                </div>
+            </div>
+        </div>
+        <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-100">
+            <div class="flex justify-between items-center">
+                <div>
+                    <p class="text-sm text-gray-500 mb-1">New Applicants</p>
+                    <p class="text-2xl font-bold">23</p>
+                </div>
+                <div class="bg-blue-100 p-3 rounded-lg">
+                    <i class="fas fa-users text-blue-600"></i>
+                </div>
+            </div>
+        </div>
+        <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-100">
+            <div class="flex justify-between items-center">
+                <div>
+                    <p class="text-sm text-gray-500 mb-1">Interviews Scheduled</p>
+                    <p class="text-2xl font-bold">6</p>
+                </div>
+                <div class="bg-purple-100 p-3 rounded-lg">
+                    <i class="fas fa-calendar-alt text-purple-600"></i>
+                </div>
+            </div>
+        </div>
+        <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-100">
+            <div class="flex justify-between items-center">
+                <div>
+                    <p class="text-sm text-gray-500 mb-1">Onboarding Candidates</p>
+                    <p class="text-2xl font-bold">3</p>
+                </div>
+                <div class="bg-orange-100 p-3 rounded-lg">
+                    <i class="fas fa-user-check text-orange-600"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Access Section -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <!-- Onboarding Tracker Card -->
+        <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="font-semibold text-lg">Onboarding Tracker</h3>
+                <i class="fas fa-user-check text-gray-400"></i>
+            </div>
+            <p class="text-gray-600 mb-4">Track and manage the onboarding process for new hires.</p>
+            <button class="w-full bg-green-50 text-green-600 hover:bg-green-100 py-2 rounded-lg">
+                View Onboarding <i class="fas fa-arrow-right ml-2"></i>
+            </button>
+        </div>
+
+        <!-- Interview Scheduler Card -->
+        <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="font-semibold text-lg">Interview Scheduler</h3>
+                <i class="fas fa-calendar-alt text-gray-400"></i>
+            </div>
+            <p class="text-gray-600 mb-4">Schedule and manage interviews with candidates seamlessly.</p>
+            <button class="w-full bg-green-50 text-green-600 hover:bg-green-100 py-2 rounded-lg">
+                Schedule Interview <i class="fas fa-arrow-right ml-2"></i>
+            </button>
+        </div>
+
+        <!-- Employer Branding Card -->
+        <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="font-semibold text-lg">Employer Branding</h3>
+                <i class="fas fa-bullhorn text-gray-400"></i>
+            </div>
+            <p class="text-gray-600 mb-4">Showcase your company culture and attract top talent.</p>
+            <button class="w-full bg-green-50 text-green-600 hover:bg-green-100 py-2 rounded-lg">
+                Manage Branding <i class="fas fa-arrow-right ml-2"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Recent Activity Section -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100">
+        <div class="px-6 py-4 border-b border-gray-100">
+            <h3 class="text-lg font-semibold">Recent Hiring Activity</h3>
+        </div>
+        <div class="p-6">
+            <div class="flex items-start space-x-4 pb-4 mb-4 border-b border-gray-100">
+                <div class="bg-green-100 p-2 rounded-lg">
+                    <i class="fas fa-user-check text-green-600"></i>
+                </div>
+                <div class="flex-1">
+                    <p class="font-medium">New hire: Sarah Johnson</p>
+                    <p class="text-sm text-gray-600">Accepted offer for Senior UX Designer position</p>
+                    <p class="text-xs text-gray-500 mt-1">2 hours ago</p>
+                </div>
+            </div>
+            <div class="flex items-start space-x-4 pb-4 mb-4 border-b border-gray-100">
+                <div class="bg-blue-100 p-2 rounded-lg">
+                    <i class="fas fa-comments text-blue-600"></i>
+                </div>
+                <div class="flex-1">
+                    <p class="font-medium">New message from candidate</p>
+                    <p class="text-sm text-gray-600">Mark Wilson: "Regarding the Product Manager role..."</p>
+                    <p class="text-xs text-gray-500 mt-1">5 hours ago</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
+
+{% block footer %}
+<div class="my-2 w-full md:hidden">&nbsp;</div>
+<div class="footer-container hidden md:block">
+    {% include 'components/footer.html' %}
+</div>
+{% endblock footer %}

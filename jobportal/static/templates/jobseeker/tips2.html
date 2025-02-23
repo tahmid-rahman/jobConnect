@@ -121,5 +121,7 @@
 
 {% endblock content %}
 {% block footer %}
-{% include 'components/footer.html' %}
+<div class="footer-container hidden md:block">
+    {% include 'components/footer.html' %}
+</div>
 {% endblock footer %}

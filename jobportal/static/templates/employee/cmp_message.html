@@ -1,0 +1,170 @@
+{% extends 'base.html' %}
+
+{% block nav %}
+{% include 'components/company_nav.html' %}
+{% endblock nav %}
+{% block content %}
+
+
+<!-- Main Messages Content -->
+<div class="max-w-7xl mx-auto px-4 py-8">
+    <!-- Messages Header -->
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
+        <div class="mb-4 md:mb-0">
+            <h1 class="text-2xl font-bold text-gray-900">Messages</h1>
+            <p class="text-gray-600 mt-1">Manage and interact with your messages.</p>
+        </div>
+        <div class="flex space-x-3">
+            <button class="bg-green-600 hover:bg-green-700 text-white px-5 py-2.5 rounded-lg flex items-center">
+                <i class="fas fa-plus mr-2"></i>New Message
+            </button>
+        </div>
+    </div>
+
+    <!-- Messages Layout -->
+    <div class="flex flex-col lg:flex-row gap-8">
+        <!-- Message List (Visible on all screens) -->
+        <div id="message-list" class="bg-white rounded-xl shadow-sm border border-gray-100 lg:w-1/3">
+            <div class="px-6 py-4 border-b border-gray-100">
+                <h3 class="text-lg font-semibold">Message Threads</h3>
+            </div>
+            <div class="p-6">
+                <!-- Search Bar -->
+                <div class="mb-4">
+                    <input type="text" placeholder="Search messages..."
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
+                </div>
+
+                <!-- Message Threads -->
+                <div class="overflow-y-auto max-h-[calc(100vh-400px)]">
+                    <!-- Sample Message Thread -->
+                    <div id="thread-1"
+                        class="flex items-center space-x-4 p-4 hover:bg-gray-50 rounded-lg cursor-pointer"
+                        onclick="openMessage('thread-1')">
+                        <div class="h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center">
+                            <i class="fas fa-user text-gray-600"></i>
+                        </div>
+                        <div class="flex-1">
+                            <p class="font-medium">John Doe</p>
+                            <p class="text-sm text-gray-600">Regarding the Senior Frontend Developer role...</p>
+                            <p class="text-xs text-gray-500 mt-1">2 hours ago</p>
+                        </div>
+                        <span class="bg-green-100 text-green-600 px-2 py-1 rounded-full text-xs">New</span>
+                    </div>
+
+                    <!-- Sample Message Thread -->
+                    <div id="thread-2"
+                        class="flex items-center space-x-4 p-4 hover:bg-gray-50 rounded-lg cursor-pointer"
+                        onclick="openMessage('thread-2')">
+                        <div class="h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center">
+                            <i class="fas fa-user text-gray-600"></i>
+                        </div>
+                        <div class="flex-1">
+                            <p class="font-medium">Jane Smith</p>
+                            <p class="text-sm text-gray-600">Follow-up on the Product Manager position...</p>
+                            <p class="text-xs text-gray-500 mt-1">5 hours ago</p>
+                        </div>
+                    </div>
+
+                    <!-- Add more message threads here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Message Conversation (Hidden on mobile/tablet by default) -->
+        <div id="message-conversation"
+            class="bg-white rounded-xl shadow-sm border border-gray-100 lg:w-2/3 hidden lg:block">
+            <!-- Back Button for Mobile/Tablet -->
+            <div class="lg:hidden px-6 py-4 border-b border-gray-100">
+                <button onclick="closeMessage()" class="text-gray-600 hover:text-green-600 flex items-center">
+                    <i class="fas fa-arrow-left mr-2"></i>Back to Messages
+                </button>
+            </div>
+            <div class="px-6 py-4 border-b border-gray-100">
+                <h3 class="text-lg font-semibold">Conversation with <span id="conversation-name">John Doe</span>
+                </h3>
+            </div>
+            <div class="p-6">
+                <!-- Message History -->
+                <div class="overflow-y-auto max-h-[calc(100vh-666px)] space-y-4">
+                    <!-- Incoming Message -->
+                    <div class="flex items-start space-x-4">
+                        <div class="h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center">
+                            <i class="fas fa-user text-gray-600"></i>
+                        </div>
+                        <div class="flex-1">
+                            <p class="text-sm text-gray-800 bg-white rounded-lg p-4 w-fit mr-auto shadow-md">Hi, I
+                                wanted to follow up on the Senior Frontend
+                                Developer role. Are there any updates?</p>
+                            <p class="text-xs text-gray-500 mt-1">John Doe - 2 hours ago</p>
+                        </div>
+                    </div>
+
+                    <!-- Outgoing Message -->
+                    <div class="flex items-start space-x-4 justify-end">
+                        <div class="flex-1 text-right ">
+                            <p class="text-sm text-gray-800 bg-green-50 rounded-lg p-4 w-fit ml-auto shadow-md">Hi John,
+                                thanks
+                                for reaching out. We're currently
+                                reviewing applications and will get back to you soon.</p>
+                            <p class="text-xs text-gray-500 mt-1">You - 1 hour ago</p>
+                        </div>
+                        <div class="h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center">
+                            <i class="fas fa-user text-gray-600"></i>
+                        </div>
+                    </div>
+
+
+                    <!-- Add more messages here -->
+                </div>
+
+                <!-- Message Input -->
+                <div class="mt-6">
+                    <textarea rows="3" placeholder="Type your message..."
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"></textarea>
+                    <button
+                        class="mt-2 bg-green-600 hover:bg-green-700 text-white px-5 py-2.5 rounded-lg flex items-center">
+                        <i class="fas fa-paper-plane mr-2"></i>Send Message
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Function to open message conversation (for mobile/tablet)
+    function openMessage(threadId) {
+        const conversation = document.getElementById('message-conversation');
+        const messageList = document.getElementById('message-list');
+        const thread = document.getElementById(threadId);
+        const conversationName = thread.querySelector('.font-medium').textContent;
+
+        // Update conversation name
+        document.getElementById('conversation-name').textContent = conversationName;
+
+        // Show conversation on mobile/tablet
+        if (window.innerWidth < 1024) {
+            conversation.classList.remove('hidden');
+            messageList.classList.add('hidden'); // Hide message list
+        }
+    }
+
+    // Function to close message conversation (for mobile/tablet)
+    function closeMessage() {
+        const conversation = document.getElementById('message-conversation');
+        const messageList = document.getElementById('message-list');
+        conversation.classList.add('hidden');
+        messageList.classList.remove('hidden'); // Show message list
+    }
+</script>
+
+
+{% endblock content %}
+
+{% block footer %}
+<div class="my-2 w-full md:hidden">&nbsp;</div>
+<div class="footer-container hidden md:block">
+    {% include 'components/footer.html' %}
+</div>
+{% endblock footer %}

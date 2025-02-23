@@ -1,0 +1,106 @@
+<nav class="bg-white shadow-lg border-b border-gray-200 sticky top-0">
+    <div class="max-w-7xl mx-auto px-4">
+        <div class="flex justify-between items-center py-3">
+            <!-- Logo Section -->
+            <a href="/company/" class="flex items-center space-x-2">
+                <span class="text-xl font-bold text-gray-800">JobConnect</span>
+                <span class="text-sm text-gray-500">for Companies</span>
+            </a>
+
+            <!-- Navigation Menu (Hidden on mobile) -->
+            <div class="hidden md:flex items-center space-x-6">
+                <a href="/company/"
+                    class="hover:hover:text-green-600 {% if request.path == '/company/' %} text-green-600 {% else %} text-gray-600 {% endif %}">Dashboard</a>
+                <a href="/company/jobs/"
+                    class="hover:hover:text-green-600 {% if '/company/jobs/' in request.path %} text-green-600 {% else %} text-gray-600 {% endif %}">Jobs</a>
+                <a href="/company/candidates/"
+                    class="hover:hover:text-green-600 {% if '/company/candidates/' in request.path %} text-green-600 {% else %} text-gray-600 {% endif %}">Candidates</a>
+            </div>
+
+            <!-- Company Profile Dropdown -->
+            <div class="relative ml-4">
+                <button id="profile-dropdown-button" class="flex items-center space-x-3 focus:outline-none">
+                    <div class="relative">
+                        <div class="h-10 w-10 rounded-lg bg-gray-200 flex items-center justify-center">
+                            <i class="fas fa-building text-gray-600"></i>
+                        </div>
+                        <span
+                            class="absolute bottom-0 right-0 w-3 h-3 bg-green-400 rounded-full border-2 border-white"></span>
+                    </div>
+                    <div class="text-left hidden md:block">
+                        <p class="text-sm font-medium text-gray-700">{{request.user.name}}</p>
+                        <p class="text-xs text-gray-500">Premium Plan</p>
+                    </div>
+                    <i class="fas fa-chevron-down text-gray-400 text-sm"></i>
+                </button>
+                <!-- Dropdown Menu -->
+                <div id="profile-dropdown"
+                    class="absolute right-0 hidden bg-white shadow-xl rounded-lg mt-2 py-2 w-48 border border-gray-100">
+                    <a href="/company/profile/"
+                        class="flex items-center px-4 py-2.5 text-sm text-gray-700 hover:bg-green-50">
+                        <i class="fas fa-building mr-3 text-gray-500"></i>Profile
+                    </a>
+                    <a href="/company/settings/"
+                        class="flex items-center px-4 py-2.5 text-sm text-gray-700 hover:bg-green-50">
+                        <i class="fas fa-cog mr-3 text-gray-500"></i>Settings
+                    </a>
+                    <a href="/company/messages/"
+                        class="flex items-center px-4 py-2.5 text-sm text-gray-700 hover:bg-green-50">
+                        <i class="fas fa-envelope mr-3 text-gray-500"></i>Messages
+                        <span class="ml-auto bg-green-100 text-green-600 px-2 py-1 rounded-full text-xs">2
+                            New</span>
+                    </a>
+                    <a href="/accounts/logout/"
+                        class="flex items-center px-4 py-2.5 text-sm text-gray-700 hover:bg-green-50">
+                        <i class="fas fa-sign-out-alt mr-3 text-gray-500"></i>Logout
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- Bottom Navigation Bar (Visible on mobile) -->
+<div class="md:hidden fixed bottom-0 left-0 right-0 bg-white shadow-lg border-t border-gray-200">
+    <div class="flex justify-around items-center py-2">
+        <a href="/company/"
+            class="{% if request.path == '/company/' %} text-green-600 {% else %} text-gray-600 {% endif %} hover:text-green-600 flex flex-col items-center">
+            <i class="fas fa-home text-lg"></i>
+            <span class="text-xs">Dashboard</span>
+        </a>
+        <a href="/company/jobs/"
+            class="{% if request.path == '/company/jobs/' %} text-green-600 {% else %} text-gray-600 {% endif %} hover:text-green-600 flex flex-col items-center">
+            <i class="fas fa-briefcase text-lg"></i>
+            <span class="text-xs">Jobs</span>
+        </a>
+        <a href="/company/candidates/"
+            class="{% if request.path == '/company/candidates/' %} text-green-600 {% else %} text-gray-600 {% endif %} hover:text-green-600 flex flex-col items-center">
+            <i class="fas fa-users text-lg"></i>
+            <span class="text-xs">Candidates</span>
+        </a>
+        <a href="/company/messages/"
+            class="{% if request.path == '/company/messages/' %} text-green-600 {% else %} text-gray-600 {% endif %} hover:text-green-600 flex flex-col items-center relative">
+            <i class="fas fa-envelope text-lg"></i>
+            <span class="text-xs">Messages</span>
+            <!-- Notification Badge -->
+            <span class="absolute top-0 right-0 bg-green-100 text-green-600 px-1.5 py-0.5 rounded-full text-xs">2</span>
+        </a>
+    </div>
+</div>
+
+<script>
+    // Dropdown toggle on click
+    const dropdownButton = document.getElementById('profile-dropdown-button');
+    const dropdownMenu = document.getElementById('profile-dropdown');
+
+    dropdownButton.addEventListener('click', () => {
+        dropdownMenu.classList.toggle('hidden');
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', (event) => {
+        if (!dropdownButton.contains(event.target) && !dropdownMenu.contains(event.target)) {
+            dropdownMenu.classList.add('hidden');
+        }
+    });
+</script>

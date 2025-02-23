@@ -4,6 +4,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .models import CustomUser  # Import your CustomUser model
 from jobseeker.models import Profile,JobPreference
+from employer.models import Company
 
 # User Registration
 def register(request):
@@ -36,21 +37,37 @@ def register(request):
             return redirect('register')
 
         # Create the user
-        user = CustomUser.objects.create_user(
-            name=name,
-            username=username,
-            email=email,
-            phone_no=phone_no,
-            role=role,
-            password=password1
-        )
+        if role == 'user' :
+            user = CustomUser.objects.create_user(
+                name=name,
+                username=username,
+                email=email,
+                phone_no=phone_no,
+                role=role,
+                status='approved',
+                password=password1
+            )
+        else :
+            user = CustomUser.objects.create_user(
+                name=name,
+                username=username,
+                email=email,
+                phone_no=phone_no,
+                role=role,
+                password=password1
+            )
+
         if user.role =="user" :
             Profile.objects.create(user=user)
             prf = Profile.objects.get(user = user)
             JobPreference.objects.create(profile=prf)
-        # Log the user in immediately after registration
-        login(request, user)
-        messages.success(request, "Registration successful.")
+            messages.success(request, "Registration successful.")
+            login(request, user)
+        elif user.role == "employee" :
+            Company.objects.create(user=user,name=name)
+            messages.success(request, "Registration successful.")
+            return redirect('login')
+
         return redirect('login')
 
     return render(request, 'accounts/registration.html')
@@ -75,16 +92,29 @@ def user_login(request):
         user = authenticate(request, username=email, password=password)
         if user is not None:
             print('success')
-            login(request, user)
-            messages.success(request, f"Welcome back, {user.username}! ")
+           
 
             # Redirect based on user role
             if user.role == 'admin':
-                return redirect('adminpanel:admin_home')
+                if user.status == 'pending':
+                    messages.error(request, "Your account is pending approval. Please wait for approval.")
+                    return redirect('login')
+                else:
+                    login(request, user)
+                    messages.success(request, f"Welcome back, {user.username}! ")
+                    return redirect('adminpanel:admin_home')
             elif user.role == 'user':
+                login(request, user)
+                messages.success(request, f"Welcome back, {user.username}! ")
                 return redirect('jobseeker:dashboard')
             elif user.role == 'employee':
-                return redirect('employee:employee_home')
+                if user.status == 'pending':
+                    messages.error(request, "Your account is pending for approval. Please wait approval. You will be notified through Email after confirmation.")
+                    return redirect('login')
+                else:
+                    login(request, user)
+                    messages.success(request, f"Welcome back, {user.username}! ")
+                    return redirect('employer:company_dashboard')
             else:
                 return redirect('login')  # Fallback if role is undefined
         else:

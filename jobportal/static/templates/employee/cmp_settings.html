@@ -1,0 +1,133 @@
+{% extends 'base.html' %}
+
+{% block nav %}
+{% include 'components/company_nav.html' %}
+{% endblock nav %}
+{% block content %}
+
+
+<!-- Main Settings Content -->
+<div class="max-w-7xl mx-auto px-4 py-8">
+    <!-- Settings Header -->
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
+        <div class="mb-4 md:mb-0">
+            <h1 class="text-2xl font-bold text-gray-900">Settings</h1>
+            <p class="text-gray-600 mt-1">Manage your account settings and preferences.</p>
+        </div>
+    </div>
+
+    <!-- Settings Sections -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <!-- Account Settings -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+            <h2 class="text-xl font-semibold text-gray-900 mb-4">Account Settings</h2>
+            <div class="space-y-4">
+                <div>
+                    <label for="company-name" class="block text-sm font-medium text-gray-700">Company Name</label>
+                    <input type="text" id="company-name" value="TechCorp Inc."
+                        class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
+                </div>
+                <div>
+                    <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+                    <input type="email" id="email" value="contact@techcorp.com"
+                        class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
+                </div>
+                <div>
+                    <label for="phone" class="block text-sm font-medium text-gray-700">Phone</label>
+                    <input type="tel" id="phone" value="+1 (555) 123-4567"
+                        class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
+                </div>
+                <button class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg">
+                    Save Changes
+                </button>
+            </div>
+        </div>
+
+        <!-- Security Settings -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+            <h2 class="text-xl font-semibold text-gray-900 mb-4">Security Settings</h2>
+            <div class="space-y-4">
+                <div>
+                    <label for="current-password" class="block text-sm font-medium text-gray-700">Current
+                        Password</label>
+                    <input type="password" id="current-password"
+                        class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
+                </div>
+                <div>
+                    <label for="new-password" class="block text-sm font-medium text-gray-700">New Password</label>
+                    <input type="password" id="new-password"
+                        class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
+                </div>
+                <div>
+                    <label for="confirm-password" class="block text-sm font-medium text-gray-700">Confirm New
+                        Password</label>
+                    <input type="password" id="confirm-password"
+                        class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
+                </div>
+                <button class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg">
+                    Update Password
+                </button>
+            </div>
+        </div>
+
+        <!-- Notification Preferences -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+            <h2 class="text-xl font-semibold text-gray-900 mb-4">Notification Preferences</h2>
+            <div class="space-y-4">
+                <div class="flex items-center">
+                    <input type="checkbox" id="email-notifications"
+                        class="h-4 w-4 text-green-600 border-gray-300 rounded focus:ring-green-500">
+                    <label for="email-notifications" class="ml-2 text-sm text-gray-700">Email Notifications</label>
+                </div>
+                <div class="flex items-center">
+                    <input type="checkbox" id="sms-notifications"
+                        class="h-4 w-4 text-green-600 border-gray-300 rounded focus:ring-green-500">
+                    <label for="sms-notifications" class="ml-2 text-sm text-gray-700">SMS Notifications</label>
+                </div>
+                <div class="flex items-center">
+                    <input type="checkbox" id="push-notifications"
+                        class="h-4 w-4 text-green-600 border-gray-300 rounded focus:ring-green-500">
+                    <label for="push-notifications" class="ml-2 text-sm text-gray-700">Push Notifications</label>
+                </div>
+                <button class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg">
+                    Save Preferences
+                </button>
+            </div>
+        </div>
+
+        <!-- Billing Information -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+            <h2 class="text-xl font-semibold text-gray-900 mb-4">Billing Information</h2>
+            <div class="space-y-4">
+                <div>
+                    <label for="card-number" class="block text-sm font-medium text-gray-700">Card Number</label>
+                    <input type="text" id="card-number" value="**** **** **** 1234"
+                        class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
+                </div>
+                <div>
+                    <label for="expiry-date" class="block text-sm font-medium text-gray-700">Expiry Date</label>
+                    <input type="text" id="expiry-date" value="12/25"
+                        class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
+                </div>
+                <div>
+                    <label for="cvv" class="block text-sm font-medium text-gray-700">CVV</label>
+                    <input type="text" id="cvv" value="***"
+                        class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
+                </div>
+                <button class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg">
+                    Update Billing
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock content %}
+
+{% block footer %}
+<div class="my-2 w-full md:hidden">&nbsp;</div>
+<div class="footer-container hidden md:block">
+    {% include 'components/footer.html' %}
+</div>
+{% endblock footer %}

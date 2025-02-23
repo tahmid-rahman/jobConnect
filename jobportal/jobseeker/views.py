@@ -19,7 +19,7 @@ def user_role_required(view_func):
 @login_required
 def dashboard(request):
     jobs = Job.objects.all().order_by('-posted_date') 
-    paginator = Paginator(jobs, 3)
+    paginator = Paginator(jobs, 6)
     print(request.path)
 
     page_number = request.GET.get('page')

@@ -115,5 +115,8 @@
 {% endblock content %}
 
 {% block footer %}
-{% include 'components/footer.html' %}
+<div class="my-20 w-full md:hidden">&nbsp;</div>
+<div class="footer-container hidden md:block">
+    {% include 'components/footer.html' %}
+</div>
 {% endblock footer %}
