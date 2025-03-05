@@ -20,7 +20,6 @@ def user_role_required(view_func):
 def dashboard(request):
     jobs = Job.objects.all().order_by('-posted_date') 
     paginator = Paginator(jobs, 6)
-    print(request.path)
 
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number) 
@@ -317,3 +316,44 @@ def tips2(request):
 def tips3(request):
     return render(request, 'jobseeker/tips3.html') 
     
+@login_required
+def upload_profile_picture(request):
+    if request.method == 'POST' and request.FILES.get('profile_picture'):
+        user = request.user
+        user.profile.profile_picture = request.FILES['profile_picture']
+        user.profile.save()
+        messages.success(request, "Upload successful!")
+    else:
+        messages.error(request, "Error uploading image.")
+
+    return redirect('jobseeker:profile')
+
+
+
+@login_required
+def remove_skill(request, skill_id):
+    if request.method == 'POST':
+        pro = Profile.objects.get(user=request.user)
+        skill = pro.skills.filter(id=skill_id).first()
+        print(skill)
+        try:
+            skill.delete()
+            messages.success(request, "Skill removed successfully.")
+        except Exception as e:
+            messages.error(request, f"Failed to remove skill: {str(e)}")
+            
+        return redirect('jobseeker:profile')  
+    
+    messages.error(request, "Invalid request method.")
+    return redirect('jobseeker:profile')
+
+
+
+@login_required
+def resume_build(request):
+    pro = Profile.objects.get(user=request.user)
+    edu = pro.educations.all()
+    exp = pro.experiences.all()
+    skill = pro.skills.all()
+    prf = JobPreference.objects.get(profile=pro)
+    return render(request, 'jobseeker/resume_tem1.html',{'pro': pro,'edu':edu, 'exp':exp, 'skill':skill,'prf':prf})

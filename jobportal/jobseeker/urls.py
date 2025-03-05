@@ -1,7 +1,7 @@
 from django.urls import path, include
 from .views import dashboard, company_view, job_detail, setting, profile, tips, insight,company_detail,resume_tips,tips2,tips3,update_profile
 from .views import update_about_me,add_work_experience,update_work_experience,delete_work_experience,add_education,update_education,delete_education
-from .views import update_job_preferences,add_skills,update_account,change_password
+from .views import update_job_preferences,add_skills,update_account,change_password,upload_profile_picture,remove_skill,resume_build
 app_name = 'jobseeker'
 
 from jobseeker.views import dashboard
@@ -25,8 +25,11 @@ urlpatterns = [
     path('update-account/', update_account, name='update_account'),
     path('change-password/', change_password, name='change_password'),
     path('tips/', tips, name='tips'),
+    path('resume-build/', resume_build, name='resume_build'),
     path('tips/resume_tips', resume_tips, name='resume_tips'),
     path('tips/interview_tips', tips2, name='tips2'),
     path('tips/networking_tips', tips3, name='tips3'),
     path('salaryinsight/', insight, name='insight'),
+    path('upload-profile-picture/', upload_profile_picture, name='upload_profile_picture'),
+    path('remove-skill/<int:skill_id>/', remove_skill, name='remove_skill'),
 ]

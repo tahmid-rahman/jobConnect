@@ -11,15 +11,34 @@
         <div class="bg-white p-8 rounded-lg shadow-md mb-8">
             <div class="flex flex-col md:flex-row items-center md:items-start space-y-4 md:space-y-0 md:space-x-6">
                 <!-- Profile Picture -->
-                <div class="w-24 h-24 bg-blue-100 rounded-full flex items-center justify-center">
-                    <span class="text-3xl font-bold text-blue-600">TR</span>
+                <!-- <div onclick=" document.getElementById('profileInput').click()"
+                    class=" cursor-pointer w-28 h-28 bg-blue-100 rounded-full flex items-center justify-center overflow-hidden border-transparent border-2 hover:border-blue-600 ">
+                    <img id="profileImage" src="{{ pro.profile_picture.url }}" alt="profileImage"
+                        class="w-full h-full object-cover">
+                </div> -->
+                <input type="file" id="profileInput" accept="image/*" class="hidden">
+
+                <div onclick="document.getElementById('profileInput').click()"
+                    class="relative cursor-pointer w-28 h-28 bg-blue-100 rounded-full flex items-center justify-center overflow-hidden">
+
+                    <!-- Profile Image -->
+                    <img id="profileImage" src="{{ pro.profile_picture.url }}" alt="TR"
+                        class="w-full h-full object-cover">
+
+                    <!-- Hover Overlay -->
+                    <div
+                        class="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
+                        <span class="text-white text-sm font-normal">Choose Image</span>
+                    </div>
                 </div>
+
                 <!-- Profile Info -->
                 <div>
                     <div id="profile-info">
-                        <h1 class="text-3xl font-bold text-gray-800 mb-2">{{pro.first_name}} {{pro.last_name}}</h1>
+                        <h1 class="text-3xl font-bold text-gray-800 mb-2 hover:underline cursor-pointer">
+                            {{pro.first_name}}
+                            {{pro.last_name}}</h1>
                         <p class="text-lg text-gray-600">{{pro.job_title}}</p>
-                        <p class="text-gray-600">{{pro.location}}</p>
                         <div class="mt-4">
                             <a href="#" id="edit-profile-link" class="text-blue-600 hover:text-blue-700">Edit
                                 Profile</a>
@@ -177,22 +196,22 @@
                             {% csrf_token %}
                             <div>
                                 <label for="job_title_new" class="block text-gray-700">Job Title</label>
-                                <input type="text" id="job_title_new" name="job_title"
+                                <input type="text" id="job_title_new" name="job_title" required
                                     class="w-full px-4 py-2 border rounded-lg">
                             </div>
                             <div>
                                 <label for="company_name_new" class="block text-gray-700">Company Name</label>
-                                <input type="text" id="company_name_new" name="company_name"
+                                <input type="text" id="company_name_new" name="company_name" required
                                     class="w-full px-4 py-2 border rounded-lg">
                             </div>
                             <div>
                                 <label for="location_new" class="block text-gray-700">Location</label>
-                                <input type="text" id="location_new" name="location"
+                                <input type="text" id="location_new" name="location" required
                                     class="w-full px-4 py-2 border rounded-lg">
                             </div>
                             <div>
                                 <label for="start_date_new" class="block text-gray-700">Start Date</label>
-                                <input type="date" id="start_date_new" name="start_date"
+                                <input type="date" id="start_date_new" name="start_date" required
                                     class="w-full px-4 py-2 border rounded-lg">
                             </div>
                             <div>
@@ -202,7 +221,7 @@
                             </div>
                             <div>
                                 <label for="description_new" class="block text-gray-700">Description</label>
-                                <textarea id="description_new" name="description"
+                                <textarea id="description_new" name="description" required
                                     class="w-full px-4 py-2 border rounded-lg"></textarea>
                             </div>
                             <div class="mt-4">
@@ -248,23 +267,23 @@
                                 <div>
                                     <label for="degree_{{ e.edu_id }}" class="block text-gray-700">Degree</label>
                                     <input type="text" id="degree_{{ e.edu_id }}" name="degree" value="{{ e.degree }}"
-                                        class="w-full px-4 py-2 border rounded-lg">
+                                        required class="w-full px-4 py-2 border rounded-lg">
                                 </div>
                                 <div>
                                     <label for="school_{{ e.edu_id }}" class="block text-gray-700">School</label>
                                     <input type="text" id="school_{{ e.edu_id }}" name="school" value="{{ e.school }}"
-                                        class="w-full px-4 py-2 border rounded-lg">
+                                        required class="w-full px-4 py-2 border rounded-lg">
                                 </div>
                                 <div>
                                     <label for="location_{{ e.edu_id }}" class="block text-gray-700">Location</label>
-                                    <input type="text" id="location_{{ e.edu_id }}" name="location"
+                                    <input type="text" id="location_{{ e.edu_id }}" name="location" required
                                         value="{{ e.location }}" class="w-full px-4 py-2 border rounded-lg">
                                 </div>
                                 <div>
                                     <label for="graduation_date_{{ e.edu_id }}" class="block text-gray-700">Graduation
                                         Date</label>
                                     <input type="date" id="graduation_date_{{ e.edu_id }}" name="graduation_date"
-                                        value="{{ e.graduation_date|date:'Y-m-d' }}"
+                                        value="{{ e.graduation_date|date:'Y-m-d' }}" required
                                         class="w-full px-4 py-2 border rounded-lg">
                                 </div>
                                 <div class="mt-4">
@@ -284,22 +303,22 @@
                             {% csrf_token %}
                             <div>
                                 <label for="degree_new" class="block text-gray-700">Degree</label>
-                                <input type="text" id="degree_new" name="degree"
+                                <input type="text" id="degree_new" name="degree" required
                                     class="w-full px-4 py-2 border rounded-lg">
                             </div>
                             <div>
                                 <label for="school_new" class="block text-gray-700">School</label>
-                                <input type="text" id="school_new" name="school"
+                                <input type="text" id="school_new" name="school" required
                                     class="w-full px-4 py-2 border rounded-lg">
                             </div>
                             <div>
                                 <label for="location_new" class="block text-gray-700">Location</label>
-                                <input type="text" id="location_new" name="location"
+                                <input type="text" id="location_new" name="location" required
                                     class="w-full px-4 py-2 border rounded-lg">
                             </div>
                             <div>
                                 <label for="graduation_date_new" class="block text-gray-700">Graduation Date</label>
-                                <input type="date" id="graduation_date_new" name="graduation_date"
+                                <input type="date" id="graduation_date_new" name="graduation_date" required
                                     class="w-full px-4 py-2 border rounded-lg">
                             </div>
                             <div class="mt-4">
@@ -358,17 +377,17 @@
                             {% csrf_token %}
                             <div>
                                 <label for="job_type" class="block text-gray-700">Job Type</label>
-                                <input type="text" id="job_type" name="job_type" value="{{ prf.job_type }}"
+                                <input type="text" id="job_type" name="job_type" value="{{ prf.job_type }}" required
                                     class="w-full px-4 py-2 border rounded-lg">
                             </div>
                             <div>
                                 <label for="preferred_location" class="block text-gray-700">Preferred Location</label>
-                                <input type="text" id="preferred_location" name="preferred_location"
+                                <input type="text" id="preferred_location" name="preferred_location" required
                                     value="{{ prf.preferred_location }}" class="w-full px-4 py-2 border rounded-lg">
                             </div>
                             <div>
                                 <label for="salary_expectation" class="block text-gray-700">Salary Expectation</label>
-                                <input type="text" id="salary_expectation" name="salary_expectation"
+                                <input type="text" id="salary_expectation" name="salary_expectation" required
                                     value="{{ prf.salary_expectation }}" class="w-full px-4 py-2 border rounded-lg">
                             </div>
                             <div class="mt-4">
@@ -388,9 +407,24 @@
                     <!-- Display Skills -->
                     <div id="skills-display">
                         <div class="flex flex-wrap gap-2">
-                            {% for s in skill %}
+                            <!-- {% for s in skill %}
                             <span class="bg-blue-100 text-blue-600 px-3 py-1 rounded-full">{{ s.name }}</span>
+                            {% endfor %} -->
+                            {% for s in skill %}
+                            <div class="relative inline-block group my-2">
+                                <!-- Skill Tag -->
+                                <span class="bg-blue-100 text-blue-600 px-3 py-2 rounded-full">
+                                    {{ s.name }}
+                                </span>
+
+                                <!-- Close Button (Hidden by Default, Shown on Hover) -->
+                                <button onclick="removeSkill('{{ s.id }}')"
+                                    class="absolute -top-2 -right-2 bg-red-500 text-white w-5 h-5 rounded-full flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-opacity">
+                                    ✕
+                                </button>
+                            </div>
                             {% endfor %}
+
                         </div>
                         <a href="#" id="add-skills-link" class="text-blue-600 hover:text-blue-700 mt-4 block">Add
                             Skills</a>
@@ -402,7 +436,7 @@
                             {% csrf_token %}
                             <div>
                                 <label for="skill_name" class="block text-gray-700">Skill Name</label>
-                                <input type="text" id="skill_name" name="skill_name"
+                                <input type="text" id="skill_name" name="skill_name" required
                                     class="w-full px-4 py-2 border rounded-lg" placeholder="Enter skill name">
                             </div>
                             <div class="mt-4">
@@ -413,6 +447,11 @@
                                     class="text-gray-600 hover:text-gray-800 ml-4">Cancel</a>
                             </div>
                         </form>
+                        <!-- <a href=""
+                            onclick="return confirm('Are you sure you want to remove this skill?');">
+                            Remove Skill
+                        </a> -->
+
                     </div>
                 </div>
             </div>
@@ -591,6 +630,40 @@
         document.getElementById('skills-display').classList.remove('hidden');
         document.getElementById('add-skills-form').classList.add('hidden');
     });
+
+    document.getElementById('profileInput').addEventListener('change', function (event) {
+        let formData = new FormData();
+        formData.append('profile_picture', event.target.files[0]);
+
+        fetch('/jobseeker/upload-profile-picture/', {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'
+            }
+        }).then(() => {
+            location.reload();  // Reload the page to display the new image and message
+        })
+            .catch(error => console.error('Error:', error));
+    });
+
+    function removeSkill(skillId) {
+        // Show confirmation dialog
+        if (confirm("Are you sure you want to remove this skill?")) {
+            fetch(`/jobseeker/remove-skill/${skillId}/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}',
+                    'Content-Type': 'application/json'
+                }
+            }).then(() => {
+
+                location.reload();
+
+            }).catch(error => console.error('Error:', error));
+        }
+    }
+
 </script>
 
 {% endblock content %}

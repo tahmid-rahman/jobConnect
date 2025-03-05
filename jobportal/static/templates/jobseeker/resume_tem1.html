@@ -1,0 +1,123 @@
+{% extends 'base.html' %}
+
+{% block nav %}
+{% include 'components/main_nav.html' %}
+{% endblock nav %}
+{% block content %}
+
+
+<div class="container mx-auto my-8 p-8 bg-white shadow-xl rounded-lg max-w-4xl">
+    <!-- Grid Layout -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <!-- Left Sidebar -->
+        <div class="md:col-span-1 space-y-8">
+            <!-- Profile Picture -->
+            <div class="w-36 h-36 rounded-full overflow-hidden border-4 border-white shadow-lg mx-auto md:mx-0">
+                <img src="https://via.placeholder.com/150" alt="Profile Picture" class="w-full h-full object-cover">
+            </div>
+
+            <!-- Personal Details -->
+            <div class="space-y-4">
+                <h2 class="text-2xl font-bold text-gray-900">John Doe</h2>
+                <p class="text-lg text-blue-600 font-medium">Software Engineer</p>
+                <p class="text-sm text-gray-500">San Francisco, CA</p>
+            </div>
+
+            <!-- Contact Information -->
+            <div class="space-y-4">
+                <h3 class="text-lg font-semibold text-gray-900 border-b-2 border-blue-600 pb-1">Contact</h3>
+                <p class="text-sm text-gray-600 flex items-center">
+                    <span class="mr-2">📧</span> john.doe@example.com
+                </p>
+                <p class="text-sm text-gray-600 flex items-center">
+                    <span class="mr-2">📞</span> (123) 456-7890
+                </p>
+                <p class="text-sm text-gray-600 flex items-center">
+                    <span class="mr-2">🔗</span> linkedin.com/in/johndoe
+                </p>
+                <p class="text-sm text-gray-600 flex items-center">
+                    <span class="mr-2">🐙</span> github.com/johndoe
+                </p>
+            </div>
+
+            <!-- Skills -->
+            <div class="space-y-4">
+                <h3 class="text-lg font-semibold text-gray-900 border-b-2 border-blue-600 pb-1">Skills</h3>
+                <ul class="list-disc list-inside text-sm text-gray-600">
+                    <li>JavaScript</li>
+                    <li>React</li>
+                    <li>Node.js</li>
+                    <li>AWS</li>
+                    <li>Python</li>
+                </ul>
+            </div>
+
+            <!-- Job Preferences -->
+            <div class="space-y-4">
+                <h3 class="text-lg font-semibold text-gray-900 border-b-2 border-blue-600 pb-1">Preferences</h3>
+                <p class="text-sm text-gray-600"><span class="font-medium">Job Type:</span> Full-time, Remote</p>
+                <p class="text-sm text-gray-600"><span class="font-medium">Location:</span> San Francisco, CA or
+                    Remote</p>
+                <p class="text-sm text-gray-600"><span class="font-medium">Salary:</span> $120,000 - $150,000</p>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="md:col-span-3 space-y-8">
+            <!-- About Me -->
+            <div>
+                <h2 class="text-2xl font-bold text-gray-900 border-b-2 border-blue-600 pb-1">About Me</h2>
+                <p class="mt-4 text-gray-700 leading-relaxed">
+                    Passionate software engineer with 5+ years of experience in building scalable web applications.
+                    Skilled in JavaScript, React, Node.js, and cloud technologies. Always eager to learn and adapt
+                    to new challenges.
+                </p>
+            </div>
+
+            <!-- Experience -->
+            <div>
+                <h2 class="text-2xl font-bold text-gray-900 border-b-2 border-blue-600 pb-1">Experience</h2>
+                <!-- Experience Item -->
+                <div class="mt-6">
+                    <h3 class="text-xl font-semibold text-gray-900">Senior Software Engineer</h3>
+                    <p class="text-gray-600 font-medium">Tech Corp Inc. | San Francisco, CA</p>
+                    <p class="text-sm text-gray-500">Jan 2020 - Present</p>
+                    <p class="mt-2 text-gray-700">
+                        Led a team of 5 developers to build a scalable e-commerce platform. Implemented
+                        microservices architecture and improved system performance by 30%.
+                    </p>
+                </div>
+                <!-- Experience Item -->
+                <div class="mt-6">
+                    <h3 class="text-xl font-semibold text-gray-900">Software Engineer</h3>
+                    <p class="text-gray-600 font-medium">Innovate Solutions | New York, NY</p>
+                    <p class="text-sm text-gray-500">Jun 2017 - Dec 2019</p>
+                    <p class="mt-2 text-gray-700">
+                        Developed and maintained RESTful APIs for a SaaS platform. Collaborated with
+                        cross-functional teams to deliver features on time.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Education -->
+            <div>
+                <h2 class="text-2xl font-bold text-gray-900 border-b-2 border-blue-600 pb-1">Education</h2>
+                <!-- Education Item -->
+                <div class="mt-6">
+                    <h3 class="text-xl font-semibold text-gray-900">Bachelor of Science in Computer Science</h3>
+                    <p class="text-gray-600 font-medium">Stanford University | Stanford, CA</p>
+                    <p class="text-sm text-gray-500">Graduated: May 2017</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock content %}
+{% block footer %}
+<div class="my-2 w-full md:hidden">&nbsp;</div>
+<div class="footer-container hidden md:block">
+    {% include 'components/footer.html' %}
+</div>
+{% endblock footer %}

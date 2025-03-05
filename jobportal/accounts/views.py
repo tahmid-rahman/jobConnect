@@ -58,9 +58,16 @@ def register(request):
             )
 
         if user.role =="user" :
-            Profile.objects.create(user=user)
-            prf = Profile.objects.get(user = user)
-            JobPreference.objects.create(profile=prf)
+            Profile.objects.create(
+                user=user,
+                first_name=name
+                )
+            prf = Profile.objects.get(
+                user = user
+                )
+            JobPreference.objects.create(
+                profile=prf
+                )
             messages.success(request, "Registration successful.")
             login(request, user)
         elif user.role == "employee" :
