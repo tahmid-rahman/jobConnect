@@ -3,8 +3,9 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.core.paginator import Paginator
 from django.contrib.auth import update_session_auth_hash
-from .models import Job,Company,Profile,JobPreference,Experience,Education,Skill
+from .models import Job,Company,Profile,JobPreference,Experience,Education,Skill,Contact
 from accounts.models import CustomUser
+from employer.models import JobApplication
 
 
 def user_role_required(view_func):
@@ -30,11 +31,15 @@ def dashboard(request):
 @login_required   
 def job_detail(request,job_id):
     job = Job.objects.get(job_id = job_id)
+    application = JobApplication.objects.filter(job=job).count()
+    applied =  JobApplication.objects.filter(job=job, applicant=Profile.objects.get(user=request.user)).exists()
     comp = Company.objects.get(company_id = job.company.company_id)
     res_list = job.responsibilities.split("\n")
     req_list = job.requirements.split("\n")
     ben_list = job.benefits.split("\n")
-    return render(request, 'jobseeker/job_details.html',{'job': job, 'comp': comp,'res_list':res_list,'req_list':req_list,'ben_list':ben_list}) 
+    return render(request, 'jobseeker/job_details.html',
+                  {'job': job, 'comp': comp,'res_list':res_list,'req_list':req_list,
+                   'ben_list':ben_list,'app_cont':application,'applied':applied}) 
     
 @user_role_required
 @login_required
@@ -350,10 +355,23 @@ def remove_skill(request, skill_id):
 
 
 @login_required
-def resume_build(request):
-    pro = Profile.objects.get(user=request.user)
+def resume_build(request,id):
+    pro = Profile.objects.get(profile_id=id)
     edu = pro.educations.all()
     exp = pro.experiences.all()
     skill = pro.skills.all()
     prf = JobPreference.objects.get(profile=pro)
-    return render(request, 'jobseeker/resume_tem1.html',{'pro': pro,'edu':edu, 'exp':exp, 'skill':skill,'prf':prf})
+    Cont = Contact.objects.get(profile=pro)
+    return render(request, 'jobseeker/resume_tem1.html',{'pro': pro,'edu':edu, 'exp':exp, 'skill':skill,'prf':prf,'cont':Cont})
+
+
+def apply_job(request, id):
+    if not JobApplication.objects.filter(job=Job.objects.get(job_id=id), applicant=Profile.objects.get(user=request.user)).exists():
+        JobApplication.objects.create(
+            job=Job.objects.get(job_id=id),
+            applicant=Profile.objects.get(user=request.user)
+        )
+        messages.success(request, "Application submitted successfully.")
+    else:
+        messages.error(request, "You have already applied for this job.")
+    return redirect('jobseeker:job_detail',job_id=id)

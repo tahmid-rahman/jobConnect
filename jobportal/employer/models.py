@@ -52,3 +52,13 @@ class Job(models.Model):
 
     def __str__(self):
         return f"{self.title} at {self.company.name}"
+    
+class JobApplication(models.Model):
+    application_id = models.AutoField(primary_key=True)
+    job = models.ForeignKey('Job', on_delete=models.CASCADE)
+    applicant = models.ForeignKey('jobseeker.Profile', on_delete=models.CASCADE)
+    resume = models.FileField(upload_to='resumes/', null=True, blank=True)
+    applied_date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.applicant.first_name} applied for {self.job.title}"

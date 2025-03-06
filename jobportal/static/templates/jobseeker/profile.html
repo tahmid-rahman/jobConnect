@@ -19,7 +19,7 @@
                 <input type="file" id="profileInput" accept="image/*" class="hidden">
 
                 <div onclick="document.getElementById('profileInput').click()"
-                    class="relative cursor-pointer w-28 h-28 bg-blue-100 rounded-full flex items-center justify-center overflow-hidden">
+                    class="relative cursor-pointer w-28 h-28 bg-blue-100 rounded-full flex items-center justify-center overflow-hidden z-0">
 
                     <!-- Profile Image -->
                     <img id="profileImage" src="{{ pro.profile_picture.url }}" alt="TR"
@@ -36,9 +36,17 @@
                 <div>
                     <div id="profile-info">
                         <h1 class="text-3xl font-bold text-gray-800 mb-2 hover:underline cursor-pointer">
+                            {% if pro.first_name %}
                             {{pro.first_name}}
-                            {{pro.last_name}}</h1>
-                        <p class="text-lg text-gray-600">{{pro.job_title}}</p>
+                            {% endif %}
+                            {% if pro.last_name %}
+                            {{pro.last_name}}
+                            {% endif %}</h1>
+                        <p class="text-lg text-gray-600">
+                            {% if pro.job_title %}
+                            {{pro.job_title}}
+                            {% endif %}
+                            {{pro.profile_id}}</p>
                         <div class="mt-4">
                             <a href="#" id="edit-profile-link" class="text-blue-600 hover:text-blue-700">Edit
                                 Profile</a>
@@ -342,9 +350,11 @@
                 <div class="bg-white p-8 rounded-lg shadow-md mb-8">
                     <h2 class="text-2xl font-bold text-gray-800 mb-4">Resume</h2>
                     <p class="text-gray-600 mb-6">Upload or update your resume to apply for jobs.</p>
-                    <button class="w-full bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700">
-                        Upload Resume
-                    </button>
+                    <a href="{% url 'jobseeker:resume_build' pro.profile_id %}">
+                        <button class="w-full bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700">
+                            View Resume
+                        </button>
+                    </a>
                 </div>
 
                 <!-- Job Preferences -->

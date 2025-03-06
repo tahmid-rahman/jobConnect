@@ -1,7 +1,6 @@
 from django.contrib import admin
 
-from .models import Job,Company
-from .models import Profile, Experience, Education, Resume, JobPreference, Skill
+from .models import Profile, Experience, Education, Resume, JobPreference, Skill, Contact
 
 class ExperienceInline(admin.TabularInline):
     model = Experience
@@ -23,6 +22,7 @@ class ProfileAdmin(admin.ModelAdmin):
 admin.site.register(Profile, ProfileAdmin)
 admin.site.register(Resume)
 admin.site.register(JobPreference)
+admin.site.register(Contact)
 
 
 # Register your models here.

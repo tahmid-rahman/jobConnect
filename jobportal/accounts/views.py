@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .models import CustomUser  # Import your CustomUser model
-from jobseeker.models import Profile,JobPreference
+from jobseeker.models import Profile,JobPreference,Contact
 from employer.models import Company
 
 # User Registration
@@ -68,6 +68,9 @@ def register(request):
             JobPreference.objects.create(
                 profile=prf
                 )
+            Contact.objects.create(
+                profile=prf
+            )
             messages.success(request, "Registration successful.")
             login(request, user)
         elif user.role == "employee" :

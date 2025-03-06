@@ -66,4 +66,16 @@ class Skill(models.Model):
 
     def __str__(self):
         return self.name
+class Contact(models.Model):
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='contacts')
+    contact_id = models.AutoField(primary_key=True)
+    email = models.EmailField(blank=True, null=True)
+    phone = models.IntegerField(blank=True, null=True)
+    link1 = models.URLField(blank=True, null=True)
+    link2 = models.URLField(blank=True, null=True)
+    link3 = models.URLField(blank=True, null=True)
+
+
+    def __str__(self):
+        return f"Contact of {self.profile}"
 

@@ -94,38 +94,41 @@
                 </div>
             </div>
         </div>
-
         <!-- Candidates Section -->
         <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-            <h2 class="text-xl font-semibold text-gray-900 mb-4">Candidates (15 Applications)</h2>
+            <h2 class="text-xl font-semibold text-gray-900 mb-4">Candidates ({{apl_cont}} Applications)</h2>
             <div class="overflow-y-auto max-h-[calc(100vh-300px)]">
                 <!-- Candidate Card -->
-                <div class="flex items-center space-x-4 p-4 hover:bg-gray-50 rounded-lg cursor-pointer">
-                    <div class="h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center">
-                        <i class="fas fa-user text-gray-600"></i>
+                {% for cand in cand_list %}
+                <a href="{% url 'jobseeker:resume_build' cand.applicant.profile_id %}"
+                    class="flex items-center space-x-4 p-4 hover:bg-gray-50 rounded-lg cursor-pointer">
+                    <div
+                        class="h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center object-cover overflow-hidden">
+                        <img src="{{ cand.applicant.profile_picture.url }}" alt="Candidate Image">
                     </div>
                     <div class="flex-1">
-                        <p class="font-medium">John Doe</p>
-                        <p class="text-sm text-gray-600">Senior Frontend Developer</p>
-                        <p class="text-xs text-gray-500 mt-1">Applied 2 days ago</p>
+                        <p class="font-medium hover:underline">
+                            {% if cand.applicant.first_name %}
+                            {{cand.applicant.first_name}}
+                            {% endif %}
+                            {% if cand.applicant.last_name %}
+                            {{cand.applicant.last_name}}
+                            {% endif %}
+                        </p>
+                        <p class="text-sm text-gray-600">
+                            {% if cand.applicant.job_title %}
+                            {{ cand.applicant.job_title}}
+                            {% endif %}
+                        </p>
+                        <p class="text-xs text-gray-500 mt-1">Applied {{cand.applied_date|timesince}} ago</p>
                     </div>
-                    <span class="bg-green-100 text-green-600 px-2 py-1 rounded-full text-xs">New</span>
-                </div>
-
-                <!-- Candidate Card -->
-                <div class="flex items-center space-x-4 p-4 hover:bg-gray-50 rounded-lg cursor-pointer">
-                    <div class="h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center">
-                        <i class="fas fa-user text-gray-600"></i>
-                    </div>
-                    <div class="flex-1">
-                        <p class="font-medium">Jane Smith</p>
-                        <p class="text-sm text-gray-600">Product Manager</p>
-                        <p class="text-xs text-gray-500 mt-1">Applied 4 days ago</p>
-                    </div>
-                </div>
-
-                <!-- Add more candidate cards here -->
+                    {% if request.user.last_login < cand.applied_date %} <span
+                        class="bg-green-100 text-green-600 px-2 py-1 rounded-full text-xs">New</span>
+                        {% endif %}
+                </a>
+                {% endfor %}
             </div>
+
         </div>
     </div>
 </div>

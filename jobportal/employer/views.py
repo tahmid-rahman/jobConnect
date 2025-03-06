@@ -2,13 +2,15 @@ from django.shortcuts import render,get_object_or_404,redirect
 from django.contrib import messages
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
-from employer.models import Job,Company
+from employer.models import Job,Company, JobApplication
+from jobseeker.models import Profile,Skill
+from django.db.models import Count,Subquery,Prefetch
 
 
 
 
 
-def user_role_required(view_func):
+def employee_role_required(view_func):
     def wrapper(request, *args, **kwargs):
         if request.user.role != 'employee':
             messages.error(request, "You are not authorized to view this page.")
@@ -17,43 +19,49 @@ def user_role_required(view_func):
     return wrapper
 
 
-@user_role_required
+@employee_role_required
 @login_required
 def company_dashboard(request):
     active_jobs_count = Job.objects.filter(company__user=request.user, status="Active").count()
-    return render(request, 'employee/employee_home.html', {'active_jobs_count': active_jobs_count}) 
+    applications = JobApplication.objects.filter(job__company__user=request.user, job__status="Active").count()
+
+    return render(request, 'employee/employee_home.html', {'active_jobs_count': active_jobs_count, 'applications': applications}) 
 
 
-@user_role_required
+@employee_role_required
 @login_required
 def company_jobs(request):
-    jobs_list = Job.objects.filter(company__user=request.user).order_by('-posted_date')  # Order by posted_date (newest first)
-
-    # Paginate the jobs list (e.g., 10 jobs per page)
+    # jobs_list = Job.objects.filter(company__user=request.user).order_by('-posted_date')  
+    jobs_list = Job.objects.filter(company__user=request.user).annotate(applicant_count=Count('jobapplication')).order_by('-posted_date')
     paginator = Paginator(jobs_list, 9)
-    page_number = request.GET.get('page')  # Get the current page number from the URL
-    page_obj = paginator.get_page(page_number)  # Get the Page object for the current page
+    page_number = request.GET.get('page')  
+    page_obj = paginator.get_page(page_number) 
 
     return render(request, 'employee/emp_jobs.html', {'page_obj': page_obj})
 
 
-@user_role_required
+@employee_role_required
 @login_required
 def company_candidates(request):
-    return render(request, 'employee/candidate.html') 
+    applicant = JobApplication.objects.filter(
+        job__company__user=request.user, job__status="Active"
+    ).select_related('applicant', 'job').prefetch_related(
+        Prefetch('applicant__skills', queryset=Skill.objects.all())
+    ).order_by('-applied_date')
+    return render(request, 'employee/candidate.html',{'candidate':applicant}) 
 
-@user_role_required
+@employee_role_required
 @login_required
 def company_profile(request):
     return render(request, 'employee/cmp_profile.html') 
 
-@user_role_required
+@employee_role_required
 @login_required
 def company_settings(request):
     return render(request, 'employee/cmp_settings.html') 
 
 
-@user_role_required
+@employee_role_required
 @login_required
 def company_messages(request):
     return render(request, 'employee/cmp_message.html') 
@@ -61,10 +69,14 @@ def company_messages(request):
 
 def view_job(request, job_id):
     job = get_object_or_404(Job, job_id=job_id)
+    apl_cont = JobApplication.objects.filter(job=job).count()
+    applicant = JobApplication.objects.filter(job=job).select_related('applicant').order_by('-applied_date')
     res_list = job.responsibilities.split("\n")
     req_list = job.requirements.split("\n")
     ben_list = job.benefits.split("\n")
-    return render(request, 'employee/cmp_job_details.html', {'job': job,'res_list':res_list,'req_list':req_list,'ben_list':ben_list})
+    return render(request, 'employee/cmp_job_details.html', 
+                  {'job': job,'res_list':res_list,'req_list':req_list,
+                   'apl_cont':apl_cont,'ben_list':ben_list,'cand_list':applicant})
 
 
 def delete_job(request, job_id):

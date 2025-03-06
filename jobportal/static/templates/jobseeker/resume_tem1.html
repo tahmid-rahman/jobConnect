@@ -1,7 +1,11 @@
 {% extends 'base.html' %}
 
 {% block nav %}
+{% if request.user.role == 'user' %}
 {% include 'components/main_nav.html' %}
+{% else %}
+{% include 'components/company_nav.html' %}
+{% endif %}
 {% endblock nav %}
 {% block content %}
 
@@ -13,52 +17,77 @@
         <div class="md:col-span-1 space-y-8">
             <!-- Profile Picture -->
             <div class="w-36 h-36 rounded-full overflow-hidden border-4 border-white shadow-lg mx-auto md:mx-0">
-                <img src="https://via.placeholder.com/150" alt="Profile Picture" class="w-full h-full object-cover">
+                <img src="{{ pro.profile_picture.url }}" alt="Profile Picture" class="w-full h-full object-cover">
             </div>
 
             <!-- Personal Details -->
             <div class="space-y-4">
-                <h2 class="text-2xl font-bold text-gray-900">John Doe</h2>
-                <p class="text-lg text-blue-600 font-medium">Software Engineer</p>
-                <p class="text-sm text-gray-500">San Francisco, CA</p>
+                <h2 class="text-2xl font-bold text-gray-900 break-normal">{{pro.first_name}} {{pro.last_name}}</h2>
+                <p class="text-lg text-blue-600 font-medium">{{pro.job_title}}</p>
+                <p class="text-sm text-gray-500">{{pro.location}}</p>
             </div>
 
             <!-- Contact Information -->
             <div class="space-y-4">
                 <h3 class="text-lg font-semibold text-gray-900 border-b-2 border-blue-600 pb-1">Contact</h3>
-                <p class="text-sm text-gray-600 flex items-center">
-                    <span class="mr-2">📧</span> john.doe@example.com
+                {% if cont.email %}
+                <p class="text-sm text-gray-600 flex items-start">
+                    <span class="mr-2">📧</span> {{cont.email}}
                 </p>
-                <p class="text-sm text-gray-600 flex items-center">
-                    <span class="mr-2">📞</span> (123) 456-7890
+                {% endif %}
+                {% if cont.phone %}
+                <p class="text-sm text-gray-600 flex items-start">
+                    <span class="mr-2">📞</span> (+880) {{cont.phone}}
                 </p>
-                <p class="text-sm text-gray-600 flex items-center">
-                    <span class="mr-2">🔗</span> linkedin.com/in/johndoe
+                {% endif %}
+                {% if cont.link1 %}
+                <p class="text-sm text-gray-600 flex items-start break-normal">
+                    <span class="mr-2">🔗</span>
+                    <a href="{{ cont.link1 }}" class="hover:text-blue-600 hover:underline" target="_blank"
+                        title="{{ cont.link1 }}">
+                        {{ cont.link1|cut:"https://www."|cut:"http://www."|cut:"https://"|cut:"http://" }}
+                    </a>
                 </p>
-                <p class="text-sm text-gray-600 flex items-center">
-                    <span class="mr-2">🐙</span> github.com/johndoe
+                {% endif %}
+                {% if cont.link2 %}
+                <p class="text-sm text-gray-600 flex items-start break-normal">
+                    <span class="mr-2">🔗</span>
+                    <a href="{{ cont.link2 }}" class="hover:text-blue-600 hover:underline" target="_blank"
+                        title="{{ cont.link2 }}">
+                        {{ cont.link2|cut:"https://www."|cut:"http://www."|cut:"https://"|cut:"http://" }}
+                    </a>
                 </p>
+                {% endif %}
+                {% if cont.link3 %}
+                <p class="text-sm text-gray-600 flex items-start break-normal">
+                    <span class="mr-2">🐙</span>
+                    <a href="{{ cont.link3 }}" class="hover:text-blue-600 hover:underline" target="_blank"
+                        title="{{ cont.link3 }}">
+                        {{ cont.link3|cut:"https://www."|cut:"http://www."|cut:"https://"|cut:"http://" }}
+                    </a>
+                </p>
+
+                {% endif %}
             </div>
 
             <!-- Skills -->
             <div class="space-y-4">
                 <h3 class="text-lg font-semibold text-gray-900 border-b-2 border-blue-600 pb-1">Skills</h3>
                 <ul class="list-disc list-inside text-sm text-gray-600">
-                    <li>JavaScript</li>
-                    <li>React</li>
-                    <li>Node.js</li>
-                    <li>AWS</li>
-                    <li>Python</li>
+                    {% for s in skill %}
+                    <li>{{ s.name }}</li>
+                    {% endfor %}
+
                 </ul>
             </div>
 
             <!-- Job Preferences -->
             <div class="space-y-4">
                 <h3 class="text-lg font-semibold text-gray-900 border-b-2 border-blue-600 pb-1">Preferences</h3>
-                <p class="text-sm text-gray-600"><span class="font-medium">Job Type:</span> Full-time, Remote</p>
-                <p class="text-sm text-gray-600"><span class="font-medium">Location:</span> San Francisco, CA or
-                    Remote</p>
-                <p class="text-sm text-gray-600"><span class="font-medium">Salary:</span> $120,000 - $150,000</p>
+                <p class="text-sm text-gray-600"><span class="font-medium">Job Type:</span> {{prf.job_type}}</p>
+                <p class="text-sm text-gray-600"><span class="font-medium">Location:</span> {{prf.preferred_location}}
+                </p>
+                <p class="text-sm text-gray-600"><span class="font-medium">Salary:</span> {{prf.salary_expectation}}</p>
             </div>
         </div>
 
@@ -68,9 +97,7 @@
             <div>
                 <h2 class="text-2xl font-bold text-gray-900 border-b-2 border-blue-600 pb-1">About Me</h2>
                 <p class="mt-4 text-gray-700 leading-relaxed">
-                    Passionate software engineer with 5+ years of experience in building scalable web applications.
-                    Skilled in JavaScript, React, Node.js, and cloud technologies. Always eager to learn and adapt
-                    to new challenges.
+                    {{pro.about_me}}
                 </p>
             </div>
 
@@ -78,36 +105,33 @@
             <div>
                 <h2 class="text-2xl font-bold text-gray-900 border-b-2 border-blue-600 pb-1">Experience</h2>
                 <!-- Experience Item -->
+                {% for e in exp %}
                 <div class="mt-6">
-                    <h3 class="text-xl font-semibold text-gray-900">Senior Software Engineer</h3>
-                    <p class="text-gray-600 font-medium">Tech Corp Inc. | San Francisco, CA</p>
-                    <p class="text-sm text-gray-500">Jan 2020 - Present</p>
+                    <h3 class="text-xl font-semibold text-gray-900">{{e.job_title}}</h3>
+                    <p class="text-gray-600 font-medium">{{e.company_name}} | {{e.location}}</p>
+                    <p class="text-sm text-gray-500">{{e.start_date}} - {% if e.end_date %}
+                        {{ e.end_date }}
+                        {% else %}
+                        Present
+                        {% endif %}</p>
                     <p class="mt-2 text-gray-700">
-                        Led a team of 5 developers to build a scalable e-commerce platform. Implemented
-                        microservices architecture and improved system performance by 30%.
+                        {{e.description}}
                     </p>
                 </div>
-                <!-- Experience Item -->
-                <div class="mt-6">
-                    <h3 class="text-xl font-semibold text-gray-900">Software Engineer</h3>
-                    <p class="text-gray-600 font-medium">Innovate Solutions | New York, NY</p>
-                    <p class="text-sm text-gray-500">Jun 2017 - Dec 2019</p>
-                    <p class="mt-2 text-gray-700">
-                        Developed and maintained RESTful APIs for a SaaS platform. Collaborated with
-                        cross-functional teams to deliver features on time.
-                    </p>
-                </div>
+                {% endfor %}
             </div>
 
             <!-- Education -->
             <div>
                 <h2 class="text-2xl font-bold text-gray-900 border-b-2 border-blue-600 pb-1">Education</h2>
                 <!-- Education Item -->
+                {% for e in edu %}
                 <div class="mt-6">
-                    <h3 class="text-xl font-semibold text-gray-900">Bachelor of Science in Computer Science</h3>
-                    <p class="text-gray-600 font-medium">Stanford University | Stanford, CA</p>
-                    <p class="text-sm text-gray-500">Graduated: May 2017</p>
+                    <h3 class="text-xl font-semibold text-gray-900">{{e.degree}}</h3>
+                    <p class="text-gray-600 font-medium">{{e.school}} | {{e.location}}</p>
+                    <p class="text-sm text-gray-500">Graduated: {{e.graduation_date}}</p>
                 </div>
+                {% endfor %}
             </div>
         </div>
     </div>
