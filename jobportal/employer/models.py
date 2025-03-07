@@ -62,3 +62,14 @@ class JobApplication(models.Model):
 
     def __str__(self):
         return f"{self.applicant.first_name} applied for {self.job.title}"
+    
+
+class Interview(models.Model):
+    candidate = models.ForeignKey('jobseeker.Profile', on_delete=models.CASCADE)
+    job = models.ForeignKey(Job, on_delete=models.CASCADE)
+    start_time = models.DateTimeField()
+    end_time = models.DateTimeField()
+    company = models.ForeignKey(Company, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"Interview with {self.candidate.first_name} for {self.job.title}"

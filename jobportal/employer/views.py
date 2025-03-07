@@ -1,8 +1,10 @@
 from django.shortcuts import render,get_object_or_404,redirect
 from django.contrib import messages
+from django.utils import timezone
+from datetime import datetime, timedelta
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
-from employer.models import Job,Company, JobApplication
+from employer.models import Job,Company, JobApplication,Interview
 from jobseeker.models import Profile,Skill
 from django.db.models import Count,Subquery,Prefetch
 
@@ -143,3 +145,72 @@ def edit_job(request, job_id):
         return redirect('employer:view_job', job_id=job.job_id)
     else:
         return render(request, 'employee/job_edit.html', {'job': job})
+    
+def schedule_interview(request):
+    if request.method == 'POST':
+        job_id = request.POST.get('job-select')
+        profile_id = request.POST.get('candidate-select')  # Now selecting a Profile
+        start_time_str = request.POST.get('date-range')
+        duration_H = request.POST.get('duration_hours')
+        duration_M = request.POST.get('duration_minutes')
+
+        try:
+            job = Job.objects.get(job_id=job_id)
+            profile = Profile.objects.get(profile_id=profile_id)
+            start_time = datetime.strptime(start_time_str, '%Y-%m-%dT%H:%M')
+            end_time = start_time + timedelta(hours=int(duration_H), minutes=int(duration_M))
+            print(start_time, end_time)
+
+            # Check for conflicts within the same company
+            company_conflicts = Interview.objects.filter(
+                company=job.company,
+                start_time__lt=end_time,
+                end_time__gt=start_time
+            ).exists()
+            print(company_conflicts)
+            # if company_conflicts:
+            #     messages.error(request, 'There is already an interview scheduled for this time in the same company.')
+            #     return redirect('employer:schedule_interview')
+
+            # # Check for conflicts for the candidate (Profile)
+            # candidate_conflicts = Interview.objects.filter(
+            #     candidate=profile,
+            #     start_time__lt=end_time,
+            #     end_time__gt=start_time
+            # ).exists()
+
+            # if candidate_conflicts:
+            #     messages.error(request, 'The candidate already has an interview scheduled at this time.')
+            #     return redirect('employer:schedule_interview')
+
+            # # If no conflicts, create the interview
+            # Interview.objects.create(
+            #     job=job,
+            #     candidate=profile,  # Use the Profile instance
+            #     start_time=start_time,
+            #     end_time=end_time,
+            #     company=job.company
+            # )
+
+            # messages.success(request, 'Interview scheduled successfully.')
+            return redirect('employer:schedule_interview')
+
+        except Exception as e:
+            messages.error(request, f'An error occurred: {str(e)}')
+            return redirect('employer:schedule_interview')
+        # return redirect('employer:schedule_interview')
+
+    else:
+        applications = JobApplication.objects.filter(job__company__user=request.user).select_related('job', 'applicant')
+        jobs = Job.objects.filter(company__user=request.user)
+        interviews = Interview.objects.filter(company__user=request.user).order_by('start_time').select_related('job')
+        # for app in applications:
+        #     print(f"Application ID: {app.application_id}")
+        #     print(f"name: {app.applicant.first_name}")
+        #     print(f"Job Title: {app.job.title}")
+        #     print(f"Job id: {app.job.job_id}")
+        return render(request, 'employee/interview_schedule.html', {
+            'jobs': jobs,
+            'interviews': interviews,
+            'applications': applications
+        })

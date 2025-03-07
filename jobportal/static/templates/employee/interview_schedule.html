@@ -1,0 +1,278 @@
+{% extends 'base.html' %}
+
+{% block nav %}
+{% include 'components/company_nav.html' %}
+{% endblock nav %}
+{% block content %}
+<!-- Main Interview Scheduler Content -->
+<div class="max-w-7xl mx-auto px-4 py-8">
+    <!-- Interview Scheduler Header -->
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
+        <div class="mb-4 md:mb-0">
+            <h1 class="text-2xl font-bold text-gray-900">Interview Scheduler</h1>
+            <p class="text-gray-600 mt-1">Schedule and manage interviews for different jobs.</p>
+        </div>
+        <!-- Schedule New Interview Button -->
+        <div class="flex space-x-3">
+            <button onclick="openModal()"
+                class="bg-green-600 hover:bg-green-700 text-white px-5 py-2.5 rounded-lg flex items-center">
+                <i class="fas fa-plus mr-2"></i>Schedule New Interview
+            </button>
+        </div>
+
+        <!-- Modal for Scheduling New Interview -->
+        <div id="schedule-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden justify-center items-center z-[1]">
+            <div class="bg-white rounded-xl shadow-lg w-full max-w-md p-6">
+                <h2 class="text-xl font-semibold text-gray-900 mb-4">Schedule New Interview</h2>
+                <form method="POST" action="{% url 'employer:schedule_interview' %}">
+                    {% csrf_token %}
+                    <!-- Job Selection -->
+                    <div class="mb-4">
+                        <label for="modal-job-select" class="block text-sm font-medium text-gray-700 mb-1">Select
+                            Job</label>
+                        <select id="modal-job-select" name="job-select"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
+                            <option value="">-- Select a Job --</option>
+                            {% for application in applications %}
+                            <option value="{{ application.job.job_id }}">{{ application.job.title }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <!-- Candidate Selection -->
+                    <div class="mb-4">
+                        <label for="modal-candidate-select" class="block text-sm font-medium text-gray-700 mb-1">Select
+                            Candidate</label>
+                        <select id="modal-candidate-select" name="candidate-select"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
+                            <option value="">-- Select a Candidate --</option>
+                            {% for application in applications %}
+                            <option value="{{ application.applicant.profile_id }}"
+                                data-job="{{ application.job.job_id }}">
+                                {% if application.applicant.first_name %}
+                                {{ application.applicant.first_name }}
+                                {% endif %}
+                                {% if application.applicant.last_name %}
+                                {{ application.applicant.last_name }}
+                                {% endif %}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <!-- Date and Time Selection -->
+                    <div class="mb-4">
+                        <label for="modal-date-range" class="block text-sm font-medium text-gray-700 mb-1">Date and
+                            Time</label>
+                        <input type="datetime-local" id="modal-date-range" name="date-range" required
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
+                    </div>
+                    <div class="mb-4">
+                        <label for="modal-date-duration" class="block text-sm font-medium text-gray-700 mb-1">
+                            Duration</label>
+                        <div class="flex">
+                            <input type="number" id="modal-date-range" name="duration_hours" min="0" required max="23"
+                                placeholder="Hours"
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 mr-1">
+                            <input type="number" id="modal-date-range" name="duration_minutes" min="0" max="59" required
+                                placeholder="Minutes"
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
+                        </div>
+
+                    </div>
+
+                    <!-- Buttons -->
+                    <div class="flex justify-end space-x-3">
+                        <button type="button" onclick="closeModal()"
+                            class="bg-gray-500 hover:bg-gray-600 text-white px-5 py-2.5 rounded-lg">
+                            Cancel
+                        </button>
+                        <button type="submit" class="bg-green-600 hover:bg-green-700 text-white px-5 py-2.5 rounded-lg">
+                            Schedule
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Job and Date Filter Form -->
+    <form id="filter-form" class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-8">
+        <h2 class="text-xl font-semibold text-gray-900 mb-4">Filter Interviews</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <!-- Job Selection -->
+            <div>
+                <label for="job-select" class="block text-sm font-medium text-gray-700 mb-1">Select Job</label>
+                <select id="job-select" name="job-select"
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
+                    <option value="">All Jobs</option>
+                    {% for interview in interviews %}
+                    <option value="{{ interview.job.job_id }}">{{ interview.job.title }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- Date and Time Selection -->
+            <div>
+                <label for="date-range" class="block text-sm font-medium text-gray-700 mb-1">Date and Time</label>
+                <input type="datetime-local" id="date-range" name="date-range"
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
+            </div>
+        </div>
+    </form>
+
+    <!-- Calendar and Scheduled Interviews Side by Side -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <!-- Calendar Section -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 z-[0]">
+            <h2 class="text-xl font-semibold text-gray-900 mb-4">Interview Calendar</h2>
+            <div id="calendar"></div>
+        </div>
+
+        <!-- Scheduled Interviews -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+            <h2 class="text-xl font-semibold text-gray-900 mb-4">Scheduled Interviews</h2>
+            <div id="scheduled-interviews" class="overflow-y-auto max-h-[calc(100vh-300px)]">
+                {% for interview in interviews %}
+                <div class="interview-item flex items-center justify-between p-4 hover:bg-gray-50 rounded-lg cursor-pointer"
+                    data-job-id="{{ interview.job.job_id }}"
+                    data-start-time="{{ interview.start_time|date:'Y-m-d\TH:i:s' }}"
+                    data-end-time="{{ interview.end_time|date:'Y-m-d\TH:i:s' }}">
+                    <div>
+                        <p class="font-medium">
+                            {% if interview.candidate.first_name %}
+                            {{interview.candidate.first_name}}
+                            {% endif %}
+                            {% if interview.candidate.last_name %}
+                            {{interview.candidate.last_name}}
+                            {% endif %}
+                        </p>
+                        <p class="text-sm text-gray-600">{{ interview.job.title }}</p>
+                        <p class="text-xs text-gray-500 mt-1">Scheduled for
+                            {{ interview.start_time|date:'d-M-Y' }}
+                            {{ interview.start_time|date:'h:i A' }} to
+                            {{ interview.end_time|date:'h:i A' }}</p>
+                    </div>
+                    <div class="flex space-x-3">
+                        <button class="text-green-600 hover:text-green-800">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="text-red-600 hover:text-red-800">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<script>
+    // Function to open the modal
+    function openModal() {
+        const modal = document.getElementById('schedule-modal');
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+    }
+
+    // Function to close the modal
+    function closeModal() {
+        const modal = document.getElementById('schedule-modal');
+        modal.classList.remove('flex');
+        modal.classList.add('hidden');
+    }
+
+    // Close modal when clicking outside
+    const modal = document.getElementById('schedule-modal');
+    modal.addEventListener('click', (event) => {
+        if (event.target === modal) {
+            closeModal();
+        }
+    });
+    // Initialize FullCalendar
+    document.addEventListener('DOMContentLoaded', function () {
+        const calendarEl = document.getElementById('calendar');
+        const calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+            events: [
+                {% for interview in interviews %}
+                    {
+                start: '{{ interview.start_time|date:"Y-m-d\TH:i:s" }}',
+                end: '{{ interview.end_time|date:"Y-m-d\TH:i:s" }}',
+                backgroundColor: '#10B981',
+                borderColor: '#10B981',
+            },
+            {% endfor %}
+                ],
+            });
+    calendar.render();
+    });
+    function filterInterviews() {
+        const jobSelect = document.getElementById('job-select');
+        const dateRange = document.getElementById('date-range');
+        const interviewItems = document.querySelectorAll('.interview-item');
+
+        const selectedJobId = jobSelect.value;
+        const selectedDate = dateRange.value;
+        // console.log(interviewItems, selectedJobId, selectedDate);
+        interviewItems.forEach(item => {
+            const jobId = item.getAttribute('data-job-id');
+            const startTime = item.getAttribute('data-start-time');
+            const endTime = item.getAttribute('data-end-time');
+            // Job filter
+            // console.log(jobId, startTime, endTime);
+            const jobMatch = selectedJobId === '' || jobId === selectedJobId;
+
+            // Date filter
+            const dateMatch = selectedDate === '' || (
+                new Date(selectedDate).getTime() >= new Date(startTime).getTime() &&
+                new Date(selectedDate).getTime() <= new Date(endTime).getTime()
+            );
+
+            // Show or hide based on filters
+            if (jobMatch && dateMatch) {
+                item.style.display = 'flex'; // Show the interview item
+            } else {
+                item.style.display = 'none'; // Hide the interview item
+            }
+        });
+    }
+
+    // Attach event listeners to filter inputs
+    document.getElementById('job-select').addEventListener('change', filterInterviews);
+    document.getElementById('date-range').addEventListener('change', filterInterviews);
+
+    // Initial filter on page load
+    filterInterviews();
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const jobSelect = document.getElementById("modal-job-select");
+        const candidateSelect = document.getElementById("modal-candidate-select");
+        const allCandidates = Array.from(candidateSelect.querySelectorAll("option"));
+
+        jobSelect.addEventListener("change", function () {
+            const selectedJobId = this.value;
+
+            // Clear existing options except the first one
+            candidateSelect.innerHTML = '<option value="">-- Select a Candidate --</option>';
+
+            // Filter and add candidates who applied for the selected job
+            allCandidates.forEach(option => {
+                if (option.dataset.job === selectedJobId) {
+                    candidateSelect.appendChild(option.cloneNode(true));
+                }
+            });
+        });
+    });
+
+</script>
+
+{% endblock content %}
+
+{% block footer %}
+<div class="my-2 w-full md:hidden">&nbsp;</div>
+<div class="footer-container hidden md:block">
+    {% include 'components/footer.html' %}
+</div>
+{% endblock footer %}
