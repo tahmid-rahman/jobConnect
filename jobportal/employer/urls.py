@@ -1,6 +1,6 @@
 from django.urls import path
 from .views import company_dashboard,company_jobs,company_candidates,company_profile,company_settings,company_messages
-from .views import view_job,create_job,delete_job,edit_job,schedule_interview
+from .views import view_job,create_job,delete_job,edit_job,schedule_interview,schedule_delete,take_interview,interview_details
 
 app_name = 'employer'
 
@@ -16,4 +16,7 @@ urlpatterns = [
     path('settings/', company_settings, name='company_settings'),
     path('messages/', company_messages, name='company_messages'),
     path('schedule/', schedule_interview, name='schedule_interview'),
+    path('schedule-delete/<int:id>/', schedule_delete, name='schedule_delete'),
+    path('interview/<int:id>/', take_interview, name='take_interview'),
+    path('interview-details/<int:id>/', interview_details, name='interview_details'),
 ]

@@ -1,0 +1,208 @@
+{% extends 'base.html' %}
+
+{% block nav %}
+{% include 'components/company_nav.html' %}
+{% endblock nav %}
+{% block content %}
+
+<script src="https://meet.jit.si/external_api.js"></script>
+<!-- Main Interview Content -->
+<div class="max-w-7xl mx-auto px-4 py-8">
+    <!-- Interview Header -->
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
+        <div class="mb-4 md:mb-0">
+            <h1 class="text-2xl font-bold text-gray-900">Conduct Interview</h1>
+            <p class="text-gray-600 mt-1">Interview for {{ interview.application.job.title }} with
+                {% if interview.application.applicant.first_name %}
+                {{interview.application.applicant.first_name}}
+                {% endif %}
+                {% if interview.application.applicant.last_name %}
+                {{interview.application.applicant.last_name}}
+                {% endif %}.
+            </p>
+        </div>
+        <div class="flex space-x-3">
+            <button id="start-quiz-btn"
+                class="bg-green-600 hover:bg-green-700 text-white px-5 py-2.5 rounded-lg flex items-center">
+                <i class="fas fa-play mr-2"></i>Start Quiz
+            </button>
+            <button id="end-interview-btn"
+                class="bg-red-600 hover:bg-red-700 text-white px-5 py-2.5 rounded-lg flex items-center">
+                <i class="fas fa-stop-circle mr-2"></i>End Interview
+            </button>
+            <button id="video-call-btn"
+                class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-lg flex items-center">
+                <i class="fas fa-video mr-2"></i>Start Video Call
+            </button>
+        </div>
+    </div>
+    <!-- Timer Section -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 my-4">
+        <!-- <h3 class="text-xl font-semibold text-gray-900 mb-4">Remaining Time</h3> -->
+        <div class="text-center">
+            <p class="text-xl font-bold text-gray-800" id="timer">00:00:00</p>
+        </div>
+    </div>
+    <!-- Video Call Section -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-8">
+        <h2 class="text-xl font-semibold text-gray-900 mb-4">Video Call</h2>
+        <div id="jitsi-meet-container" class="w-full h-[80vh] bg-gray-200 rounded-lg"></div>
+    </div>
+
+    <!-- Quiz and Marking Section -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <!-- Marking Section -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+            <h2 class="text-xl font-semibold text-gray-900 mb-4">Marking</h2>
+            <form action="" method="post" class="space-y-4">
+                <div>
+                    <label for="technical-skills" class="flex text-sm font-medium text-gray-700">
+                        <p>Technical Skills</p>
+                        <p class="text-xs text-gray-500 ml-auto w-fit ">(10 Marks)</p>
+                    </label>
+                    <input type="number" id="technical-skills" min="0" max="10" required name="technical_skills"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
+                </div>
+                <div>
+                    <label for="communication" class="flex text-sm font-medium text-gray-700">
+                        <p>Communication</p>
+                        <p class="text-xs text-gray-500 ml-auto w-fit">(10 Marks)</p>
+                    </label>
+                    <input type="number" id="communication" min="0" max="10" required name="communication"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
+                </div>
+                <div>
+                    <label for="problem-solving" class="flex text-sm font-medium text-gray-700">
+                        <p>Problem Solving</p>
+                        <p class="text-xs text-gray-500 ml-auto w-fit">(10 Marks)</p>
+                    </label>
+                    <input type="number" id="problem-solving" min="0" max="10" required name="problem_solving"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
+                </div>
+                <button
+                    class="w-full bg-green-600 hover:bg-green-700 text-white px-5 py-2.5 rounded-lg flex items-center justify-center">
+                    <i class="fas fa-save mr-2"></i>Save Marks
+                </button>
+            </form>
+        </div>
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+            <form action="" method="post">
+                <h2 class="text-xl font-semibold text-gray-900 mb-4">Notes and Feedback</h2>
+                <textarea rows="4" placeholder="Add notes or feedback about the interview..."
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"></textarea>
+                <div class="mt-4 flex space-x-3">
+                    <button class="bg-green-600 hover:bg-green-700 text-white px-5 py-2.5 rounded-lg flex items-center">
+                        <i class="fas fa-check mr-2"></i>Save
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    let api = null;
+    let isVideoCallActive = false;
+
+    function startVideoCall() {
+        const domain = 'meet.jit.si';
+        const roomName = 'jobseekers-interview-{{interview.id}}'; // Unique room name for the interview
+        const options = {
+            roomName: roomName,
+            width: '100%',
+            height: '100%',
+            parentNode: document.querySelector('#jitsi-meet-container'),
+            userInfo: {
+                displayName: '{{interview.application.job.company.name}}', // Set the interviewer's display name
+            },
+            configOverwrite: {
+                startWithAudioMuted: false,
+                startWithVideoMuted: false,
+                enableWelcomePage: false, // Disable the welcome page
+                prejoinPageEnabled: false, // Disable the pre-join page
+                requireDisplayName: false, // Do not require display name
+                enableClosePage: false, // Disable the close page
+                disableModeratorIndicator: false, // Hide moderator indicators
+                enableNoisyMicDetection: false, // Disable noisy mic detection
+            },
+            interfaceConfigOverwrite: {
+                SHOW_JITSI_WATERMARK: false, // Hide Jitsi watermark
+                SHOW_WATERMARK_FOR_GUESTS: false, // Hide watermark for guests
+                DISABLE_JOIN_LEAVE_NOTIFICATIONS: true, // Disable join/leave notifications
+            },
+        };
+
+        api = new JitsiMeetExternalAPI(domain, options);
+        isVideoCallActive = true;
+        document.getElementById('video-call-btn').innerHTML = '<i class="fas fa-video mr-2"></i>Stop Video Call';
+    }
+
+    function stopVideoCall() {
+        if (api) {
+            api.executeCommand('hangup'); // End the call
+            api = null;
+        }
+        isVideoCallActive = false;
+        document.getElementById('video-call-btn').innerHTML = '<i class="fas fa-video mr-2"></i>Start Video Call';
+        location.reload();
+    }
+
+    // Timer Logic
+    let remainingSeconds = 0;
+    let timerInterval;
+
+    function updateTimer() {
+        const now = new Date();
+        const startTime = new Date('{{ interview.start_time|date:"Y-m-d H:i:s" }}');
+        const endTime = new Date('{{ interview.end_time|date:"Y-m-d H:i:s" }}');
+
+        if (now < startTime) {
+            // Meeting has not started yet
+            remainingSeconds = Math.floor((startTime - now) / 1000);
+            document.getElementById('timer').textContent = `Meeting starts in: ${formatTime(remainingSeconds)}`;
+        } else if (now >= startTime && now < endTime) {
+            // Meeting is in progress
+            remainingSeconds = Math.floor((endTime - now) / 1000);
+            document.getElementById('timer').textContent = `Time left: ${formatTime(remainingSeconds)}`;
+        } else {
+            // Meeting has ended
+            clearInterval(timerInterval);
+            document.getElementById('timer').textContent = 'Meeting has ended.';
+        }
+    }
+
+    function formatTime(seconds) {
+        const hours = Math.floor(seconds / 3600);
+        const minutes = Math.floor((seconds % 3600) / 60);
+        const secs = seconds % 60;
+        return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+    }
+
+    // Start timer automatically when the page loads
+    timerInterval = setInterval(updateTimer, 1000);
+
+    // Video Call Button
+    document.getElementById('video-call-btn').addEventListener('click', () => {
+        if (isVideoCallActive) {
+            stopVideoCall();
+        } else {
+            startVideoCall();
+        }
+    });
+
+    // End Interview Button
+    document.getElementById('end-interview-btn').addEventListener('click', () => {
+        clearInterval(timerInterval);
+        alert('Interview ended. Timer stopped.');
+        if (api) {
+            stopVideoCall();
+        }
+    });
+</script>
+{% endblock content %}
+
+{% block footer %}
+<div class="my-2 w-full md:hidden">&nbsp;</div>
+<div class="footer-container hidden md:block">
+    {% include 'components/footer.html' %}
+</div>
+{% endblock footer %}

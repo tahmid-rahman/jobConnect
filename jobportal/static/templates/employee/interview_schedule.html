@@ -30,7 +30,7 @@
                     <div class="mb-4">
                         <label for="modal-job-select" class="block text-sm font-medium text-gray-700 mb-1">Select
                             Job</label>
-                        <select id="modal-job-select" name="job-select"
+                        <select id="modal-job-select" name="job-select" required
                             class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
                             <option value="">-- Select a Job --</option>
                             {% for application in applications %}
@@ -43,7 +43,7 @@
                     <div class="mb-4">
                         <label for="modal-candidate-select" class="block text-sm font-medium text-gray-700 mb-1">Select
                             Candidate</label>
-                        <select id="modal-candidate-select" name="candidate-select"
+                        <select id="modal-candidate-select" name="candidate-select" required
                             class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
                             <option value="">-- Select a Candidate --</option>
                             {% for application in applications %}
@@ -71,8 +71,8 @@
                         <label for="modal-date-duration" class="block text-sm font-medium text-gray-700 mb-1">
                             Duration</label>
                         <div class="flex">
-                            <input type="number" id="modal-date-range" name="duration_hours" min="0" required max="23"
-                                placeholder="Hours"
+                            <input type="number" id="modal-date-range" name="duration_hours" min="0" max="23"
+                                placeholder="Hours" required
                                 class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 mr-1">
                             <input type="number" id="modal-date-range" name="duration_minutes" min="0" max="59" required
                                 placeholder="Minutes"
@@ -107,7 +107,8 @@
                     class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
                     <option value="">All Jobs</option>
                     {% for interview in interviews %}
-                    <option value="{{ interview.job.job_id }}">{{ interview.job.title }}</option>
+                    <option value="{{ interview.application.job.job_id }}">{{ interview.application.job.title }}
+                    </option>
                     {% endfor %}
                 </select>
             </div>
@@ -134,34 +135,45 @@
             <h2 class="text-xl font-semibold text-gray-900 mb-4">Scheduled Interviews</h2>
             <div id="scheduled-interviews" class="overflow-y-auto max-h-[calc(100vh-300px)]">
                 {% for interview in interviews %}
-                <div class="interview-item flex items-center justify-between p-4 hover:bg-gray-50 rounded-lg cursor-pointer"
-                    data-job-id="{{ interview.job.job_id }}"
-                    data-start-time="{{ interview.start_time|date:'Y-m-d\TH:i:s' }}"
-                    data-end-time="{{ interview.end_time|date:'Y-m-d\TH:i:s' }}">
-                    <div>
-                        <p class="font-medium">
-                            {% if interview.candidate.first_name %}
-                            {{interview.candidate.first_name}}
-                            {% endif %}
-                            {% if interview.candidate.last_name %}
-                            {{interview.candidate.last_name}}
-                            {% endif %}
-                        </p>
-                        <p class="text-sm text-gray-600">{{ interview.job.title }}</p>
-                        <p class="text-xs text-gray-500 mt-1">Scheduled for
-                            {{ interview.start_time|date:'d-M-Y' }}
-                            {{ interview.start_time|date:'h:i A' }} to
-                            {{ interview.end_time|date:'h:i A' }}</p>
+                <a href="{% url 'employer:take_interview' interview.id %}">
+                    <div class="interview-item flex items-center justify-between p-4 hover:bg-gray-50 rounded-lg cursor-pointer"
+                        data-job-id="{{ interview.application.job.job_id }}"
+                        data-start-time="{{ interview.start_time|date:'Y-m-d\TH:i:s' }}"
+                        data-end-time="{{ interview.end_time|date:'Y-m-d\TH:i:s' }}">
+                        <div>
+                            <div class="font-medium">
+                                {% if interview.application.applicant.first_name %}
+                                {{interview.application.applicant.first_name}}
+                                {% endif %}
+                                {% if interview.application.applicant.last_name %}
+                                {{interview.application.applicant.last_name}}
+                                {% endif %}
+                                {{interview.id}}
+                            </div>
+                            <p class="text-sm text-gray-600">{{ interview.application.job.title }}</p>
+                            <p class="text-xs text-gray-500 mt-1">Scheduled for
+                                {{ interview.start_time|date:'d-M-Y' }}
+                                {{ interview.start_time|date:'h:i A' }} to
+                                {{ interview.end_time|date:'h:i A' }}</p>
+                        </div>
+                        {% if interview.start_time %} <span
+                            class="bg-green-100 text-green-600 px-2 py-1 rounded-full text-xs mx-auto w-fit">
+                            {{ now|timesince:interview.start_time }}
+                        </span>
+                        {% endif %}
+                        <div class="flex space-x-3">
+                            <a href="{% url 'employer:interview_details' interview.id %}"
+                                class="text-green-600 hover:text-green-800">
+                                <i class="fas fa-eye"></i>
+                            </a>
+                            <a href="{% url 'employer:schedule_delete' interview.id %}">
+                                <button class="text-red-600 hover:text-red-800">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </a>
+                        </div>
                     </div>
-                    <div class="flex space-x-3">
-                        <button class="text-green-600 hover:text-green-800">
-                            <i class="fas fa-edit"></i>
-                        </button>
-                        <button class="text-red-600 hover:text-red-800">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </div>
-                </div>
+                </a>
                 {% endfor %}
             </div>
         </div>
@@ -195,17 +207,58 @@
         const calendarEl = document.getElementById('calendar');
         const calendar = new FullCalendar.Calendar(calendarEl, {
             initialView: 'dayGridMonth',
+            headerToolbar: {
+                center: 'title',
+                left: 'prev,next',
+                right: 'today',
+            },
             events: [
                 {% for interview in interviews %}
-                    {
+                {
+                title: 'Interview', // Add a title for the event
                 start: '{{ interview.start_time|date:"Y-m-d\TH:i:s" }}',
                 end: '{{ interview.end_time|date:"Y-m-d\TH:i:s" }}',
-                backgroundColor: '#10B981',
-                borderColor: '#10B981',
+                backgroundColor: '#daf7a6', // Light background
+                borderColor: '#10B981', // Green border
+                textColor: '#FFFFFF', // White text
+                extendedProps: {
+                    description: 'Interview with {{ interview.application.applicant.first_name }}' // Optional: Add more details
+                }
             },
             {% endfor %}
-                ],
-            });
+        ],
+        eventContent: function (arg) {
+            // Customize event content using Tailwind classes
+            return {
+                html: `<div class="p-1 flex items-center">
+                         <div class="bg-green-600 rounded-full w-1 h-6 mr-1"></div>
+                         <div class="text-sm opacity-80 text-green-700">${arg.timeText}</div>
+                       </div>`
+            };
+        },
+        eventMouseEnter: function (info) {
+            // Show additional details on hover
+            const description = info.event.extendedProps.description;
+            if (description) {
+                const tooltip = document.createElement('div');
+                tooltip.className = 'absolute bg-black text-white text-sm px-2 py-1 rounded shadow-lg';
+                tooltip.innerHTML = description;
+                document.body.appendChild(tooltip);
+
+                const rect = info.el.getBoundingClientRect();
+                tooltip.style.top = `${rect.top + window.scrollY - 30}px`;
+                tooltip.style.left = `${rect.left + window.scrollX}px`;
+            }
+        },
+        eventMouseLeave: function () {
+            // Remove tooltip on mouse leave
+            const tooltip = document.querySelector('.bg-black.text-white');
+            if (tooltip) {
+                tooltip.remove();
+            }
+        }
+    });
+
     calendar.render();
     });
     function filterInterviews() {
@@ -222,6 +275,7 @@
             const endTime = item.getAttribute('data-end-time');
             // Job filter
             // console.log(jobId, startTime, endTime);
+            // console.log(jobId, selectedJobId);
             const jobMatch = selectedJobId === '' || jobId === selectedJobId;
 
             // Date filter

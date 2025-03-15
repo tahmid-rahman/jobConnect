@@ -59,17 +59,15 @@ class JobApplication(models.Model):
     applicant = models.ForeignKey('jobseeker.Profile', on_delete=models.CASCADE)
     resume = models.FileField(upload_to='resumes/', null=True, blank=True)
     applied_date = models.DateTimeField(auto_now_add=True)
-
+    is_scheduled = models.BooleanField(default=False, null=True, blank=True)
     def __str__(self):
         return f"{self.applicant.first_name} applied for {self.job.title}"
     
 
 class Interview(models.Model):
-    candidate = models.ForeignKey('jobseeker.Profile', on_delete=models.CASCADE)
-    job = models.ForeignKey(Job, on_delete=models.CASCADE)
+    application = models.ForeignKey(JobApplication, on_delete=models.CASCADE)
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
-    company = models.ForeignKey(Company, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f"Interview with {self.candidate.first_name} for {self.job.title}"
+        return f"Interview with {self.application.applicant.first_name} for {self.application.job.title}"

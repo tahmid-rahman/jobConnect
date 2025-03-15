@@ -1,0 +1,207 @@
+{% extends 'base.html' %}
+
+{% block nav %}
+{% include 'components/company_nav.html' %}
+{% endblock nav %}
+{% block content %}
+
+<!-- Main Interview Content -->
+<div class="max-w-7xl mx-auto px-4 py-8">
+    <!-- Interview Header -->
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
+        <div class="mb-4 md:mb-0">
+            <h1 class="text-2xl font-bold text-gray-900">Interview Details</h1>
+            <p class="text-gray-600 mt-1">View and manage the details of this interview.</p>
+        </div>
+        <div class="flex space-x-3">
+            <button onclick="openModalrs()"
+                class="bg-green-600 hover:bg-green-700 text-white px-5 py-2.5 rounded-lg flex items-center">
+                <i class="fas fa-edit mr-2"></i>Reschedule
+            </button>
+            <a href="{% url 'employer:schedule_delete' interview.id %}"
+                class="bg-red-600 hover:bg-red-700 text-white px-5 py-2.5 rounded-lg flex items-center">
+                <i class="fas fa-trash mr-2"></i>Cancel Interview
+            </a>
+        </div>
+    </div>
+
+    <!-- Modal for reScheduling  Interview -->
+    <div id="reschedule-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden justify-center items-center z-[1]">
+        <div class="bg-white rounded-xl shadow-lg w-full max-w-md p-6">
+            <h2 class="text-xl font-semibold text-gray-900 mb-4">Reschedule Interview</h2>
+            <form method="POST" action="{% url 'employer:interview_details' interview.id %}">
+                {% csrf_token %}
+                <!-- Job Selection -->
+                <div class="mb-4">
+                    <label for="modal-job-select" class="block text-sm font-medium text-gray-700 mb-1">Select
+                        Job</label>
+                    <input id="modal-job-select" name="job-select" required type="text" readonly
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                        value="{{ interview.application.job.title }}">
+                </div>
+
+                <!-- Candidate Selection -->
+                <div class="mb-4">
+                    <label for="modal-candidate-select" class="block text-sm font-medium text-gray-700 mb-1">Select
+                        Candidate</label>
+                    <input id="modal-candidate-select" name="candidate-select" required type="text" readonly
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                        value="{% if interview.application.applicant.first_name %}{{ interview.application.applicant.first_name }}{% endif %} {% if interview.application.applicant.last_name %}{{ interview.application.applicant.last_name }}{% endif %}">
+                </div>
+
+                <!-- Date and Time Selection -->
+                <div class="mb-4">
+                    <label for="modal-date-range" class="block text-sm font-medium text-gray-700 mb-1">Date and
+                        Time</label>
+                    <input type="datetime-local" id="modal-date-range" name="start_time" required
+                        value="{{ interview.start_time|date:'Y-m-d H:i' }}"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
+                </div>
+                <div class="mb-4">
+                    <label for="modal-date-duration" class="block text-sm font-medium text-gray-700 mb-1">
+                        Duration</label>
+                    <div class="flex">
+                        <input type="number" id="modal-date-range" name="duration_hours" min="0" max="23"
+                            placeholder="Hours" required
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 mr-1">
+                        <input type="number" id="modal-date-range" name="duration_minutes" min="0" max="59" required
+                            placeholder="Minutes"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
+                    </div>
+
+                </div>
+
+                <!-- Buttons -->
+                <div class="flex justify-end space-x-3">
+                    <button type="button" onclick="closeModal()"
+                        class="bg-gray-500 hover:bg-gray-600 text-white px-5 py-2.5 rounded-lg">
+                        Cancel
+                    </button>
+                    <button type="submit" class="bg-green-600 hover:bg-green-700 text-white px-5 py-2.5 rounded-lg">
+                        Schedule
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- Interview Details Section -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <!-- Interview Information -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+            <h2 class="text-xl font-semibold text-gray-900 mb-4">Interview Information</h2>
+            <div class="space-y-4">
+                <div>
+                    <p class="text-sm text-gray-500">Job Title</p>
+                    <p class="text-lg font-medium text-gray-800">{{ interview.application.job.title }}
+                    </p>
+                </div>
+
+                <div>
+                    <p class="text-sm text-gray-500">Interview Date & Time</p>
+                    <p class="text-lg font-medium text-gray-800">
+                        {{ interview.start_time|date:"F d, Y" }} at {{ interview.start_time|date:"h:i A" }}
+                        <!-- to {{ interview.end_time|date:"M d, Y at h:i A" }} -->
+                    </p>
+                </div>
+                <div>
+                    <p class="text-sm text-gray-500">Interview Duration</p>
+                    <p class="text-lg font-medium text-gray-800">
+                        {{ interview.end_time|timeuntil:interview.start_time }}
+                    </p>
+                </div>
+                <div>
+                    <p class="text-sm text-gray-500">Interviewer</p>
+                    <p class="text-lg font-medium text-gray-800">{{ interview.application.job.company.name }}</p>
+                </div>
+                <div>
+                    <p class="text-sm text-gray-500">Status</p>
+                    <p class="text-lg font-medium text-gray-800">
+                        <span class="px-2 py-1 bg-green-100 text-green-800 rounded-full text-sm">Scheduled</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Candidate Information -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+            <h2 class="text-xl font-semibold text-gray-900 mb-4">Candidate Information</h2>
+            <div class="space-y-4">
+                <div>
+                    <p class="text-sm text-gray-500">Name</p>
+                    <p class="text-lg font-medium text-gray-800">
+                        {% if interview.application.applicant.first_name %}
+                        {{ interview.application.applicant.first_name }}
+                        {% endif %}
+                        {% if interview.application.applicant.last_name %}
+                        {{ interview.application.applicant.last_name }}
+                        {% endif %}
+                    </p>
+                </div>
+                <div>
+                    <p class="text-sm text-gray-500">Email</p>
+                    <p class="text-lg font-medium text-gray-800">
+                        {% if contact.email %}
+                        {{ contact.email }}
+                        {% else %}
+                        N/A
+                        {% endif %}
+                    </p>
+                </div>
+                <div>
+                    <p class="text-sm text-gray-500">Phone</p>
+                    <p class="text-lg font-medium text-gray-800">
+                        {% if contact.phone %}
+                        (+880) {{contact.phone}}
+                        {% else %}
+                        N/A
+                        {% endif %}
+                    </p>
+                </div>
+                <div>
+                    <p class="text-sm text-gray-500">Resume</p>
+                    <a href="{% url 'jobseeker:resume_build' interview.application.applicant.profile_id %}"
+                        class="text-lg font-medium  hover:underline">Virtual Resume</a>
+                </div>
+                <div>
+                    <p class="text-sm text-gray-500">Resume</p>
+                    <a href="#" class="text-lg font-medium text-green-600 hover:text-green-800">Download Resume</a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Notes and Feedback Section -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mt-8">
+        <h2 class="text-xl font-semibold text-gray-900 mb-4">Notes and Feedback</h2>
+        <textarea rows="4" placeholder="Add notes or feedback about the interview..."
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"></textarea>
+        <button class="mt-4 bg-green-600 hover:bg-green-700 text-white px-5 py-2.5 rounded-lg flex items-center">
+            <i class="fas fa-save mr-2"></i>Save Notes
+        </button>
+    </div>
+</div>
+<script>
+    function openModalrs() {
+        const modal = document.getElementById('reschedule-modal');
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+    }
+
+    // Function to close the modal
+    function closeModal() {
+        const modal = document.getElementById('reschedule-modal');
+        modal.classList.remove('flex');
+        modal.classList.add('hidden');
+    }
+</script>
+
+
+{% endblock content %}
+
+{% block footer %}
+<div class="my-2 w-full md:hidden">&nbsp;</div>
+<div class="footer-container hidden md:block">
+    {% include 'components/footer.html' %}
+</div>
+{% endblock footer %}
