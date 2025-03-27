@@ -81,9 +81,11 @@
                 <i class="fas fa-user-check text-gray-400"></i>
             </div>
             <p class="text-gray-600 mb-4">Track and manage the onboarding process for new hires.</p>
-            <button class="w-full bg-green-50 text-green-600 hover:bg-green-100 py-2 rounded-lg">
-                View Onboarding <i class="fas fa-arrow-right ml-2"></i>
-            </button>
+            <a href="{% url 'employer:interview_evaluation' %}">
+                <button class="w-full bg-green-50 text-green-600 hover:bg-green-100 py-2 rounded-lg">
+                    View Onboarding <i class="fas fa-arrow-right ml-2"></i>
+                </button>
+            </a>
         </div>
 
         <!-- Interview Scheduler Card -->

@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+
+{% block nav %}
+{% include 'components/company_nav.html' %}
+{% endblock nav %}
+{% block content %}
+
+<div class="max-w-7xl mx-auto px-4 py-8">
+    <!-- Page Header -->
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
+        <div class="mb-4 md:mb-0">
+            <h1 class="text-2xl font-bold text-gray-900">Interview Evaluation</h1>
+            <p class="text-gray-600 mt-1">Review candidate scores and filter by job category.</p>
+        </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-8">
+        <div class="flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0 md:space-x-4">
+            <div class="w-full md:w-auto">
+                <label for="job-category" class="block text-sm font-medium text-gray-700 mb-1">Filter by Job</label>
+                <select id="job-category"
+                    class="w-full md:w-64 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
+                    <option value="all">All Jobs</option>
+                    {% for job in interview %}
+                    <option value="{{ job.application.job_id }}">{{ job.application.job.title }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="w-full md:w-auto">
+                <label for="sort-by" class="block text-sm font-medium text-gray-700 mb-1">Sort By</label>
+                <select id="sort-by"
+                    class="w-full md:w-48 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
+                    <option value="score">Score (High to Low)</option>
+                    <option value="date">Interview Date (Recent First)</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <!-- Candidate List -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100">
+        <div class="px-6 py-4 border-b border-gray-100">
+            <h3 class="text-lg font-semibold">Candidates</h3>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="w-full">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-500">Candidate</th>
+                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-500">Job Applied</th>
+                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-500">Interview Date</th>
+                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-500">Overall Score</th>
+                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-500">Details</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200">
+                    {% for i in interview %}
+                    <tr>
+                        <td class="px-6 py-4">
+                            <div class="flex items-center space-x-4">
+                                <div class="h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center">
+                                    <i class="fas fa-user text-gray-600"></i>
+                                </div>
+                                <div>
+                                    <p class="font-medium">{{ i.application.applicant.first_name }}</p>
+                                    <p class="text-sm text-gray-600">Senior Frontend Developer</p>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4">
+                            <p class="text-gray-600">{{ i.application.job.title}}</p>
+                        </td>
+                        <td class="px-6 py-4">
+                            <p class="text-gray-600">{{ i.start_time|date:"F d, Y" }}</p>
+                        </td>
+                        <td class="px-6 py-4">
+                            <p class="text-gray-600">85/100</p>
+                        </td>
+                        <td class="px-6 py-4">
+                            <a href="{% url 'employer:interview_selection' i.id %}">
+                                <button class="text-green-600 hover:text-green-800">
+                                    <i class="fas fa-eye"></i> View Details
+                                </button>
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+{% endblock content %}
+
+{% block footer %}
+<div class="my-2 w-full md:hidden">&nbsp;</div>
+<div class="footer-container hidden md:block">
+    {% include 'components/footer.html' %}
+</div>
+{% endblock footer %}

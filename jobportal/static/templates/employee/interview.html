@@ -21,7 +21,7 @@
                 {% endif %}.
             </p>
         </div>
-        <div class="flex space-x-3">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-2 items-center">
             <button id="start-quiz-btn"
                 class="bg-green-600 hover:bg-green-700 text-white px-5 py-2.5 rounded-lg flex items-center">
                 <i class="fas fa-play mr-2"></i>Start Quiz
@@ -61,6 +61,7 @@
                         <p class="text-xs text-gray-500 ml-auto w-fit ">(10 Marks)</p>
                     </label>
                     <input type="number" id="technical-skills" min="0" max="10" required name="technical_skills"
+                        required
                         class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
                 </div>
                 <div>
@@ -68,7 +69,7 @@
                         <p>Communication</p>
                         <p class="text-xs text-gray-500 ml-auto w-fit">(10 Marks)</p>
                     </label>
-                    <input type="number" id="communication" min="0" max="10" required name="communication"
+                    <input type="number" id="communication" min="0" max="10" required name="communication" required
                         class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
                 </div>
                 <div>
@@ -76,7 +77,7 @@
                         <p>Problem Solving</p>
                         <p class="text-xs text-gray-500 ml-auto w-fit">(10 Marks)</p>
                     </label>
-                    <input type="number" id="problem-solving" min="0" max="10" required name="problem_solving"
+                    <input type="number" id="problem-solving" min="0" max="10" required name="problem_solving" required
                         class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
                 </div>
                 <button
@@ -191,11 +192,33 @@
 
     // End Interview Button
     document.getElementById('end-interview-btn').addEventListener('click', () => {
-        clearInterval(timerInterval);
-        alert('Interview ended. Timer stopped.');
+        // clearInterval(timerInterval);
+        alert('Confirm end of the interview. After that you wont be able to join the interview again.');
         if (api) {
             stopVideoCall();
         }
+        const appId = '{{interview.application.application_id}}';
+        console.log(appId);
+        fetch(`/company/interview-complete/${appId}/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            body: JSON.stringify({
+                'application_id': appId
+            })
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    console.log('Interview ended successfully');
+                    // location.reload();
+                } else {
+                    alert('Error: ' + data.message);
+                }
+            })
+            .catch(error => console.error('Error:', error));
     });
 </script>
 {% endblock content %}

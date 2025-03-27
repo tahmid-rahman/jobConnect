@@ -1,0 +1,133 @@
+{% extends 'base.html' %}
+
+{% block nav %}
+{% include 'components/company_nav.html' %}
+{% endblock nav %}
+{% block content %}
+
+<!-- Main Content -->
+<div class="max-w-7xl mx-auto px-4 py-8">
+    <!-- Page Header -->
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
+        <div class="mb-4 md:mb-0">
+            <h1 class="text-2xl font-bold text-gray-900">
+                {% if interview.application.applicant.first_name %}
+                {{ interview.application.applicant.first_name }}
+                {% endif %}
+                {% if interview.application.applicant.last_name %}
+                {{interview.application.applicant.last_name}}
+                {% endif %}
+
+            </h1>
+            <p class="text-gray-600 mt-1">{{ interview.application.job.title}} - Interview Evaluation Details</p>
+        </div>
+        <div class="flex space-x-3">
+            <button class="bg-green-600 hover:bg-green-700 text-white px-5 py-2.5 rounded-lg flex items-center">
+                <i class="fas fa-check mr-2"></i>Approve
+            </button>
+            <button class="bg-red-600 hover:bg-red-700 text-white px-5 py-2.5 rounded-lg flex items-center">
+                <i class="fas fa-times mr-2"></i>Reject
+            </button>
+        </div>
+    </div>
+
+    <!-- Candidate Details -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-8">
+        <h2 class="text-xl font-semibold text-gray-900 mb-4">Candidate Information</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+                <p class="text-sm text-gray-500">Name</p>
+                <p class="text-lg font-medium text-gray-800">
+                    {% if interview.application.applicant.first_name %}
+                    {{ interview.application.applicant.first_name }}
+                    {% endif %}
+                    {% if interview.application.applicant.last_name %}
+                    {{interview.application.applicant.last_name}}
+                    {% endif %}
+                </p>
+            </div>
+            <div>
+                <p class="text-sm text-gray-500">Job Applied</p>
+                <p class="text-lg font-medium text-gray-800">{{ interview.application.job.title}}</p>
+            </div>
+            <div>
+                <p class="text-sm text-gray-500">Resume</p>
+                <a href="{% url 'jobseeker:resume_build' interview.application.applicant.profile_id %}"
+                    class="text-lg font-medium hover:underline">
+                    <p class="text-lg font-medium text-gray-800 hover:underline">View Resume</p>
+                </a>
+            </div>
+            <div>
+                <p class="text-sm text-gray-500">Interview Date</p>
+                <p class="text-lg font-medium text-gray-800">{{ interview.start_time }}</p>
+            </div>
+            <div>
+                <p class="text-sm text-gray-500">Overall Score</p>
+                <p class="text-lg font-medium text-gray-800">85/100</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Evaluation Breakdown -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-8">
+        <h2 class="text-xl font-semibold text-gray-900 mb-4">Evaluation Breakdown</h2>
+        <div class="space-y-4">
+            <!-- Technical Skills -->
+            <div>
+                <p class="text-sm text-gray-500">Technical Skills</p>
+                <div class="flex items-center space-x-2">
+                    <div class="w-full bg-gray-200 rounded-full h-2.5">
+                        <div class="bg-green-600 h-2.5 rounded-full" style="width: 80%;"></div>
+                    </div>
+                    <p class="text-sm text-gray-600">80/100</p>
+                </div>
+            </div>
+
+            <!-- Problem Solving -->
+            <div>
+                <p class="text-sm text-gray-500">Problem Solving</p>
+                <div class="flex items-center space-x-2">
+                    <div class="w-full bg-gray-200 rounded-full h-2.5">
+                        <div class="bg-green-600 h-2.5 rounded-full" style="width: 90%;"></div>
+                    </div>
+                    <p class="text-sm text-gray-600">90/100</p>
+                </div>
+            </div>
+
+            <!-- Communication -->
+            <div>
+                <p class="text-sm text-gray-500">Communication</p>
+                <div class="flex items-center space-x-2">
+                    <div class="w-full bg-gray-200 rounded-full h-2.5">
+                        <div class="bg-green-600 h-2.5 rounded-full" style="width: 75%;"></div>
+                    </div>
+                    <p class="text-sm text-gray-600">75/100</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Feedback Section -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+        <h2 class="text-xl font-semibold text-gray-900 mb-4">Interview Feedback</h2>
+        <div class="space-y-4">
+            <div>
+                <p class="text-sm text-gray-500">Feedback</p>
+                <p class="text-gray-600">John demonstrated excellent problem-solving skills and a strong
+                    understanding of frontend technologies. His ability to explain complex concepts clearly was
+                    impressive.</p>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+{% endblock content %}
+
+{% block footer %}
+<div class="my-2 w-full md:hidden">&nbsp;</div>
+<div class="footer-container hidden md:block">
+    {% include 'components/footer.html' %}
+</div>
+{% endblock footer %}

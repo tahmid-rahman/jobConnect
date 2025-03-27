@@ -2,10 +2,12 @@ from django.shortcuts import render,get_object_or_404,redirect
 from django.contrib import messages
 from django.utils import timezone
 from datetime import datetime, timedelta
+from django.http import JsonResponse
+from django.views.decorators.http import require_POST
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
 from employer.models import Job,Company, JobApplication,Interview
-from jobseeker.models import Profile,Skill,Contact
+from jobseeker.models import Profile,Skill,Contact,JobPreference
 from django.db.models import Count,Subquery,Prefetch
 
 
@@ -199,9 +201,9 @@ def schedule_interview(request):
         # return redirect('employer:schedule_interview')
 
     else:
-        applications = JobApplication.objects.filter(job__company__user=request.user, is_scheduled=False).select_related('job', 'applicant')
+        applications = JobApplication.objects.filter(job__company__user=request.user, is_scheduled=False, is_selected=True, is_interviewed=False).select_related('job', 'applicant')
         # jobs = Job.objects.filter(company__user=request.user) 
-        interviews = Interview.objects.filter(application__job__company__user=request.user).order_by('start_time').select_related('application__job')
+        interviews = Interview.objects.filter(application__job__company__user=request.user, application__is_interviewed=False).order_by('start_time').select_related('application__job')
         now = timezone.now()
         # for app in applications:
         #     print("hello")
@@ -287,3 +289,59 @@ def interview_details(request,id):
         'interview':interview,
         'contact':contact,
         })
+
+
+def interview_evaluation(request):
+    interview = Interview.objects.filter(application__is_interviewed=True).order_by('start_time')
+    return render(request, 'employee/candidate_evaluation.html',
+                  {'interview':interview})
+
+def interview_selection(request,id):
+    interview = get_object_or_404(Interview,id=id)
+    return render(request, 'employee/selection.html',
+                  {'interview':interview})
+
+def view_resume(request,id):
+    application = get_object_or_404(JobApplication, application_id=id)
+    edu = application.applicant.educations.all()
+    exp = application.applicant.experiences.all()
+    skill = application.applicant.skills.all()
+    prf = JobPreference.objects.get(profile=application.applicant)
+    Cont = Contact.objects.get(profile=application.applicant)
+    return render(request, 'employee/resume_view.html',{
+        'app': application,
+        'pro': application.applicant,
+        'edu':edu, 
+        'exp':exp, 
+        'skill':skill,
+        'prf':prf,
+        'cont':Cont
+    })
+
+
+@require_POST
+def select_for_interview(request, candidate_id):
+    
+    candidate = JobApplication.objects.get(application_id=candidate_id)
+    try:
+        candidate.is_selected = 'True'
+        candidate.save()
+        return JsonResponse({'success': True})
+    
+    except JobApplication.DoesNotExist:
+        return JsonResponse({'success': False, 'message': 'Candidate not found'}, status=404)
+    except Exception as e:
+        return JsonResponse({'success': False, 'message': str(e)}, status=500)
+
+def interview_complete(request,application_id):
+    application = get_object_or_404(JobApplication, application_id=application_id)
+    try:
+        application.is_interviewed = True
+        application.save()
+        return JsonResponse({'success': True})
+    
+    except JobApplication.DoesNotExist:
+        return JsonResponse({'success': False, 'message': 'Candidate not found'}, status=404)
+    except Exception as e:
+        return JsonResponse({'success': False, 'message': str(e)}, status=500)
+    

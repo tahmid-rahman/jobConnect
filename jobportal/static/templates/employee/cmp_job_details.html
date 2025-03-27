@@ -100,7 +100,7 @@
             <div class="overflow-y-auto max-h-[calc(100vh-300px)]">
                 <!-- Candidate Card -->
                 {% for cand in cand_list %}
-                <a href="{% url 'jobseeker:resume_build' cand.applicant.profile_id %}"
+                <a href="{% url 'employer:view_resume' cand.application_id %}"
                     class="flex items-center space-x-4 p-4 hover:bg-gray-50 rounded-lg cursor-pointer">
                     <div
                         class="h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center object-cover overflow-hidden">

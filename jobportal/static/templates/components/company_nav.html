@@ -15,6 +15,8 @@
                     class="hover:hover:text-green-600 {% if '/company/jobs/' in request.path %} text-green-600 {% else %} text-gray-600 {% endif %}">Jobs</a>
                 <a href="/company/candidates/"
                     class="hover:hover:text-green-600 {% if '/company/candidates/' in request.path %} text-green-600 {% else %} text-gray-600 {% endif %}">Candidates</a>
+                <a href="/company/schedule/"
+                    class="hover:hover:text-green-600 {% if '/company/schedule/' in request.path %} text-green-600 {% else %} text-gray-600 {% endif %}">Schedule</a>
             </div>
 
             <!-- Company Profile Dropdown -->
@@ -61,7 +63,7 @@
 </nav>
 
 <!-- Bottom Navigation Bar (Visible on mobile) -->
-<div class="md:hidden fixed bottom-0 left-0 right-0 bg-white shadow-lg border-t border-gray-200">
+<div class="md:hidden fixed bottom-0 left-0 right-0 bg-white shadow-lg border-t border-gray-200 z-10">
     <div class="flex justify-around items-center py-2">
         <a href="/company/"
             class="{% if request.path == '/company/' %} text-green-600 {% else %} text-gray-600 {% endif %} hover:text-green-600 flex flex-col items-center">
@@ -77,6 +79,11 @@
             class="{% if request.path == '/company/candidates/' %} text-green-600 {% else %} text-gray-600 {% endif %} hover:text-green-600 flex flex-col items-center">
             <i class="fas fa-users text-lg"></i>
             <span class="text-xs">Candidates</span>
+        </a>
+        <a href="/company/schedule/"
+            class="{% if request.path == '/company/schedule/' %} text-green-600 {% else %} text-gray-600 {% endif %} hover:text-green-600 flex flex-col items-center">
+            <i class="fas fa-calendar text-lg"></i>
+            <span class="text-xs">Schedules</span>
         </a>
         <a href="/company/messages/"
             class="{% if request.path == '/company/messages/' %} text-green-600 {% else %} text-gray-600 {% endif %} hover:text-green-600 flex flex-col items-center relative">
