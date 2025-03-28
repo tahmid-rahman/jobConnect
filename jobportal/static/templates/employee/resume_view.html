@@ -237,21 +237,27 @@
         <!-- Rating Card -->
         <div class="bg-white rounded-xl shadow-[0_4px_20px_rgba(0,0,0,0.08)] p-6">
             <h3 class="text-lg font-bold text-gray-900 mb-3">Rate Candidate</h3>
-            <div class="flex items-center justify-center space-x-1 mb-4">
+            <div class="flex items-center justify-center space-x-1 mb-4" id="rating-stars">
                 {% for i in "12345" %}
-                <svg class="w-8 h-8 text-yellow-400 hover:text-yellow-500 cursor-pointer" fill="none"
-                    stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="w-8 h-8 cursor-pointer star {% if intr.resume_ratings >= forloop.counter %}text-yellow-400{% else %}text-gray-300 {% endif %}"
+                    fill="{% if candidate.resume_ratings >= forloop.counter %}currentColor{% else %}none{% endif %}"
+                    stroke="currentColor" viewBox="0 0 24 24" data-rating="{{ forloop.counter }}">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z">
                     </path>
                 </svg>
                 {% endfor %}
             </div>
-            <textarea
-                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
-                rows="3" placeholder="Evaluation notes..."></textarea>
-        </div>
+            <textarea id="evaluation-notes"
+                class="w-full px-3 py-2 border border-gray-300 text-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+                rows="3" placeholder="Evaluation notes...">{{ intr.resume_comments|default:'' }}</textarea>
 
+            <button onclick="saveRating({{ intr.application.application_id }})"
+                class="mt-4 w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition-all duration-200 flex items-center justify-center shadow-md hover:shadow-lg"
+                id="save-btn">
+                Save Rating
+            </button>
+        </div>
         <!-- Status Card -->
         <div class="bg-white rounded-xl shadow-[0_4px_20px_rgba(0,0,0,0.08)] p-6">
             <h3 class="text-lg font-bold text-gray-900 mb-3">Application Status</h3>
@@ -324,6 +330,63 @@
             .finally(() => {
                 button.disabled = false;
             });
+    }
+    let selectedRating = "{{ candidate.resume_ratings|default:'0' }}";
+
+    document.querySelectorAll('.star').forEach(star => {
+        star.addEventListener('click', function () {
+            const rating = parseInt(this.dataset.rating);
+            selectedRating = rating;
+
+            // Update star colors and fills
+            document.querySelectorAll('.star').forEach((s, index) => {
+                const starRating = parseInt(s.dataset.rating);
+                s.classList.toggle('text-yellow-400', starRating <= rating);
+                s.classList.toggle('text-gray-300', starRating > rating);
+                s.setAttribute('fill', starRating <= rating ? 'currentColor' : 'none');
+            });
+        });
+    });
+
+    function saveRating(candidateId) {
+        const btn = document.getElementById('save-btn');
+        const notes = document.getElementById('evaluation-notes').value;
+
+        btn.innerHTML = 'Saving...';
+        btn.disabled = true;
+
+        fetch(`/company/view-resume/${candidateId}/rate/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            body: JSON.stringify({
+                'resume_ratings': selectedRating,
+                'evaluation_notes': notes
+            })
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    btn.innerHTML = 'Saved!';
+                    setTimeout(() => {
+                        btn.innerHTML = 'Save Rating';
+                        btn.disabled = false;
+                    }, 2000);
+                } else {
+                    alert('Error: ' + data.message);
+                    btn.disabled = false;
+                    btn.innerHTML = 'Save Rating';
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred while saving');
+                btn.disabled = false;
+                btn.innerHTML = 'Save Rating';
+            });
+        location.reload();
     }
 </script>
 

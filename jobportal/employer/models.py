@@ -73,22 +73,22 @@ class Interview(models.Model):
     application = models.ForeignKey(JobApplication, on_delete=models.CASCADE)
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
-    resume_ratings = models.IntegerField(
+    resume_ratings = models.SmallIntegerField(
         default=0,
         null=True,
         blank=True,
         validators=[MinValueValidator(0), MaxValueValidator(5)])    
-    technical_score = models.IntegerField(
+    technical_score = models.FloatField(
         default=0,
         null=True,
         blank=True,
         validators=[MinValueValidator(0), MaxValueValidator(10)])    
-    communication_score = models.IntegerField(
+    communication_score = models.FloatField(
         default=0,
         null=True,
         blank=True,
         validators=[MinValueValidator(0), MaxValueValidator(10)])    
-    problem_solving_score = models.IntegerField(
+    problem_solving_score = models.FloatField(
         default=0,
         null=True,
         blank=True,

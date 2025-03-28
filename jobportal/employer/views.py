@@ -1,14 +1,17 @@
+import json
+from datetime import datetime, timedelta
 from django.shortcuts import render,get_object_or_404,redirect
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.utils import timezone
-from datetime import datetime, timedelta
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
+from django.views.decorators.csrf import csrf_exempt
 from django.core.paginator import Paginator
-from django.contrib.auth.decorators import login_required
+from django.db.models import Count,Subquery,Prefetch,F, ExpressionWrapper, FloatField
 from employer.models import Job,Company, JobApplication,Interview
 from jobseeker.models import Profile,Skill,Contact,JobPreference
-from django.db.models import Count,Subquery,Prefetch
+
 
 
 
@@ -292,23 +295,33 @@ def interview_details(request,id):
 
 
 def interview_evaluation(request):
-    interview = Interview.objects.filter(application__is_interviewed=True).order_by('start_time')
+    interview = Interview.objects.filter(application__is_interviewed=True).annotate(
+        ration=ExpressionWrapper(
+            ((F("resume_ratings") + F("technical_score") + F("problem_solving_score") + F("communication_score")) * 100) / 35,
+            output_field=FloatField()
+        )
+    ).order_by('start_time')
     return render(request, 'employee/candidate_evaluation.html',
                   {'interview':interview})
 
 def interview_selection(request,id):
     interview = get_object_or_404(Interview,id=id)
-    return render(request, 'employee/selection.html',
-                  {'interview':interview})
+    ration = ((interview.resume_ratings + interview.technical_score + interview.problem_solving_score + interview.communication_score)*100)/35
+    return render(request, 'employee/selection.html', {
+        'interview':interview,
+        'total':round(ration,2)
+        })
 
 def view_resume(request,id):
     application = get_object_or_404(JobApplication, application_id=id)
+    interveiw = get_object_or_404(Interview, application=application)
     edu = application.applicant.educations.all()
     exp = application.applicant.experiences.all()
     skill = application.applicant.skills.all()
     prf = JobPreference.objects.get(profile=application.applicant)
     Cont = Contact.objects.get(profile=application.applicant)
     return render(request, 'employee/resume_view.html',{
+        'intr':interveiw,
         'app': application,
         'pro': application.applicant,
         'edu':edu, 
@@ -345,3 +358,59 @@ def interview_complete(request,application_id):
     except Exception as e:
         return JsonResponse({'success': False, 'message': str(e)}, status=500)
     
+
+@require_POST
+def resume_review(request, id):   
+    interveiw = Interview.objects.get(application__application_id=id)
+    try:
+        data = json.loads(request.body)
+        
+        # Update rating
+        rating = data.get('resume_ratings', 0)
+        interveiw.resume_ratings = rating
+        # Update evaluation notes
+        # candidate.evaluation_notes = data.get('evaluation_notes', '')[:2000]  # Limit to 2000 chars
+        interveiw.resume_comments = data.get('evaluation_notes', '')
+        
+        interveiw.save()
+        return JsonResponse({'success': True})
+    
+    except interveiw.DoesNotExist:
+        return JsonResponse({'success': False, 'message': 'Candidate not found'}, status=404)
+    except Exception as e:
+        return JsonResponse({'success': False, 'message': str(e)}, status=500)
+    
+
+
+@require_POST
+@csrf_exempt
+def save_marks(request,id):
+    try:
+        technical_skills = int(request.POST.get('technical_skills', 0))
+        communication = int(request.POST.get('communication', 0))
+        problem_solving = int(request.POST.get('problem_solving', 0))
+        
+        # Validate marks
+        if not all(0 <= mark <= 10 for mark in [technical_skills, communication, problem_solving]):
+            return JsonResponse({'success': False, 'message': 'Marks must be between 0-10'})
+        interview = Interview.objects.get(id=id)
+        interview.technical_score = technical_skills
+        interview.communication_score = communication
+        interview.problem_solving_score = problem_solving
+        interview.save()\
+
+        return JsonResponse({'success': True})
+    except Exception as e:
+        return JsonResponse({'success': False, 'message': str(e)})
+
+@require_POST
+@csrf_exempt
+def save_feedback(request,id):
+    try:
+        feedback_notes = request.POST.get('feedback_notes', '')
+        interview = Interview.objects.get(id=id)
+        interview.feedback = feedback_notes
+        interview.save()
+        return JsonResponse({'success': True, 'value': feedback_notes})
+    except Exception as e:
+        return JsonResponse({'success': False, 'message': str(e)})

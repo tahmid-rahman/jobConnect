@@ -75,7 +75,7 @@
                             <p class="text-gray-600">{{ i.start_time|date:"F d, Y" }}</p>
                         </td>
                         <td class="px-6 py-4">
-                            <p class="text-gray-600">85/100</p>
+                            <p class="text-gray-600">{{ i.ration|floatformat:0}}%</p>
                         </td>
                         <td class="px-6 py-4">
                             <a href="{% url 'employer:interview_selection' i.id %}">

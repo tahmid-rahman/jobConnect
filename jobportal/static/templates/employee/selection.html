@@ -9,17 +9,21 @@
 <div class="max-w-7xl mx-auto px-4 py-8">
     <!-- Page Header -->
     <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
-        <div class="mb-4 md:mb-0">
-            <h1 class="text-2xl font-bold text-gray-900">
-                {% if interview.application.applicant.first_name %}
-                {{ interview.application.applicant.first_name }}
-                {% endif %}
-                {% if interview.application.applicant.last_name %}
-                {{interview.application.applicant.last_name}}
-                {% endif %}
+        <div class="flex items-center space-x-4">
+            <img src="{{interview.application.applicant.profile_picture.url}}" alt=" profile picture"
+                class="w-20 h-20 rounded-xl overflow-hidden border-4 border-white shadow-md">
+            <div class="mb-4 md:mb-0">
+                <h1 class="text-2xl font-bold text-gray-900">
+                    {% if interview.application.applicant.first_name %}
+                    {{ interview.application.applicant.first_name }}
+                    {% endif %}
+                    {% if interview.application.applicant.last_name %}
+                    {{interview.application.applicant.last_name}}
+                    {% endif %}
 
-            </h1>
-            <p class="text-gray-600 mt-1">{{ interview.application.job.title}} - Interview Evaluation Details</p>
+                </h1>
+                <p class="text-gray-600 mt-1">{{ interview.application.applicant.job_title}}</p>
+            </div>
         </div>
         <div class="flex space-x-3">
             <button class="bg-green-600 hover:bg-green-700 text-white px-5 py-2.5 rounded-lg flex items-center">
@@ -30,94 +34,118 @@
             </button>
         </div>
     </div>
-
-    <!-- Candidate Details -->
-    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-8">
-        <h2 class="text-xl font-semibold text-gray-900 mb-4">Candidate Information</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-                <p class="text-sm text-gray-500">Name</p>
-                <p class="text-lg font-medium text-gray-800">
-                    {% if interview.application.applicant.first_name %}
-                    {{ interview.application.applicant.first_name }}
-                    {% endif %}
-                    {% if interview.application.applicant.last_name %}
-                    {{interview.application.applicant.last_name}}
-                    {% endif %}
-                </p>
-            </div>
-            <div>
-                <p class="text-sm text-gray-500">Job Applied</p>
-                <p class="text-lg font-medium text-gray-800">{{ interview.application.job.title}}</p>
-            </div>
-            <div>
-                <p class="text-sm text-gray-500">Resume</p>
-                <a href="{% url 'jobseeker:resume_build' interview.application.applicant.profile_id %}"
-                    class="text-lg font-medium hover:underline">
-                    <p class="text-lg font-medium text-gray-800 hover:underline">View Resume</p>
-                </a>
-            </div>
-            <div>
-                <p class="text-sm text-gray-500">Interview Date</p>
-                <p class="text-lg font-medium text-gray-800">{{ interview.start_time }}</p>
-            </div>
-            <div>
-                <p class="text-sm text-gray-500">Overall Score</p>
-                <p class="text-lg font-medium text-gray-800">85/100</p>
-            </div>
-        </div>
-    </div>
-
-    <!-- Evaluation Breakdown -->
-    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-8">
-        <h2 class="text-xl font-semibold text-gray-900 mb-4">Evaluation Breakdown</h2>
-        <div class="space-y-4">
-            <!-- Technical Skills -->
-            <div>
-                <p class="text-sm text-gray-500">Technical Skills</p>
-                <div class="flex items-center space-x-2">
-                    <div class="w-full bg-gray-200 rounded-full h-2.5">
-                        <div class="bg-green-600 h-2.5 rounded-full" style="width: 80%;"></div>
-                    </div>
-                    <p class="text-sm text-gray-600">80/100</p>
+    <div class="grid md:grid-cols-2 grid-cols-1 gap-4 ">
+        <!-- Candidate Details -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+            <h2 class="text-xl font-semibold text-gray-900 mb-4">Candidate Information</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <p class="text-sm text-gray-500">Name</p>
+                    <p class="text-lg font-medium text-gray-800">
+                        {% if interview.application.applicant.first_name %}
+                        {{ interview.application.applicant.first_name }}
+                        {% endif %}
+                        {% if interview.application.applicant.last_name %}
+                        {{interview.application.applicant.last_name}}
+                        {% endif %}
+                    </p>
                 </div>
-            </div>
-
-            <!-- Problem Solving -->
-            <div>
-                <p class="text-sm text-gray-500">Problem Solving</p>
-                <div class="flex items-center space-x-2">
-                    <div class="w-full bg-gray-200 rounded-full h-2.5">
-                        <div class="bg-green-600 h-2.5 rounded-full" style="width: 90%;"></div>
-                    </div>
-                    <p class="text-sm text-gray-600">90/100</p>
+                <div>
+                    <p class="text-sm text-gray-500">Job Applied</p>
+                    <p class="text-lg font-medium text-gray-800">{{ interview.application.job.title}}</p>
                 </div>
-            </div>
-
-            <!-- Communication -->
-            <div>
-                <p class="text-sm text-gray-500">Communication</p>
-                <div class="flex items-center space-x-2">
-                    <div class="w-full bg-gray-200 rounded-full h-2.5">
-                        <div class="bg-green-600 h-2.5 rounded-full" style="width: 75%;"></div>
-                    </div>
-                    <p class="text-sm text-gray-600">75/100</p>
+                <div>
+                    <p class="text-sm text-gray-500">Resume</p>
+                    <a href="{% url 'jobseeker:resume_build' interview.application.applicant.profile_id %}"
+                        class="text-lg font-medium hover:underline">
+                        <p class="text-lg font-medium text-gray-800 hover:underline">View Resume</p>
+                    </a>
+                </div>
+                <div>
+                    <p class="text-sm text-gray-500">Interview Date</p>
+                    <p class="text-lg font-medium text-gray-800">{{ interview.start_time }}</p>
+                </div>
+                <div>
+                    <p class="text-sm text-gray-500">Overall Score</p>
+                    <p class="text-lg font-medium text-gray-800">
+                        {{ total }}%
+                    </p>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- Feedback Section -->
-    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-        <h2 class="text-xl font-semibold text-gray-900 mb-4">Interview Feedback</h2>
-        <div class="space-y-4">
-            <div>
-                <p class="text-sm text-gray-500">Feedback</p>
-                <p class="text-gray-600">John demonstrated excellent problem-solving skills and a strong
-                    understanding of frontend technologies. His ability to explain complex concepts clearly was
-                    impressive.</p>
+        <!-- Evaluation Breakdown -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+            <h2 class="text-xl font-semibold text-gray-900 mb-4">Evaluation Breakdown</h2>
+            <div class="space-y-4">
+                <!-- Technical Skills -->
+                <div>
+                    <p class="text-sm text-gray-500">Resume Score</p>
+                    <div class="flex items-center space-x-2">
+                        <div class="w-full bg-gray-200 rounded-full h-2.5">
+                            <div class="bg-green-600 h-2.5 rounded-full"
+                                style="width: {% widthratio interview.resume_ratings 5 100 %}%;"></div>
+                        </div>
+                        <p class="text-sm text-gray-600">{{ interview.resume_ratings }}/5</p>
+                    </div>
+                </div>
+                <div>
+                    <p class="text-sm text-gray-500">Technical Skills</p>
+                    <div class="flex items-center space-x-2">
+                        <div class="w-full bg-gray-200 rounded-full h-2.5">
+                            <div class="bg-green-600 h-2.5 rounded-full"
+                                style="width: {% widthratio interview.technical_score 10 100 %}%;"></div>
+                        </div>
+                        <p class="text-sm text-gray-600">{{ interview.technical_score }}/10</p>
+                    </div>
+                </div>
+
+                <!-- Problem Solving -->
+                <div>
+                    <p class="text-sm text-gray-500">Problem Solving</p>
+                    <div class="flex items-center space-x-2">
+                        <div class="w-full bg-gray-200 rounded-full h-2.5">
+                            <div class="bg-green-600 h-2.5 rounded-full"
+                                style="width: {% widthratio interview.communication_score 10 100 %}%;"></div>
+                        </div>
+                        <p class="text-sm text-gray-600">{{ interview.communication_score }}/10</p>
+                    </div>
+                </div>
+
+                <!-- Communication -->
+                <div>
+                    <p class="text-sm text-gray-500">Communication</p>
+                    <div class="flex items-center space-x-2">
+                        <div class="w-full bg-gray-200 rounded-full h-2.5">
+                            <div class="bg-green-600 h-2.5 rounded-full"
+                                style="width: {% widthratio interview.problem_solving_score 10 100 %}%;"></div>
+                        </div>
+                        <p class="text-sm text-gray-600">{{ interview.problem_solving_score }}/10</p>
+                    </div>
+                </div>
             </div>
+        </div>
 
+        <!-- Feedback Section -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+            <h2 class="text-xl font-semibold text-gray-900 mb-4">Interview Feedback</h2>
+            <div class="space-y-4">
+                <div>
+                    <p class="text-sm text-gray-500">Feedback</p>
+                    <p class="text-gray-600">{{ interview.feedback|default:'No comments found' }}</p>
+                </div>
+
+            </div>
+        </div>
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+            <h2 class="text-xl font-semibold text-gray-900 mb-4">Resume Feedback</h2>
+            <div class="space-y-4">
+                <div>
+                    <p class="text-sm text-gray-500">Feedback</p>
+                    <p class="text-gray-600">{{ interview.resume_comments|default:'No comments found' }}</p>
+                </div>
+
+            </div>
         </div>
     </div>
 </div>
