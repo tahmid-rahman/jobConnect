@@ -23,7 +23,7 @@
 
     <!-- Messages Layout -->
     <div class="flex flex-col lg:flex-row gap-8">
-        <!-- Message List (Visible on all screens) -->
+        <!-- Message List -->
         <div id="message-list" class="bg-white rounded-xl shadow-sm border border-gray-100 lg:w-1/3">
             <div class="px-6 py-4 border-b border-gray-100">
                 <h3 class="text-lg font-semibold">Message Threads</h3>
@@ -37,41 +37,33 @@
 
                 <!-- Message Threads -->
                 <div class="overflow-y-auto h-[429px]">
-                    <!-- Sample Message Thread -->
-                    <div id="thread-1"
+                    {% for data in thread_data %}
+                    <div id="thread-{{ data.thread.id }}"
                         class="flex items-center space-x-4 p-4 hover:bg-gray-50 rounded-lg cursor-pointer"
-                        onclick="openMessage('thread-1')">
+                        onclick="openMessage('{{ data.thread.id }}')">
                         <div class="h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center">
                             <i class="fas fa-user text-gray-600"></i>
                         </div>
                         <div class="flex-1">
-                            <p class="font-medium">John Doe</p>
-                            <p class="text-sm text-gray-600">Regarding the Senior Frontend Developer role...</p>
-                            <p class="text-xs text-gray-500 mt-1">2 hours ago</p>
+                            <p class="font-medium">{{ data.participant.name }}</p>
+                            <p class="text-sm text-gray-600">{{ data.thread.messages.last.content|truncatechars:30 }}
+                            </p>
+                            <p class="text-xs text-gray-500 mt-1">{{ data.thread.updated|timesince }} ago</p>
                         </div>
+                        {% if data.has_unread %}
                         <span class="bg-green-100 text-green-600 px-2 py-1 rounded-full text-xs">New</span>
+                        {% endif %}
                     </div>
-
-                    <!-- Sample Message Thread -->
-                    <div id="thread-2"
-                        class="flex items-center space-x-4 p-4 hover:bg-gray-50 rounded-lg cursor-pointer"
-                        onclick="openMessage('thread-2')">
-                        <div class="h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center">
-                            <i class="fas fa-user text-gray-600"></i>
-                        </div>
-                        <div class="flex-1">
-                            <p class="font-medium">Jane Smith</p>
-                            <p class="text-sm text-gray-600">Follow-up on the Product Manager position...</p>
-                            <p class="text-xs text-gray-500 mt-1">5 hours ago</p>
-                        </div>
+                    {% empty %}
+                    <div class="p-4 text-center text-gray-500">
+                        No messages found
                     </div>
-
-                    <!-- Add more message threads here -->
+                    {% endfor %}
                 </div>
             </div>
         </div>
 
-        <!-- Message Conversation (Hidden on mobile/tablet by default) -->
+        <!-- Message Conversation -->
         <div id="message-conversation"
             class="bg-white rounded-xl shadow-sm border border-gray-100 lg:w-2/3 hidden lg:block">
             <!-- Back Button for Mobile/Tablet -->
@@ -81,49 +73,19 @@
                 </button>
             </div>
             <div class="px-6 py-4 border-b border-gray-100">
-                <h3 class="text-lg font-semibold">Conversation with <span id="conversation-name">John Doe</span>
-                </h3>
+                <h3 class="text-lg font-semibold">Conversation with <span id="conversation-name">...</span></h3>
             </div>
             <div class="p-6">
                 <!-- Message History -->
-                <div class="overflow-y-auto h-[315px] space-y-4 flex flex-col-reverse">
-                    <!-- Outgoing Message -->
-                    <div class="flex items-start space-x-4 justify-end">
-                        <div class="flex-1 text-right ">
-                            <p class="text-sm text-gray-800 bg-green-50 rounded-lg p-4 w-fit ml-auto shadow-md">Hi John,
-                                thanks
-                                for reaching out. We're currently
-                                reviewing applications and will get back to you soon.</p>
-                            <p class="text-xs text-gray-500 mt-1">You - 1 hour ago</p>
-                        </div>
-                        <div class="h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center">
-                            <i class="fas fa-user text-gray-600"></i>
-                        </div>
-                    </div>
-                    <!-- Incoming Message -->
-                    <div class="flex items-start space-x-4">
-                        <div class="h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center">
-                            <i class="fas fa-user text-gray-600"></i>
-                        </div>
-                        <div class="flex-1">
-                            <p class="text-sm text-gray-800 bg-white rounded-lg p-4 w-fit mr-auto shadow-md">Hi, I
-                                wanted to follow up on the Senior Frontend
-                                Developer role. Are there any updates?</p>
-                            <p class="text-xs text-gray-500 mt-1">John Doe - 2 hours ago</p>
-                        </div>
-                    </div>
-
-
-
-
-                    <!-- Add more messages here -->
+                <div class="overflow-y-auto h-[315px] space-y-4 flex flex-col-reverse" id="messages-container">
+                    <!-- Messages will be inserted here -->
                 </div>
 
                 <!-- Message Input -->
                 <div class="mt-6">
-                    <textarea rows="3" placeholder="Type your message..."
+                    <textarea id="message-input" rows="3" placeholder="Type your message..."
                         class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"></textarea>
-                    <button
+                    <button onclick="sendMessage()"
                         class="mt-2 bg-green-600 hover:bg-green-700 text-white px-5 py-2.5 rounded-lg flex items-center">
                         <i class="fas fa-paper-plane mr-2"></i>Send Message
                     </button>
@@ -134,32 +96,154 @@
 </div>
 
 <script>
-    // Function to open message conversation (for mobile/tablet)
-    function openMessage(threadId) {
-        const conversation = document.getElementById('message-conversation');
-        const messageList = document.getElementById('message-list');
-        const thread = document.getElementById(threadId);
-        const conversationName = thread.querySelector('.font-medium').textContent;
+    let currentThreadId = null;
+    let pollingInterval = null;
 
-        // Update conversation name
-        document.getElementById('conversation-name').textContent = conversationName;
-
-        // Show conversation on mobile/tablet
-        if (window.innerWidth < 1024) {
-            conversation.classList.remove('hidden');
-            messageList.classList.add('hidden'); // Hide message list
+    // Polling functions
+    function startPolling() {
+        if (currentThreadId) {
+            pollingInterval = setInterval(() => fetchMessages(currentThreadId), 5000);
         }
     }
 
-    // Function to close message conversation (for mobile/tablet)
-    function closeMessage() {
-        const conversation = document.getElementById('message-conversation');
-        const messageList = document.getElementById('message-list');
-        conversation.classList.add('hidden');
-        messageList.classList.remove('hidden'); // Show message list
+    function stopPolling() {
+        if (pollingInterval) {
+            clearInterval(pollingInterval);
+            pollingInterval = null;
+        }
     }
-</script>
 
+    // Message handling
+    async function fetchMessages(threadId) {
+        try {
+            const response = await fetch(`/messages/${threadId}/`);
+            const data = await response.json();
+            renderMessages(data.messages);
+        } catch (error) {
+            console.error('Error fetching messages:', error);
+        }
+    }
+
+    function renderMessages(messages) {
+        const container = document.getElementById('messages-container');
+        container.innerHTML = '';
+
+        messages.forEach(message => {
+            const isMe = message.is_me;
+            const messageHtml = `
+                <div class="flex items-start space-x-4 ${isMe ? 'justify-end' : ''}">
+                    ${!isMe ? `
+                    <div class="h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center">
+                        <i class="fas fa-user text-gray-600"></i>
+                    </div>` : ''}
+                    
+                    <div class="flex-1 ${isMe ? 'text-right' : ''}">
+                        <p class="text-sm text-gray-800 ${isMe ? 'bg-green-50' : 'bg-white'} 
+                            rounded-lg p-4 w-fit ${isMe ? 'ml-auto' : 'mr-auto'} shadow-md">
+                            ${message.content}
+                        </p>
+                        <p class="text-xs text-gray-500 mt-1">
+                            ${isMe ? 'You' : message.sender_name} - ${message.timestamp}
+                        </p>
+                    </div>
+                    
+                    ${isMe ? `
+                    <div class="h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center">
+                        <i class="fas fa-user text-gray-600"></i>
+                    </div>` : ''}
+                </div>
+            `;
+            container.insertAdjacentHTML('afterbegin', messageHtml);
+        });
+    }
+
+    // Message sending
+    async function sendMessage() {
+        const input = document.getElementById('message-input');
+        const content = input.value.trim();
+
+        if (!content || !currentThreadId) return;
+
+        try {
+            const response = await fetch('/send_message/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken'),
+                },
+                body: JSON.stringify({
+                    thread_id: currentThreadId,
+                    content: content
+                })
+            });
+
+            if (response.ok) {
+                input.value = '';
+                await fetchMessages(currentThreadId);
+            }
+        } catch (error) {
+            console.error('Error sending message:', error);
+        }
+    }
+
+    // Thread management
+    function openMessage(threadId) {
+        currentThreadId = threadId;
+        stopPolling();
+
+        // Update conversation name
+        const threadElement = document.getElementById(`thread-${threadId}`);
+        const participantName = threadElement.querySelector('.font-medium').textContent;
+        document.getElementById('conversation-name').textContent = participantName;
+
+        // Load messages and start polling
+        fetchMessages(threadId);
+        startPolling();
+
+        // Mobile handling
+        if (window.innerWidth < 1024) {
+            document.getElementById('message-conversation').classList.remove('hidden');
+            document.getElementById('message-list').classList.add('hidden');
+        }
+    }
+
+    function closeMessage() {
+        stopPolling();
+        currentThreadId = null;
+
+        document.getElementById('message-conversation').classList.add('hidden');
+        document.getElementById('message-list').classList.remove('hidden');
+    }
+
+    // CSRF helper
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    // Event listeners
+    document.getElementById('message-input').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            sendMessage();
+        }
+    });
+
+    // Initial setup for desktop
+    {% if first_thread %}
+    openMessage({{ first_thread.id }});
+    {% endif %}
+</script>
 
 {% endblock content %}
 

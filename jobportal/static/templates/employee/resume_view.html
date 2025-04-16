@@ -214,7 +214,7 @@
             {% endif %}
 
             <div class="mt-4 grid grid-cols-2 gap-3">
-                <button
+                <a href="{% url 'chatApp:start_direct_chat' recipient_id=app.applicant.user.id %}?next={{ request.path }}"
                     class="bg-gray-50 hover:bg-gray-100 text-gray-800 font-medium py-2 px-4 rounded-lg transition duration-200 flex items-center justify-center border border-gray-200">
                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -222,7 +222,7 @@
                         </path>
                     </svg>
                     Message
-                </button>
+                </a>
                 <button
                     class="bg-gray-50 hover:bg-gray-100 text-gray-800 font-medium py-2 px-4 rounded-lg transition duration-200 flex items-center justify-center border border-gray-200">
                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -379,6 +379,7 @@
                     btn.disabled = false;
                     btn.innerHTML = 'Save Rating';
                 }
+                location.reload();
             })
             .catch(error => {
                 console.error('Error:', error);
@@ -386,7 +387,6 @@
                 btn.disabled = false;
                 btn.innerHTML = 'Save Rating';
             });
-        location.reload();
     }
 </script>
 

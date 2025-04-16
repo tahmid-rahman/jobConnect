@@ -1,0 +1,583 @@
+{% extends 'base.html' %}
+{% block nav %}
+{% if request.user.role == 'employee' %}
+{% include 'components/company_nav.html' %}
+{% elif request.user.role == 'user' %}
+{% include 'components/main_nav.html' %}
+{% endif %}
+{% endblock nav %}
+{% block content %}
+<!-- Main Messages Content -->
+<div class="max-w-7xl mx-auto px-4 py-8">
+    <!-- Messages Header -->
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
+        <div class="mb-4 md:mb-0">
+            <h1 class="text-2xl font-bold text-gray-900">Messages</h1>
+            <p class="text-gray-600 mt-1">Manage and interact with your messages.</p>
+        </div>
+        <div class="flex space-x-3">
+            <button onclick="openNewChatModal()"
+                class="bg-green-600 hover:bg-green-700 text-white px-5 py-2.5 rounded-lg flex items-center">
+                <i class="fas fa-plus mr-2"></i>New Message
+            </button>
+        </div>
+    </div>
+
+    <!-- Messages Layout -->
+    <div class="flex flex-col lg:flex-row gap-8">
+        <!-- Message List -->
+        <div id="message-list" class="bg-white rounded-xl shadow-sm border border-gray-100 lg:w-1/3">
+            <div class="px-6 py-4 border-b border-gray-100">
+                <h3 class="text-lg font-semibold">Message Threads</h3>
+            </div>
+            <div class="p-6">
+                <!-- Search Bar -->
+                <div class="mb-4">
+                    <input type="text" placeholder="Search messages..."
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
+                </div>
+
+                <!-- Message Threads -->
+                <div class="overflow-y-auto h-[410px]" id="threads-container">
+                    {% for data in thread_data %}
+                    {% with other=data.participant %}
+                    <div id="thread-{{ data.thread.id }}"
+                        class="flex items-center space-x-4 p-4 hover:bg-gray-50 rounded-lg cursor-pointer thread-item"
+                        onclick="openMessage('{{ data.thread.id }}')" data-thread-id="{{ data.thread.id }}">
+                        <div
+                            class="h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden">
+                            {% if other.profile.profile_picture %}
+                            <img src="{{ other.profile.profile_picture.url }}" alt="picture" class="thread-picture">
+                            {% else %}
+                            <i class="fas fa-user text-gray-600"></i>
+                            {% endif %}
+                        </div>
+                        <div class="flex-1">
+                            <p class="thread-name font-medium {% if data.has_unread %}font-bold{% endif %}">
+                                {% if other.profile.first_name or other.profile.last_name %}
+                                {{ other.profile.first_name|default:"" }} {{ other.profile.last_name|default:"" }}
+                                {% else %}
+                                {{ other.username }}
+                                {% endif %}
+                            </p>
+                            <p
+                                class="thread-last-message text-sm text-gray-600 {% if data.has_unread %}font-semibold{% endif %}">
+                                {{ data.thread.messages.last.content|truncatechars:30 }}
+                            </p>
+                            <p class="thread-updated text-xs text-gray-500 mt-1">{{ data.thread.updated|timesince }} ago
+                            </p>
+                        </div>
+                        {% if data.has_unread %}
+                        <span class="unread-badge bg-green-100 text-green-600 px-2 py-1 rounded-full text-xs">New</span>
+                        {% endif %}
+                    </div>
+                    {% endwith %}
+                    {% empty %}
+                    <div class="p-4 text-center text-gray-500">
+                        No messages found
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Message Conversation -->
+        <div id="message-conversation"
+            class="bg-white rounded-xl shadow-sm border border-gray-100 lg:w-2/3 hidden lg:block">
+            <!-- Back Button for Mobile/Tablet -->
+            <div class="lg:hidden px-6 py-4 border-b border-gray-100">
+                <button onclick="closeMessage()" class="text-gray-600 hover:text-green-600 flex items-center">
+                    <i class="fas fa-arrow-left mr-2"></i>Back to Messages
+                </button>
+            </div>
+            <div class="px-6 py-4 border-b border-gray-100">
+                <h3 class="text-lg font-semibold">Conversation with <span id="conversation-name">...</span></h3>
+            </div>
+            <div class="p-6">
+                <!-- Message History -->
+                <div class="overflow-y-auto h-[380px] space-y-4 flex flex-col-reverse" id="messages-container">
+                    <!-- Messages will be inserted here -->
+                </div>
+
+                <!-- Message Input -->
+                <div class="mt-4">
+                    <form id="upload-form" enctype="multipart/form-data" class="relative">
+                        <div class="flex items-center border border-gray-300 rounded-lg overflow-hidden">
+                            <label for="file-upload"
+                                class="p-3 text-gray-500 hover:text-green-600 cursor-pointer border-r-gray-500">
+                                <i class="fas fa-paperclip"></i>
+                                <input type="file" name="file" id="file-upload" class="hidden">
+                            </label>
+                            <input id="message-input" type="text" placeholder="Type your message..."
+                                class="flex-1 px-4 py-3 focus:outline-none border-0">
+                            <button type="submit"
+                                class="bg-green-600 hover:bg-green-700 text-white px-4 py-[13px] h-full overflow-hidden">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+                        <div id="file-name" class="text-xs text-gray-500 mt-1 hidden"></div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="new-chat-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center">
+    <div class="bg-white rounded-lg p-6 w-full max-w-md">
+        <div class="flex justify-between items-center mb-4">
+            <h3 class="text-lg font-semibold">Start New Chat</h3>
+            <button onclick="closeNewChatModal()" class="text-gray-500 hover:text-gray-700">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <input type="text" id="user-search" placeholder="Search users..."
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg mb-4">
+        <div id="user-list" class="max-h-96 overflow-y-auto">
+            <!-- Users will be loaded here -->
+        </div>
+    </div>
+</div>
+
+<script>
+    let currentThreadId = null;
+    let pollingInterval = null;
+    let threadPollingInterval = null;
+
+    // Message Polling Functions
+    function startPolling() {
+        if (currentThreadId) {
+            pollingInterval = setInterval(() => fetchMessages(currentThreadId), 2000);
+        }
+    }
+
+    function stopPolling() {
+        if (pollingInterval) {
+            clearInterval(pollingInterval);
+            pollingInterval = null;
+        }
+    }
+
+    // Thread Polling Functions
+    function startThreadPolling() {
+        threadPollingInterval = setInterval(fetchThreadUpdates, 3000);
+    }
+
+    function stopThreadPolling() {
+        if (threadPollingInterval) {
+            clearInterval(threadPollingInterval);
+            threadPollingInterval = null;
+        }
+    }
+
+    async function fetchThreadUpdates() {
+        try {
+            const response = await fetch('/messages/get_thread_updates/');
+            if (response.ok) {
+                const data = await response.json();
+                updateThreadList(data);
+            }
+        } catch (error) {
+            console.error('Error fetching thread updates:', error);
+        }
+    }
+
+    function updateThreadList(data) {
+        const container = document.getElementById('threads-container');
+
+        data.threads.forEach(thread => {
+            let threadElement = document.getElementById(`thread-${thread.id}`);
+
+            if (!threadElement) {
+                // Create new thread element
+                threadElement = document.createElement('div');
+                threadElement.id = `thread-${thread.id}`;
+                threadElement.className = 'flex items-center space-x-4 p-4 hover:bg-gray-50 rounded-lg cursor-pointer thread-item';
+                threadElement.setAttribute('data-thread-id', thread.id);
+                threadElement.onclick = () => openMessage(thread.id);
+
+                threadElement.innerHTML = `
+                <div class="h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden">
+                    ${thread.participant.picture ?
+                        `<img src="${thread.participant.picture}" alt="${thread.participant.name}" class="thread-picture">` :
+                        `<i class="fas fa-user text-gray-600"></i>`}
+                </div>
+                <div class="flex-1">
+                    <p class="thread-name font-medium ${thread.has_unread ? 'font-bold' : ''}">
+                        ${thread.participant.name}
+                    </p>
+                    <p class="thread-last-message text-sm text-gray-600 ${thread.has_unread ? 'font-semibold' : ''}">
+                        ${thread.last_message.content}
+                    </p>
+                    <p class="thread-updated text-xs text-gray-500 mt-1">${thread.updated} ago</p>
+                </div>
+                ${thread.has_unread ?
+                        '<span class="unread-badge bg-green-100 text-green-600 px-2 py-1 rounded-full text-xs">New</span>' :
+                        ''}
+            `;
+
+                container.prepend(threadElement);
+            } else {
+                // Update existing thread
+                const nameElement = threadElement.querySelector('.thread-name');
+                const messageElement = threadElement.querySelector('.thread-last-message');
+                const updatedElement = threadElement.querySelector('.thread-updated');
+                const badgeElement = threadElement.querySelector('.unread-badge');
+                const pictureContainer = threadElement.querySelector('.rounded-full');
+
+                // Update content
+                nameElement.textContent = thread.participant.name;
+                messageElement.textContent = thread.last_message.content;
+                updatedElement.textContent = `${thread.updated} ago`;
+
+                // Update picture
+                if (thread.participant.picture) {
+                    pictureContainer.innerHTML = `<img src="${thread.participant.picture}" alt="${thread.participant.name}" class="thread-picture">`;
+                } else {
+                    pictureContainer.innerHTML = '<i class="fas fa-user text-gray-600"></i>';
+                }
+
+                // Update unread status
+                if (thread.has_unread) {
+                    nameElement.classList.add('font-bold');
+                    messageElement.classList.add('font-semibold');
+                    if (!badgeElement) {
+                        threadElement.insertAdjacentHTML('beforeend',
+                            '<span class="unread-badge bg-green-100 text-green-600 px-2 py-1 rounded-full text-xs">New</span>');
+                    }
+                } else {
+                    nameElement.classList.remove('font-bold');
+                    messageElement.classList.remove('font-semibold');
+                    if (badgeElement) {
+                        badgeElement.remove();
+                    }
+                }
+            }
+        });
+    }
+
+    // Existing message functions (unchanged)
+    async function fetchMessages(threadId) {
+        try {
+            const response = await fetch(`/messages/${threadId}/`);
+            const data = await response.json();
+            renderMessages(data.messages);
+        } catch (error) {
+            console.error('Error fetching messages:', error);
+        }
+    }
+
+    function renderMessages(messages) {
+        const container = document.getElementById('messages-container');
+        container.innerHTML = '';
+
+        messages.forEach(message => {
+            const isMe = message.is_me;
+            const fileLink = message.file_url ? `<a href="${message.file_url}" target="_blank" class="text-blue-500 underline">File</a>` : '';
+
+            // Read status indicators
+            const readStatus = isMe ?
+                (message.is_read ?
+                    '<span class="text-blue-500" title="Read">✓✓</span>' :
+                    '<span class="text-gray-400" title="Sent">✓</span>') :
+                '';
+
+            // Edit/Delete buttons (only for my messages)
+            const editDeleteHTML = isMe ? `
+            <div class="edit-delete-buttons opacity-0 group-hover:opacity-100 transition-opacity duration-200 inline-flex space-x-2 mr-2">
+                <button onclick="editMessage(${message.id}, '${message.content.replace(/'/g, "\\'")}')" 
+                        class="text-xs text-yellow-500 hover:text-yellow-600">Edit</button>
+                <button onclick="deleteMessage(${message.id})" 
+                        class="text-xs text-red-500 hover:text-red-600">Delete</button>
+            </div>` : '';
+
+            const messageHtml = `
+            <div class="relative group flex items-start space-x-4 ${isMe ? 'justify-end' : ''}">
+                ${!isMe ? `
+                <div class="h-9 w-9 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden">
+                    <img 
+                        src="${message.pic}" 
+                        alt="profile picture" 
+                        class="object-cover h-full w-full"
+                        onerror="this.style.display='none'; this.insertAdjacentHTML('afterend', '<i class=\'fas fa-user text-gray-600\'></i>')"
+                    >
+                </div>` : ''}
+                
+                <div class="flex-1 ${isMe ? 'text-right' : ''}">
+                    <div class="flex items-center ${isMe ? 'justify-end' : 'justify-start'}">
+                        ${editDeleteHTML}
+                        <div class="inline-block max-w-xs lg:max-w-md text-sm text-gray-800 ${isMe ? 'bg-green-100' : 'bg-white'} rounded-lg px-3 py-2 shadow-md">
+                            ${message.content} ${fileLink}
+                        </div>
+                    </div>
+                    <p class="text-xs text-gray-500 mt-1 flex items-center gap-1 ${isMe ? 'justify-end' : 'justify-start'}">
+                        ${message.timestamp} ago
+                        ${message.is_edited ? '<span class="text-gray-400">(edited)</span>' : ''}
+                        ${readStatus}
+                    </p>
+                </div>
+                
+                ${isMe ? `
+                <div class="h-9 w-9 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden">
+                    <img 
+                        src="${message.pic}" 
+                        alt="profile picture" 
+                        class="object-cover h-full w-full"
+                        onerror="this.style.display='none'; this.insertAdjacentHTML('afterend', '<i class=\'fas fa-user text-gray-600\'></i>')"
+                    >
+                </div>` : ''}
+            </div>`;
+
+            container.insertAdjacentHTML('afterbegin', messageHtml);
+        });
+    }
+
+    async function sendMessage() {
+        const input = document.getElementById('message-input');
+        const fileInput = document.getElementById('file-upload');
+        const content = input.value.trim();
+        const file = fileInput.files[0];
+
+        if (!content && !file) return;
+
+        if (file) {
+            const formData = new FormData();
+            formData.append('file', file);
+            formData.append('thread_id', currentThreadId);
+            try {
+                await fetch('/messages/upload_file/', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': getCookie('csrftoken'),
+                    },
+                    body: formData,
+                });
+            } catch (err) {
+                console.error('File upload error:', err);
+            }
+        }
+
+        if (content) {
+            try {
+                await fetch('/messages/send_message/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCookie('csrftoken'),
+                    },
+                    body: JSON.stringify({ thread_id: currentThreadId, content })
+                });
+            } catch (err) {
+                console.error('Message sending error:', err);
+            }
+        }
+
+        input.value = '';
+        fileInput.value = '';
+        await fetchMessages(currentThreadId);
+    }
+
+    async function deleteMessage(id) {
+        if (!confirm('Delete this message?')) return;
+        try {
+            await fetch(`/delete_message/${id}/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': getCookie('csrftoken'),
+                },
+            });
+            await fetchMessages(currentThreadId);
+        } catch (error) {
+            console.error('Delete error:', error);
+        }
+    }
+
+    function editMessage(id, oldContent) {
+        const newContent = prompt('Edit your message:', oldContent);
+        if (newContent && newContent !== oldContent) {
+            fetch(`/messages/edit_message/${id}/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken'),
+                },
+                body: JSON.stringify({ content: newContent })
+            })
+                .then(() => fetchMessages(currentThreadId))
+                .catch(error => console.error('Edit error:', error));
+        }
+    }
+
+    function openMessage(threadId) {
+        currentThreadId = threadId;
+        stopPolling();
+        const threadElement = document.getElementById(`thread-${threadId}`);
+        const participantName = threadElement.querySelector('.thread-name').textContent;
+        document.getElementById('conversation-name').textContent = participantName;
+
+        // Mark thread as read in UI immediately
+        if (threadElement) {
+            threadElement.querySelector('.thread-name').classList.remove('font-bold');
+            threadElement.querySelector('.thread-last-message').classList.remove('font-semibold');
+            const badge = threadElement.querySelector('.unread-badge');
+            if (badge) badge.remove();
+        }
+
+        fetchMessages(threadId);
+        startPolling();
+        if (window.innerWidth < 1024) {
+            document.getElementById('message-conversation').classList.remove('hidden');
+            document.getElementById('message-list').classList.add('hidden');
+        }
+    }
+
+    function closeMessage() {
+        stopPolling();
+        currentThreadId = null;
+        document.getElementById('message-conversation').classList.add('hidden');
+        document.getElementById('message-list').classList.remove('hidden');
+    }
+
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    // Event Listeners
+    document.getElementById('upload-form').addEventListener('submit', function (e) {
+        e.preventDefault();
+        sendMessage();
+    });
+
+    document.getElementById('message-input').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            sendMessage();
+        }
+    });
+
+    // Initialize when page loads
+    document.addEventListener('DOMContentLoaded', () => {
+        startThreadPolling();
+        {% if first_thread %}
+        openMessage({{ first_thread.id }});
+    {% endif %}
+});
+
+    // Clean up when leaving page
+    window.addEventListener('beforeunload', () => {
+        stopThreadPolling();
+        stopPolling();
+    });
+
+
+    function openNewChatModal() {
+        document.getElementById('new-chat-modal').classList.remove('hidden');
+        fetchPotentialRecipients();
+    }
+
+    function closeNewChatModal() {
+        document.getElementById('new-chat-modal').classList.add('hidden');
+    }
+
+    async function fetchPotentialRecipients(search = '') {
+        try {
+            const response = await fetch(`/accounts/get_users/?search=${encodeURIComponent(search)}`);
+            const users = await response.json();
+            renderUserList(users);
+        } catch (error) {
+            console.error('Error fetching users:', error);
+        }
+    }
+
+    function renderUserList(users) {
+        const container = document.getElementById('user-list');
+        container.innerHTML = '';
+
+        if (users.length === 0) {
+            container.innerHTML = '<p class="text-gray-500 text-center py-4">No users found</p>';
+            return;
+        }
+
+        users.forEach(user => {
+            const userElement = document.createElement('div');
+            userElement.className = 'flex items-center p-3 hover:bg-gray-50 rounded-lg cursor-pointer';
+            userElement.innerHTML = `
+                <div class="h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden mr-3">
+                    ${user.picture ?
+                    `<img src="${user.picture}" alt="${user.name}" class="h-full w-full object-cover">` :
+                    `<i class="fas fa-user text-gray-600"></i>`}
+                </div>
+                <div class="flex-1">
+                    <p class="font-medium">${user.name}</p>
+                    <p class="text-sm text-gray-500">${user.username}</p>
+                </div>
+            `;
+            userElement.onclick = () => startNewChat(user.id);
+            container.appendChild(userElement);
+        });
+    }
+
+    async function startNewChat(recipientId) {
+        try {
+            const response = await fetch('/messages/new_chat/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'X-CSRFToken': getCookie('csrftoken'),
+                },
+                body: `recipient_id=${recipientId}`
+            });
+
+            const data = await response.json();
+            if (data.thread_id) {
+                closeNewChatModal();
+                openMessage(data.thread_id);
+            }
+        } catch (error) {
+            console.error('Error starting new chat:', error);
+        }
+    }
+
+    // Add search functionality
+    document.getElementById('user-search').addEventListener('input', (e) => {
+        fetchPotentialRecipients(e.target.value);
+    });
+
+    // Close modal when clicking outside
+    document.getElementById('new-chat-modal').addEventListener('click', (e) => {
+        if (e.target === document.getElementById('new-chat-modal')) {
+            closeNewChatModal();
+        }
+    });
+    // Add this to your existing JavaScript
+    document.addEventListener('DOMContentLoaded', () => {
+        // Check for thread_id in URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const threadId = urlParams.get('thread_id');
+
+        if (threadId) {
+            openMessage(threadId);
+        }
+
+        startThreadPolling();
+    });
+
+</script>
+
+
+{% endblock content %}
+{% block footer %}
+<div class="my-2 w-full md:hidden">&nbsp;</div>
+<div class="footer-container hidden md:block">
+    {% include 'components/footer.html' %}</div>
+{% endblock footer %}

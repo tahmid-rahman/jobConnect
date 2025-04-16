@@ -31,7 +31,7 @@
                     </div>
                     <div class="text-left hidden md:block">
                         <p class="text-sm font-medium text-gray-700">{{request.user.name}}</p>
-                        <p class="text-xs text-gray-500">Premium Plan</p>
+                        <!-- <p class="text-xs text-gray-500">Premium Plan</p> -->
                     </div>
                     <i class="fas fa-chevron-down text-gray-400 text-sm"></i>
                 </button>
@@ -46,11 +46,10 @@
                         class="flex items-center px-4 py-2.5 text-sm text-gray-700 hover:bg-green-50">
                         <i class="fas fa-cog mr-3 text-gray-500"></i>Settings
                     </a>
-                    <a href="/company/messages/"
-                        class="flex items-center px-4 py-2.5 text-sm text-gray-700 hover:bg-green-50">
+                    <a href="/messages/" class="flex items-center px-4 py-2.5 text-sm text-gray-700 hover:bg-green-50">
                         <i class="fas fa-envelope mr-3 text-gray-500"></i>Messages
-                        <span class="ml-auto bg-green-100 text-green-600 px-2 py-1 rounded-full text-xs">2
-                            New</span>
+                        <span
+                            class="message-badge ml-auto bg-green-100 text-green-600 px-2 py-1 rounded-full text-xs hidden">New</span>
                     </a>
                     <a href="/accounts/logout/"
                         class="flex items-center px-4 py-2.5 text-sm text-gray-700 hover:bg-green-50">
@@ -85,12 +84,13 @@
             <i class="fas fa-calendar text-lg"></i>
             <span class="text-xs">Schedules</span>
         </a>
-        <a href="/company/messages/"
-            class="{% if request.path == '/company/messages/' %} text-green-600 {% else %} text-gray-600 {% endif %} hover:text-green-600 flex flex-col items-center relative">
+        <a href="/messages/"
+            class="{% if request.path == '/messages/' %} text-green-600 {% else %} text-gray-600 {% endif %} hover:text-green-600 flex flex-col items-center relative">
             <i class="fas fa-envelope text-lg"></i>
             <span class="text-xs">Messages</span>
             <!-- Notification Badge -->
-            <span class="absolute top-0 right-0 bg-green-100 text-green-600 px-1.5 py-0.5 rounded-full text-xs">2</span>
+            <span
+                class="message-count absolute top-0 right-0 bg-green-100 text-green-600 px-1.5 py-0.5 rounded-full text-xs hidden">2</span>
         </a>
     </div>
 </div>
@@ -110,4 +110,37 @@
             dropdownMenu.classList.add('hidden');
         }
     });
+
+    // Fetch and display unread count on page load
+    document.addEventListener('DOMContentLoaded', function () {
+        fetchUnreadCount();
+    });
+
+    // Function to fetch unread count
+    function fetchUnreadCount() {
+        fetch('/messages/get_unread_count/')
+            .then(response => response.json())
+            .then(data => {
+                if (data.unread_count > 0) {
+                    updateUnreadBadge(data.unread_count);
+                }
+            })
+            .catch(error => console.error('Error fetching unread count:', error));
+        console.log('nothing is happening');
+    }
+
+    // Function to update the badge
+    function updateUnreadBadge(count) {
+        const badge = document.querySelector('.message-badge');
+        const badge1 = document.querySelector('.message-count');
+        if (badge) {
+            badge.textContent = count + ' Unread';
+            badge.classList.remove('hidden');
+        }
+        if (badge1) {
+            badge1.textContent = count;
+            badge1.classList.remove('hidden');
+        }
+
+    }
 </script>

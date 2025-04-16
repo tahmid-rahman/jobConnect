@@ -1,6 +1,7 @@
 from django.urls import path
 from .views import company_dashboard,company_jobs,company_candidates,company_profile,company_settings,company_messages, interview_selection,select_for_interview,interview_complete
 from .views import view_job,create_job,delete_job,edit_job,schedule_interview,schedule_delete,take_interview,interview_details,interview_evaluation,view_resume,resume_review,save_marks,save_feedback
+from . import views
 app_name = 'employer'
 
 urlpatterns = [
@@ -13,7 +14,7 @@ urlpatterns = [
     path('candidates/', company_candidates, name='company_candidates'),
     path('profile/', company_profile, name='company_profile'),
     path('settings/', company_settings, name='company_settings'),
-    path('messages/', company_messages, name='company_messages'),
+    # path('messages-employer/', company_messages, name='company_messages'),
     path('schedule/', schedule_interview, name='schedule_interview'),
     path('schedule-delete/<int:id>/', schedule_delete, name='schedule_delete'),
     path('interview/<int:id>/', take_interview, name='take_interview'),
@@ -23,8 +24,11 @@ urlpatterns = [
     path('interview-evaluation/', interview_evaluation, name='interview_evaluation'),
     path('interview-selection/<int:id>/', interview_selection, name='interview_selection'),
     path('select-for-interview/<int:candidate_id>/', select_for_interview, name='select_for_interview'),
-    path('view-resume/<int:id>/', view_resume, name='view_resume'),
-    path('view-resume/<int:id>/rate/', resume_review, name='resume_review'),
+    path('view-resume/<int:resume_id>/', view_resume, name='view_resume'),
+    path('view-resume/<int:resume_id>/rate/', resume_review, name='resume_review'),
     path('interview-complete/<int:application_id>/', interview_complete, name='interview_complete'),
+    # path('messages/', views.thread_list, name='messages'),
+    # path('messages/<int:thread_id>/', views.get_messages, name='get_messages'),
+    # path('send_message/', views.send_message, name='send_message'),
 
 ]

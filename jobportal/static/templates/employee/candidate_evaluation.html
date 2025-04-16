@@ -4,84 +4,113 @@
 {% include 'components/company_nav.html' %}
 {% endblock nav %}
 {% block content %}
-
-<div class="max-w-7xl mx-auto px-4 py-8">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <!-- Page Header -->
     <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
         <div class="mb-4 md:mb-0">
-            <h1 class="text-2xl font-bold text-gray-900">Interview Evaluation</h1>
-            <p class="text-gray-600 mt-1">Review candidate scores and filter by job category.</p>
+            <h1 class="text-2xl font-bold text-gray-900">Interview Evaluation Dashboard</h1>
+            <p class="text-gray-600 mt-2">Review and analyze candidate interview performance</p>
         </div>
     </div>
 
-    <!-- Filters -->
-    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-8">
-        <div class="flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0 md:space-x-4">
-            <div class="w-full md:w-auto">
-                <label for="job-category" class="block text-sm font-medium text-gray-700 mb-1">Filter by Job</label>
-                <select id="job-category"
-                    class="w-full md:w-64 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
-                    <option value="all">All Jobs</option>
-                    {% for job in interview %}
-                    <option value="{{ job.application.job_id }}">{{ job.application.job.title }}</option>
-                    {% endfor %}
-                </select>
+    <!-- Candidate List Card -->
+    <div class="bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden">
+        <!-- Table Header with Filters -->
+        <div
+            class="px-6 py-4 border-b border-gray-100 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+            <div>
+                <h3 class="text-lg font-semibold text-gray-900">Candidate Evaluations</h3>
+                <p class="text-sm text-gray-500 mt-1">{{ interview|length }} candidates found</p>
             </div>
-            <div class="w-full md:w-auto">
-                <label for="sort-by" class="block text-sm font-medium text-gray-700 mb-1">Sort By</label>
-                <select id="sort-by"
-                    class="w-full md:w-48 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
-                    <option value="score">Score (High to Low)</option>
-                    <option value="date">Interview Date (Recent First)</option>
-                </select>
-            </div>
-        </div>
-    </div>
 
-    <!-- Candidate List -->
-    <div class="bg-white rounded-xl shadow-sm border border-gray-100">
-        <div class="px-6 py-4 border-b border-gray-100">
-            <h3 class="text-lg font-semibold">Candidates</h3>
+            <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full md:w-auto">
+                <div class="w-full sm:w-48">
+                    <label for="job-category" class="sr-only">Filter by Job</label>
+                    <div class="relative">
+                        <select id="job-category"
+                            class="block w-full pl-3 pr-10 py-2 text-base border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 rounded-lg">
+                            <option value="all">All Positions</option>
+                            {% for job in interview %}
+                            <option value="{{ job.application.job.job_id }}">{{ job.application.job.title }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                <div class="w-full sm:w-40">
+                    <label for="sort-by" class="sr-only">Sort By</label>
+                    <div class="relative">
+                        <select id="sort-by"
+                            class="block w-full pl-3 pr-10 py-2 text-base border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 rounded-lg">
+                            <option value="all">Sort By</option>
+                            <option value="score">Top Scores</option>
+                            <option value="date">Recent First</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="overflow-x-auto">
-            <table class="w-full">
+
+        <!-- Table Container -->
+        <div class="overflow-x-auto ">
+            <table class="min-w-full divide-y divide-gray-200">
                 <thead class="bg-gray-50">
                     <tr>
-                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-500">Candidate</th>
-                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-500">Job Applied</th>
-                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-500">Interview Date</th>
-                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-500">Overall Score</th>
-                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-500">Details</th>
+                        <th scope="col"
+                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Candidate</th>
+                        <th scope="col"
+                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Position</th>
+                        <th scope="col"
+                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Interview Date</th>
+                        <th scope="col"
+                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Score
+                        </th>
+                        <th scope="col"
+                            class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Actions</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-gray-200">
+                <tbody class="bg-white divide-y divide-gray-200" id="candidate-table-body">
                     {% for i in interview %}
-                    <tr>
-                        <td class="px-6 py-4">
-                            <div class="flex items-center space-x-4">
-                                <div class="h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center">
-                                    <i class="fas fa-user text-gray-600"></i>
+                    <tr data-job-id="{{ i.application.job.job_id }}"
+                        class="hover:bg-gray-50 transition-colors duration-150">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center">
+                                <div class="flex-shrink-0 h-10 w-10">
+                                    <img class="h-10 w-10 rounded-full border-2 border-white shadow-sm"
+                                        src="{{ i.application.applicant.profile_picture.url }}" alt="">
                                 </div>
-                                <div>
-                                    <p class="font-medium">{{ i.application.applicant.first_name }}</p>
-                                    <p class="text-sm text-gray-600">Senior Frontend Developer</p>
+                                <div class="ml-4">
+                                    <div class="text-sm font-medium text-gray-900">
+                                        {{ i.application.applicant.first_name|default:"" }}
+                                        {{ i.application.applicant.last_name|default:"" }}</div>
+                                    <div class="text-sm text-gray-500">
+                                        {{ i.application.applicant.job_title|default:"No title provided" }}</div>
                                 </div>
                             </div>
                         </td>
-                        <td class="px-6 py-4">
-                            <p class="text-gray-600">{{ i.application.job.title}}</p>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm text-gray-900">{{ i.application.job.title }}</div>
                         </td>
-                        <td class="px-6 py-4">
-                            <p class="text-gray-600">{{ i.start_time|date:"F d, Y" }}</p>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm text-gray-900">{{ i.start_time|date:"M d, Y" }}</div>
+                            <div class="text-sm text-gray-500">{{ i.start_time|time }}</div>
                         </td>
-                        <td class="px-6 py-4">
-                            <p class="text-gray-600">{{ i.ration|floatformat:0}}%</p>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center">
+                                <div class="w-24 bg-gray-200 rounded-full h-2.5 mr-2">
+                                    <div class="bg-green-600 h-2.5 rounded-full" style="width: {{ i.ration }}%"></div>
+                                </div>
+                                <span class="text-sm font-medium text-gray-700">{{ i.ration|floatformat:0 }}%</span>
+                            </div>
                         </td>
-                        <td class="px-6 py-4">
-                            <a href="{% url 'employer:interview_selection' i.id %}">
-                                <button class="text-green-600 hover:text-green-800">
-                                    <i class="fas fa-eye"></i> View Details
-                                </button>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                            <a href="{% url 'employer:interview_selection' i.id %}"
+                                class="text-green-600 hover:text-green-900 inline-flex items-center">
+                                <i class="fas fa-eye mr-1"></i> View
                             </a>
                         </td>
                     </tr>
@@ -89,8 +118,87 @@
                 </tbody>
             </table>
         </div>
+
+        <!-- Empty State -->
+        {% if not interview %}
+        <div class="text-center py-12">
+            <i class="fas fa-clipboard-list text-gray-400 text-4xl mb-4"></i>
+            <h3 class="text-lg font-medium text-gray-900">No candidates found</h3>
+            <p class="mt-1 text-sm text-gray-500">There are no interview evaluations to display.</p>
+        </div>
+        {% endif %}
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const jobCategorySelect = document.getElementById('job-category');
+        const sortBySelect = document.getElementById('sort-by');
+        const candidateTableBody = document.getElementById('candidate-table-body');
+        const countDisplay = document.querySelector('[data-count]');
+
+        // Store original rows and their order
+        const originalRows = Array.from(candidateTableBody.querySelectorAll('tr'));
+        originalRows.forEach((row, index) => {
+            row.dataset.originalOrder = index;
+        });
+
+        function updateCandidateList() {
+            const jobId = jobCategorySelect.value;
+            const sortBy = sortBySelect.value;
+
+            // Filter rows based on job category
+            let filteredRows = originalRows.filter(row => {
+                if (jobId === 'all') return true;
+                return row.getAttribute('data-job-id') === jobId;
+            });
+
+            // Update count display
+            if (countDisplay) {
+                countDisplay.textContent = `${filteredRows.length} ${filteredRows.length === 1 ? 'candidate' : 'candidates'} found`;
+            }
+
+            // Sort rows based on selected option
+            if (sortBy === 'score') {
+                filteredRows.sort((a, b) => {
+                    const scoreA = parseFloat(a.querySelector('td:nth-child(4) span').textContent);
+                    const scoreB = parseFloat(b.querySelector('td:nth-child(4) span').textContent);
+                    return scoreB - scoreA;
+                });
+            } else if (sortBy === 'date') {
+                filteredRows.sort((a, b) => {
+                    const dateTextA = a.querySelector('td:nth-child(3) div:first-child').textContent;
+                    const dateTextB = b.querySelector('td:nth-child(3) div:first-child').textContent;
+                    const dateA = new Date(dateTextA);
+                    const dateB = new Date(dateTextB);
+                    return dateB - dateA;
+                });
+            } else { // 'all' - unsorted
+                filteredRows.sort((a, b) => {
+                    return parseInt(a.dataset.originalOrder) - parseInt(b.dataset.originalOrder);
+                });
+            }
+
+            // Update the table with animation
+            candidateTableBody.style.opacity = '0.5';
+            candidateTableBody.style.transition = 'opacity 0.3s ease';
+
+            setTimeout(() => {
+                candidateTableBody.innerHTML = '';
+                filteredRows.forEach(row => {
+                    const clonedRow = row.cloneNode(true);
+                    candidateTableBody.appendChild(clonedRow);
+                });
+                candidateTableBody.style.opacity = '1';
+            }, 150);
+        }
+
+        // Add event listeners
+        jobCategorySelect.addEventListener('change', updateCandidateList);
+        sortBySelect.addEventListener('change', updateCandidateList);
+    });
+</script>
+
 
 
 {% endblock content %}

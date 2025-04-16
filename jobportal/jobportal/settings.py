@@ -43,9 +43,25 @@ INSTALLED_APPS = [
     'jobseeker',
     'employer',
     'adminpanel',
+    'chatApp',
     'accounts',
     'advancedfeatures',
+    'channels',
+    # 'messaging',
 ]
+
+
+# ASGI_APPLICATION = 'jobportal.asgi.application'
+
+# CHANNEL_LAYERS = {
+#     'default': {
+#         'BACKEND': 'channels_redis.core.RedisChannelLayer',
+#         'CONFIG': {
+#             "hosts": [('127.0.0.1', 6379)],
+#         },
+#     },
+# }
+
 
 from django.contrib.messages import constants as messages
 MESSAGE_TAGS = {

@@ -104,14 +104,20 @@
                     {% endif %}
                 </p>
             </div>
-            <div class="mt-4 flex space-x-3">
+            <div class="mt-4 flex space-x-3 justify-between">
                 <a href="{% url 'employer:view_resume' cand.application_id %}"
-                    class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg flex items-center">
+                    class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg flex items-center justify-center w-full">
                     <i class="fas fa-handshake mr-2"></i>Hire process
                 </a>
-                <button class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg flex items-center">
+
+                <!-- <a href=""
+                    class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg flex items-center justify-center w-full">
                     <i class="fas fa-message mr-2"></i>Message
-                </button>
+                </a> -->
+                <a href="{% url 'chatApp:start_direct_chat' recipient_id=cand.applicant.user.id %}?next={{ request.path }}"
+                    class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg flex items-center justify-center w-full">
+                    <i class="fas fa-message mr-2"></i>Message
+                </a>
             </div>
         </div>
         {% endfor %}

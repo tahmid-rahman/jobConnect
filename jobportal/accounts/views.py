@@ -1,10 +1,13 @@
 from django.contrib.auth import login, authenticate, logout
+from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .models import CustomUser  # Import your CustomUser model
 from jobseeker.models import Profile,JobPreference,Contact
 from employer.models import Company
+
+from accounts import models
 
 # User Registration
 def register(request):
@@ -141,3 +144,37 @@ def user_logout(request):
     print('logout success')
     messages.success(request, "You have successfully logged out.")
     return redirect('landing_page')  # Redirect to login page after logout
+
+
+@login_required
+def get_users(request):
+    search = request.GET.get('search', '')
+    users = CustomUser.objects.exclude(id=request.user.id)
+    
+    if search:
+        users = (
+            CustomUser.objects.filter(username__icontains=search) |
+            CustomUser.objects.filter(profile__first_name__icontains=search) |
+            CustomUser.objects.filter(profile__last_name__icontains=search)
+        )
+
+    users = users.select_related('profile')[:20]  # Limit to 20 results
+    
+    data = []
+    for user in users:
+        name = ""
+        if hasattr(user, 'profile'):
+            if user.profile.first_name or user.profile.last_name:
+                name = f"{user.profile.first_name or ''} {user.profile.last_name or ''}".strip()
+        
+        if not name:
+            name = user.username
+            
+        data.append({
+            'id': user.id,
+            'name': name,
+            'username': user.username,
+            'picture': user.profile.profile_picture.url if hasattr(user, 'profile') and user.profile.profile_picture else None
+        })
+    
+    return JsonResponse(data, safe=False)

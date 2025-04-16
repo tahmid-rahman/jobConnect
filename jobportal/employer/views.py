@@ -11,7 +11,7 @@ from django.core.paginator import Paginator
 from django.db.models import Count,Subquery,Prefetch,F, ExpressionWrapper, FloatField
 from employer.models import Job,Company, JobApplication,Interview
 from jobseeker.models import Profile,Skill,Contact,JobPreference
-
+# from adminpanel.models import Message, MessageThread
 
 
 
@@ -206,7 +206,7 @@ def schedule_interview(request):
     else:
         applications = JobApplication.objects.filter(job__company__user=request.user, is_scheduled=False, is_selected=True, is_interviewed=False).select_related('job', 'applicant')
         # jobs = Job.objects.filter(company__user=request.user) 
-        interviews = Interview.objects.filter(application__job__company__user=request.user, application__is_interviewed=False).order_by('start_time').select_related('application__job')
+        interviews = Interview.objects.filter(application__job__company__user=request.user, application__is_interviewed=False, application__is_scheduled=True).order_by('start_time').select_related('application__job')
         now = timezone.now()
         # for app in applications:
         #     print("hello")
@@ -312,14 +312,24 @@ def interview_selection(request,id):
         'total':round(ration,2)
         })
 
-def view_resume(request,id):
-    application = get_object_or_404(JobApplication, application_id=id)
-    interveiw = get_object_or_404(Interview, application=application)
+def view_resume(request,resume_id):
+    application = get_object_or_404(JobApplication, application_id=resume_id)
+    # print(application.application_id)
+    # print("and",resume_id)
+    # app= JobApplication.objects.all()
+    # for a in app:
+    #     print(a.application_id, a.job.title, a.applicant.first_name)
+    if Interview.objects.filter(application=application).exists():
+        interveiw = get_object_or_404(Interview, application=application)
+    else:
+        interveiw = None
+
     edu = application.applicant.educations.all()
     exp = application.applicant.experiences.all()
     skill = application.applicant.skills.all()
     prf = JobPreference.objects.get(profile=application.applicant)
     Cont = Contact.objects.get(profile=application.applicant)
+    # print(application,interveiw,edu,exp,skill,prf,Cont)
     return render(request, 'employee/resume_view.html',{
         'intr':interveiw,
         'app': application,
@@ -336,10 +346,15 @@ def view_resume(request,id):
 def select_for_interview(request, candidate_id):
     
     candidate = JobApplication.objects.get(application_id=candidate_id)
+    interview = Interview.objects.filter(application=candidate).exists()
+    print(interview)
     try:
+        if not interview:
+            interview = Interview.objects.create(application=candidate)
         candidate.is_selected = 'True'
         candidate.save()
         return JsonResponse({'success': True})
+    
     
     except JobApplication.DoesNotExist:
         return JsonResponse({'success': False, 'message': 'Candidate not found'}, status=404)
@@ -360,8 +375,8 @@ def interview_complete(request,application_id):
     
 
 @require_POST
-def resume_review(request, id):   
-    interveiw = Interview.objects.get(application__application_id=id)
+def resume_review(request, resume_id):   
+    interveiw = Interview.objects.get(application__application_id=resume_id)
     try:
         data = json.loads(request.body)
         
@@ -397,7 +412,7 @@ def save_marks(request,id):
         interview.technical_score = technical_skills
         interview.communication_score = communication
         interview.problem_solving_score = problem_solving
-        interview.save()\
+        interview.save()
 
         return JsonResponse({'success': True})
     except Exception as e:
@@ -414,3 +429,6 @@ def save_feedback(request,id):
         return JsonResponse({'success': True, 'value': feedback_notes})
     except Exception as e:
         return JsonResponse({'success': False, 'message': str(e)})
+    
+
+

@@ -1,11 +1,11 @@
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.core.paginator import Paginator
 from django.contrib.auth import update_session_auth_hash
 from .models import Job,Company,Profile,JobPreference,Experience,Education,Skill,Contact
 from accounts.models import CustomUser
-from employer.models import JobApplication
+from employer.models import JobApplication,Interview
 
 
 def user_role_required(view_func):
@@ -371,6 +371,10 @@ def apply_job(request, id):
             job=Job.objects.get(job_id=id),
             applicant=Profile.objects.get(user=request.user)
         )
+        application = JobApplication.objects.get(job=Job.objects.get(job_id=id), applicant=Profile.objects.get(user=request.user))
+        interview = Interview.objects.filter(application=application).exists()
+        if not interview:
+            interview = Interview.objects.create(application=application)
         messages.success(request, "Application submitted successfully.")
     else:
         messages.error(request, "You have already applied for this job.")

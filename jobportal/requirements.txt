@@ -1,0 +1,2 @@
+# pip install channels channels_redis Pillow
+# pip install pillow

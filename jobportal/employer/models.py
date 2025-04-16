@@ -71,8 +71,8 @@ class JobApplication(models.Model):
 
 class Interview(models.Model):
     application = models.ForeignKey(JobApplication, on_delete=models.CASCADE)
-    start_time = models.DateTimeField()
-    end_time = models.DateTimeField()
+    start_time = models.DateTimeField(blank=True, null=True)
+    end_time = models.DateTimeField(blank=True, null=True)
     resume_ratings = models.SmallIntegerField(
         default=0,
         null=True,
