@@ -14,7 +14,8 @@
             <p class="text-gray-600 mt-1">Manage your company details and employee information.</p>
         </div>
         <div class="flex space-x-3">
-            <button class="bg-green-600 hover:bg-green-700 text-white px-5 py-2.5 rounded-lg flex items-center">
+            <button id="editBtn"
+                class="bg-green-600 hover:bg-green-700 text-white px-5 py-2.5 rounded-lg flex items-center">
                 <i class="fas fa-edit mr-2"></i>Edit Profile
             </button>
         </div>
@@ -22,34 +23,102 @@
 
     <!-- Company Details Section -->
     <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-8">
-        <h2 class="text-xl font-semibold text-gray-900 mb-4">Company Information</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-                <p class="text-sm text-gray-500">Company Name</p>
-                <p class="text-lg font-medium text-gray-800">TechCorp Inc.</p>
-            </div>
-            <div>
-                <p class="text-sm text-gray-500">Industry</p>
-                <p class="text-lg font-medium text-gray-800">Technology</p>
-            </div>
-            <div>
-                <p class="text-sm text-gray-500">Location</p>
-                <p class="text-lg font-medium text-gray-800">San Francisco, CA</p>
-            </div>
-            <div>
-                <p class="text-sm text-gray-500">Website</p>
-                <a href="#" class="text-lg font-medium text-green-600 hover:text-green-700">www.techcorp.com</a>
-            </div>
-            <div>
-                <p class="text-sm text-gray-500">Founded</p>
-                <p class="text-lg font-medium text-gray-800">2015</p>
-            </div>
-            <div>
-                <p class="text-sm text-gray-500">Company Size</p>
-                <p class="text-lg font-medium text-gray-800">150 Employees</p>
-            </div>
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-xl font-semibold text-gray-900">Company Information</h2>
         </div>
+
+        <form method="POST">
+            {% csrf_token %}
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                <!-- Company Name -->
+                <div>
+                    <p class="text-sm text-gray-500">Company Name</p>
+                    <span class="text-lg font-medium text-gray-800 view-only">
+                        {{ data.first_name|default:request.user.name }}
+                    </span>
+                    <div class="edit-only hidden">
+                        <input name="first_name" class="form-input w-full mb-1" value="{{ data.first_name }}" />
+                    </div>
+                </div>
+
+                <!-- Industry -->
+                <div>
+                    <p class="text-sm text-gray-500">Industry</p>
+                    <span class="text-lg font-medium text-gray-800 view-only">
+                        {{ data.job_title|default:'Not mentioned' }}
+                    </span>
+                    <input name="job_title" class="form-input w-full edit-only hidden" value="{{ data.job_title }}">
+                </div>
+
+                <!-- Location -->
+                <div>
+                    <p class="text-sm text-gray-500">Location</p>
+                    <span class="text-lg font-medium text-gray-800 view-only">
+                        {{ data.location|default:'Not mentioned' }}
+                    </span>
+                    <input name="location" class="form-input w-full edit-only hidden" value="{{ data.location }}">
+                </div>
+
+                <!-- Website -->
+                <div>
+                    <p class="text-sm text-gray-500">Website</p>
+                    {% if contact.link1 %}
+                    {% if contact.link1|slice:":4" == "http" %}
+                    <a href="{{ contact.link1 }}" target="_blank"
+                        class="text-lg font-medium text-green-600 view-only hover:underline cursor-pointer">
+                        {{ contact.link1 }}
+                    </a>
+                    {% else %}
+                    <a href="https://{{ contact.link1 }}" target="_blank"
+                        class="text-lg font-medium text-green-600 view-only hover:underline cursor-pointer">
+                        {{ contact.link1 }}
+                    </a>
+                    {% endif %}
+                    {% else %}
+                    <span class="text-lg font-medium text-gray-500 view-only">Not mentioned</span>
+                    {% endif %}
+
+                    <input name="link1" class="form-input w-full edit-only hidden" value="{{ contact.link1 }}">
+                </div>
+
+                <!-- Founded -->
+                <div>
+                    <p class="text-sm text-gray-500">Founded</p>
+                    <span class="text-lg font-medium text-gray-800 view-only">
+                        {{ data.establised_at|default:'Not mentioned' }}
+                    </span>
+                    <input type="date" name="establised_at" class="form-input w-full edit-only hidden"
+                        value="{{ data.establised_at|date:'Y-m-d' }}">
+                </div>
+
+                <!-- Company Size -->
+                <div>
+                    <p class="text-sm text-gray-500">Company Size</p>
+                    <span class="text-lg font-medium text-gray-800 view-only">
+                        {{ data.total_employees|default:'Not mentioned' }}
+                        {% if data.total_employees %} Employees {% endif %}
+                    </span>
+                    <input type="number" name="total_employees" class="form-input w-full edit-only hidden"
+                        value="{{ data.total_employees }}">
+                </div>
+
+            </div>
+
+            <!-- Save + Cancel Buttons -->
+            <div id="editControls" class="mt-6 hidden gap-4">
+                <button type="submit" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg">
+                    Save Changes
+                </button>
+                <button type="button" id="cancelBtn"
+                    class="bg-gray-300 hover:bg-gray-400 text-gray-800 px-4 py-2 rounded-lg">
+                    Cancel
+                </button>
+            </div>
+
+        </form>
     </div>
+
 
     <!-- Employee Details Section -->
     <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
@@ -97,10 +166,32 @@
                 </div>
             </div>
 
-            <!-- Add more employee cards here -->
         </div>
     </div>
 </div>
+
+
+<script>
+    const editBtn = document.getElementById('editBtn');
+    const cancelBtn = document.getElementById('cancelBtn');
+    const editControls = document.getElementById('editControls');
+
+    editBtn.addEventListener('click', () => {
+        document.querySelectorAll('.edit-only').forEach(el => el.classList.remove('hidden'));
+        document.querySelectorAll('.view-only').forEach(el => el.classList.add('hidden'));
+        editControls.classList.remove('hidden');
+        editControls.classList.add('flex');
+    });
+
+    cancelBtn.addEventListener('click', () => {
+        document.querySelectorAll('.edit-only').forEach(el => el.classList.add('hidden'));
+        document.querySelectorAll('.view-only').forEach(el => el.classList.remove('hidden'));
+        editControls.classList.add('hidden');
+        editControls.classList.remove('flex');
+    });
+</script>
+
+
 
 
 {% endblock content %}

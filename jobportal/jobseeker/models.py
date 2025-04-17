@@ -14,6 +14,8 @@ class Profile(models.Model):
     job_title = models.CharField(max_length=100, blank=True, null=True)
     location = models.CharField(max_length=100, blank=True, null=True)
     about_me = models.TextField( blank=True, null=True)
+    establised_at = models.DateField(blank=True, null=True)
+    total_employees = models.IntegerField(blank=True, null=True)
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"

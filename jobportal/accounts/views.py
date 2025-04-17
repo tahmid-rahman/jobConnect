@@ -60,7 +60,7 @@ def register(request):
                 password=password1
             )
 
-        if user.role =="user" :
+        if user.role =="user" or user.role == "employee":
             Profile.objects.create(
                 user=user,
                 first_name=name
@@ -76,7 +76,7 @@ def register(request):
             )
             messages.success(request, "Registration successful.")
             login(request, user)
-        elif user.role == "employee" :
+        elif user.role == "admin" :
             Company.objects.create(user=user,name=name)
             messages.success(request, "Registration successful.")
             return redirect('login')

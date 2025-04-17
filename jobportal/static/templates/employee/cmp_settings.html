@@ -19,59 +19,67 @@
     <!-- Settings Sections -->
     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
         <!-- Account Settings -->
-        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-            <h2 class="text-xl font-semibold text-gray-900 mb-4">Account Settings</h2>
-            <div class="space-y-4">
-                <div>
-                    <label for="company-name" class="block text-sm font-medium text-gray-700">Company Name</label>
-                    <input type="text" id="company-name" value="TechCorp Inc."
-                        class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
+        <form method="POST">
+            {% csrf_token %}
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                <h2 class="text-xl font-semibold text-gray-900 mb-4">Account Settings</h2>
+                <div class="space-y-4">
+                    <div>
+                        <label for="company-name" class="block text-sm font-medium text-gray-700">Company
+                            Username</label>
+                        <input type="text" id="company-name" name="company-name" value="{{ data.username }}"
+                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
+                    </div>
+                    <div>
+                        <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+                        <input type="email" id="email" name="email" value="{{ data.email }}"
+                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
+                    </div>
+                    <div>
+                        <label for="phone" class="block text-sm font-medium text-gray-700">Phone</label>
+                        <input type="tel" id="phone" name="phone" value="+880{{ data.phone_no }}"
+                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
+                    </div>
+                    <button type="submit" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg">
+                        Save Changes
+                    </button>
                 </div>
-                <div>
-                    <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
-                    <input type="email" id="email" value="contact@techcorp.com"
-                        class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
-                </div>
-                <div>
-                    <label for="phone" class="block text-sm font-medium text-gray-700">Phone</label>
-                    <input type="tel" id="phone" value="+1 (555) 123-4567"
-                        class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
-                </div>
-                <button class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg">
-                    Save Changes
-                </button>
             </div>
-        </div>
+        </form>
+
 
         <!-- Security Settings -->
         <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
             <h2 class="text-xl font-semibold text-gray-900 mb-4">Security Settings</h2>
-            <div class="space-y-4">
-                <div>
-                    <label for="current-password" class="block text-sm font-medium text-gray-700">Current
-                        Password</label>
-                    <input type="password" id="current-password"
-                        class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
+            <form method="POST">
+                {% csrf_token %}
+                <div class="space-y-4">
+                    <div>
+                        <label for="current-password" class="block text-sm font-medium text-gray-700">Current
+                            Password</label>
+                        <input type="password" id="current-password" required name="current-password"
+                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
+                    </div>
+                    <div>
+                        <label for="new-password" class="block text-sm font-medium text-gray-700">New Password</label>
+                        <input type="password" id="new-password" required name="new-password"
+                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
+                    </div>
+                    <div>
+                        <label for="confirm-password" class="block text-sm font-medium text-gray-700">Confirm New
+                            Password</label>
+                        <input type="password" id="confirm-password" required name="confirm-password"
+                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
+                    </div>
+                    <button class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg">
+                        Update Password
+                    </button>
                 </div>
-                <div>
-                    <label for="new-password" class="block text-sm font-medium text-gray-700">New Password</label>
-                    <input type="password" id="new-password"
-                        class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
-                </div>
-                <div>
-                    <label for="confirm-password" class="block text-sm font-medium text-gray-700">Confirm New
-                        Password</label>
-                    <input type="password" id="confirm-password"
-                        class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
-                </div>
-                <button class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg">
-                    Update Password
-                </button>
-            </div>
+            </form>
         </div>
 
         <!-- Notification Preferences -->
-        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+        <!-- <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
             <h2 class="text-xl font-semibold text-gray-900 mb-4">Notification Preferences</h2>
             <div class="space-y-4">
                 <div class="flex items-center">
@@ -93,10 +101,10 @@
                     Save Preferences
                 </button>
             </div>
-        </div>
+        </div> -->
 
         <!-- Billing Information -->
-        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+        <!-- <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
             <h2 class="text-xl font-semibold text-gray-900 mb-4">Billing Information</h2>
             <div class="space-y-4">
                 <div>
@@ -118,7 +126,7 @@
                     Update Billing
                 </button>
             </div>
-        </div>
+        </div> -->
     </div>
 </div>
 

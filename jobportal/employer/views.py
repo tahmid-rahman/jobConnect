@@ -2,7 +2,8 @@ import json
 from datetime import datetime, timedelta
 from django.shortcuts import render,get_object_or_404,redirect
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required 
+from django.contrib.auth import update_session_auth_hash
 from django.utils import timezone
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
@@ -11,6 +12,7 @@ from django.core.paginator import Paginator
 from django.db.models import Count,Subquery,Prefetch,F, ExpressionWrapper, FloatField
 from employer.models import Job,Company, JobApplication,Interview
 from jobseeker.models import Profile,Skill,Contact,JobPreference
+from accounts.models import CustomUser as User
 # from adminpanel.models import Message, MessageThread
 
 
@@ -64,20 +66,127 @@ def company_candidates(request):
     ).order_by('-applied_date')
     return render(request, 'employee/candidate.html',{'candidate':applicant}) 
 
+# @employee_role_required
+# @login_required
+# def company_profile(request):
+#     profile = get_object_or_404(Profile, user= request.user)
+#     contact = Contact.objects.filter( profile=profile)
+#     return render(request, 'employee/cmp_profile.html',{
+#         'data': profile,
+#         'contact': contact
+#         }) 
 @employee_role_required
 @login_required
 def company_profile(request):
-    return render(request, 'employee/cmp_profile.html') 
+    profile = get_object_or_404(Profile, user=request.user)
+    contact, created = Contact.objects.get_or_create(profile=profile)
+
+    if request.method == 'POST':
+        profile.first_name = request.POST.get('first_name')
+        profile.job_title = request.POST.get('job_title')
+        profile.location = request.POST.get('location')
+        profile.establised_at = request.POST.get('establised_at') or None
+        profile.total_employees = request.POST.get('total_employees') or None
+        profile.save()
+
+        contact.link1 = request.POST.get('link1')
+        contact.save()
+
+        return redirect('employer:company_profile')
+
+    return render(request, 'employee/cmp_profile.html', {
+        'data': profile,
+        'contact': contact
+    })
+
 
 @employee_role_required
 @login_required
 def company_settings(request):
-    return render(request, 'employee/cmp_settings.html') 
+    user = User.objects.get(id=request.user.id)
+
+    if request.method == 'POST':
+        # Get profile update fields
+        new_username = request.POST.get('company-name')
+        new_email = request.POST.get('email')
+        new_phone_raw = request.POST.get('phone')
+        new_phone = new_phone_raw.replace("+880", "").strip() if new_phone_raw else None
+
+        # Get password change fields
+        current_password = request.POST.get('current-password')
+        new_password = request.POST.get('new-password')
+        confirm_password = request.POST.get('confirm-password')
+
+        updated = False  # Track if profile updated
+        password_updated = False  # Track if password updated
+
+        # --- Profile Updates ---
+        if new_username and new_username != user.username:
+            if User.objects.exclude(id=user.id).filter(username=new_username).exists():
+                messages.error(request, 'Username is already taken.')
+                return redirect('employer:company_settings')
+            else:
+                user.username = new_username
+                updated = True
+
+        if new_email and new_email != user.email:
+            if User.objects.exclude(id=user.id).filter(email=new_email).exists():
+                messages.error(request, 'Email is already in use.')
+                return redirect('employer:company_settings')
+            else:
+                user.email = new_email
+                updated = True
+
+        if new_phone and str(user.phone_no) != new_phone:
+            if User.objects.exclude(id=user.id).filter(phone_no=new_phone).exists():
+                messages.error(request, 'Phone number is already in use.')
+                return redirect('employer:company_settings')
+            else:
+                try:
+                    user.phone_no = int(new_phone)
+                    updated = True
+                except ValueError:
+                    messages.error(request, 'Phone number must be numeric.')
+                    return redirect('employer:company_settings')
+
+        # --- Password Change ---
+        if current_password or new_password or confirm_password:
+            if not (current_password and new_password and confirm_password):
+                messages.error(request, 'All password fields are required.')
+                return redirect('employer:company_settings')
+
+            if not user.check_password(current_password):
+                messages.error(request, 'Current password is incorrect.')
+                return redirect('employer:company_settings')
+
+            if new_password != confirm_password:
+                messages.error(request, 'New passwords do not match.')
+                return redirect('employer:company_settings')
+
+            user.set_password(new_password)
+            password_updated = True
+
+        # Save changes
+        if updated or password_updated:
+            user.save()
+            if password_updated:
+                update_session_auth_hash(request, user)  # Prevent logout
+                messages.success(request, 'Password updated successfully.')
+            if updated:
+                messages.success(request, 'Profile updated successfully.')
+        else:
+            messages.info(request, 'No changes were made.')
+
+        return redirect('employer:company_settings')
+
+    return render(request, 'employee/cmp_settings.html', {'data': user})
+
 
 
 @employee_role_required
 @login_required
 def company_messages(request):
+
     return render(request, 'employee/cmp_message.html') 
 
 
