@@ -1,0 +1,457 @@
+{% extends 'base.html' %}
+
+{% block nav %}
+{% include 'components/admin_nav.html' %}
+{% endblock nav %}
+{% block content %}
+
+
+
+<!-- Main Content Area -->
+<div class="flex-1 overflow-auto p-6">
+    <!-- Filter Controls -->
+    <div class="bg-white p-4 rounded-lg shadow mb-6">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div>
+                <label for="time-period" class="block text-sm font-medium text-gray-700 mb-1">Time
+                    Period</label>
+                <select id="time-period"
+                    class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                    <option>Last 7 days</option>
+                    <option>Last 30 days</option>
+                    <option>Last 3 months</option>
+                    <option>Last year</option>
+                    <option>All time</option>
+                </select>
+            </div>
+            <div>
+                <label for="user-type" class="block text-sm font-medium text-gray-700 mb-1">User
+                    Type</label>
+                <select id="user-type"
+                    class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                    <option>All Users</option>
+                    <option>Job Seekers</option>
+                    <option>Employers</option>
+                </select>
+            </div>
+            <div>
+                <label for="feedback-type" class="block text-sm font-medium text-gray-700 mb-1">Feedback
+                    Type</label>
+                <select id="feedback-type"
+                    class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                    <option>All Types</option>
+                    <option>Platform Experience</option>
+                    <option>Job Matching</option>
+                    <option>Candidate Quality</option>
+                    <option>Customer Support</option>
+                </select>
+            </div>
+            <div class="flex items-end">
+                <button class="w-full px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700">
+                    Apply Filters
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Key Metrics -->
+    <div class="grid grid-cols-1 gap-6 mb-6 md:grid-cols-2 lg:grid-cols-4">
+        <div class="p-6 bg-white rounded-lg shadow">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm font-medium text-gray-500">Total Feedback</p>
+                    <p class="mt-1 text-2xl font-semibold text-gray-900">1,248</p>
+                </div>
+                <div class="p-3 rounded-full bg-indigo-100 text-indigo-600">
+                    <i class="fas fa-comments text-xl"></i>
+                </div>
+            </div>
+            <div class="mt-4">
+                <span class="text-green-600 text-sm font-medium">+12.5%</span>
+                <span class="text-gray-500 text-sm ml-2">from last month</span>
+            </div>
+        </div>
+        <div class="p-6 bg-white rounded-lg shadow">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm font-medium text-gray-500">Average Rating</p>
+                    <p class="mt-1 text-2xl font-semibold text-gray-900">4.3</p>
+                </div>
+                <div class="p-3 rounded-full bg-yellow-100 text-yellow-600">
+                    <i class="fas fa-star text-xl"></i>
+                </div>
+            </div>
+            <div class="mt-4">
+                <span class="text-green-600 text-sm font-medium">+0.2</span>
+                <span class="text-gray-500 text-sm ml-2">from last month</span>
+            </div>
+        </div>
+        <div class="p-6 bg-white rounded-lg shadow">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm font-medium text-gray-500">Positive Sentiment</p>
+                    <p class="mt-1 text-2xl font-semibold text-gray-900">78%</p>
+                </div>
+                <div class="p-3 rounded-full bg-green-100 text-green-600">
+                    <i class="fas fa-thumbs-up text-xl"></i>
+                </div>
+            </div>
+            <div class="mt-4">
+                <span class="text-green-600 text-sm font-medium">+5%</span>
+                <span class="text-gray-500 text-sm ml-2">from last month</span>
+            </div>
+        </div>
+        <div class="p-6 bg-white rounded-lg shadow">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm font-medium text-gray-500">Response Rate</p>
+                    <p class="mt-1 text-2xl font-semibold text-gray-900">92%</p>
+                </div>
+                <div class="p-3 rounded-full bg-blue-100 text-blue-600">
+                    <i class="fas fa-reply text-xl"></i>
+                </div>
+            </div>
+            <div class="mt-4">
+                <span class="text-green-600 text-sm font-medium">+3%</span>
+                <span class="text-gray-500 text-sm ml-2">from last month</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts Section -->
+    <div class="grid grid-cols-1 gap-6 lg:grid-cols-2 mb-6">
+        <!-- Rating Trend Over Time -->
+        <div class="p-6 bg-white rounded-lg shadow">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-lg font-semibold text-gray-900">Rating Trend Over Time</h2>
+                <div class="flex space-x-2">
+                    <button class="px-3 py-1 text-sm bg-indigo-100 text-indigo-700 rounded-md">Monthly</button>
+                    <button
+                        class="px-3 py-1 text-sm bg-white text-gray-700 border border-gray-300 rounded-md hover:bg-gray-50">Weekly</button>
+                </div>
+            </div>
+            <div class="h-80">
+                <canvas id="ratingTrendChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Feedback Distribution -->
+        <div class="p-6 bg-white rounded-lg shadow">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-lg font-semibold text-gray-900">Feedback Distribution</h2>
+                <div class="flex space-x-2">
+                    <button class="px-3 py-1 text-sm bg-indigo-100 text-indigo-700 rounded-md">By
+                        Type</button>
+                    <button
+                        class="px-3 py-1 text-sm bg-white text-gray-700 border border-gray-300 rounded-md hover:bg-gray-50">By
+                        User</button>
+                </div>
+            </div>
+            <div class="h-80">
+                <canvas id="feedbackDistributionChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sentiment Analysis and Word Cloud -->
+    <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
+        <!-- Sentiment Analysis -->
+        <div class="p-6 bg-white rounded-lg shadow">
+            <h2 class="text-lg font-semibold text-gray-900 mb-4">Sentiment Analysis</h2>
+            <div class="h-64">
+                <canvas id="sentimentChart"></canvas>
+            </div>
+            <div class="mt-4 grid grid-cols-3 gap-4">
+                <div class="text-center">
+                    <p class="text-sm text-gray-500">Positive</p>
+                    <p class="text-xl font-semibold text-green-600">78%</p>
+                </div>
+                <div class="text-center">
+                    <p class="text-sm text-gray-500">Neutral</p>
+                    <p class="text-xl font-semibold text-yellow-500">15%</p>
+                </div>
+                <div class="text-center">
+                    <p class="text-sm text-gray-500">Negative</p>
+                    <p class="text-xl font-semibold text-red-600">7%</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Common Themes -->
+        <div class="p-6 bg-white rounded-lg shadow">
+            <h2 class="text-lg font-semibold text-gray-900 mb-4">Common Themes</h2>
+            <div class="space-y-4">
+                <div>
+                    <div class="flex items-center justify-between mb-1">
+                        <span class="text-sm font-medium text-gray-700">Easy to use platform</span>
+                        <span class="text-sm font-medium text-gray-700">42%</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2">
+                        <div class="bg-green-500 h-2 rounded-full" style="width: 42%"></div>
+                    </div>
+                </div>
+                <div>
+                    <div class="flex items-center justify-between mb-1">
+                        <span class="text-sm font-medium text-gray-700">Quality candidates</span>
+                        <span class="text-sm font-medium text-gray-700">35%</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2">
+                        <div class="bg-green-500 h-2 rounded-full" style="width: 35%"></div>
+                    </div>
+                </div>
+                <div>
+                    <div class="flex items-center justify-between mb-1">
+                        <span class="text-sm font-medium text-gray-700">Slow response time</span>
+                        <span class="text-sm font-medium text-gray-700">18%</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2">
+                        <div class="bg-red-500 h-2 rounded-full" style="width: 18%"></div>
+                    </div>
+                </div>
+                <div>
+                    <div class="flex items-center justify-between mb-1">
+                        <span class="text-sm font-medium text-gray-700">Limited filters</span>
+                        <span class="text-sm font-medium text-gray-700">12%</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2">
+                        <div class="bg-red-500 h-2 rounded-full" style="width: 12%"></div>
+                    </div>
+                </div>
+                <div>
+                    <div class="flex items-center justify-between mb-1">
+                        <span class="text-sm font-medium text-gray-700">Good customer support</span>
+                        <span class="text-sm font-medium text-gray-700">28%</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2">
+                        <div class="bg-green-500 h-2 rounded-full" style="width: 28%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Feedback Sources -->
+    <div class="mt-6 p-6 bg-white rounded-lg shadow">
+        <h2 class="text-lg font-semibold text-gray-900 mb-4">Feedback Sources</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="p-4 border rounded-lg">
+                <div class="flex items-center justify-between mb-2">
+                    <h3 class="font-medium text-gray-900">In-App Feedback</h3>
+                    <span class="px-2 py-1 text-xs font-medium bg-blue-100 text-blue-800 rounded-full">65%</span>
+                </div>
+                <p class="text-sm text-gray-500">Feedback submitted directly through the app</p>
+                <div class="mt-2 flex items-center text-sm text-gray-500">
+                    <i class="fas fa-arrow-up text-green-500 mr-1"></i>
+                    <span>12% increase</span>
+                </div>
+            </div>
+            <div class="p-4 border rounded-lg">
+                <div class="flex items-center justify-between mb-2">
+                    <h3 class="font-medium text-gray-900">Email Surveys</h3>
+                    <span class="px-2 py-1 text-xs font-medium bg-purple-100 text-purple-800 rounded-full">22%</span>
+                </div>
+                <p class="text-sm text-gray-500">Responses from periodic satisfaction surveys</p>
+                <div class="mt-2 flex items-center text-sm text-gray-500">
+                    <i class="fas fa-arrow-down text-red-500 mr-1"></i>
+                    <span>5% decrease</span>
+                </div>
+            </div>
+            <div class="p-4 border rounded-lg">
+                <div class="flex items-center justify-between mb-2">
+                    <h3 class="font-medium text-gray-900">Support Tickets</h3>
+                    <span class="px-2 py-1 text-xs font-medium bg-green-100 text-green-800 rounded-full">13%</span>
+                </div>
+                <p class="text-sm text-gray-500">Feedback extracted from support interactions</p>
+                <div class="mt-2 flex items-center text-sm text-gray-500">
+                    <i class="fas fa-arrow-up text-green-500 mr-1"></i>
+                    <span>3% increase</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<script>
+    // Rating Trend Chart
+    const ratingTrendCtx = document.getElementById('ratingTrendChart').getContext('2d');
+    const ratingTrendChart = new Chart(ratingTrendCtx, {
+        type: 'line',
+        data: {
+            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+            datasets: [
+                {
+                    label: 'Average Rating',
+                    data: [4.1, 4.2, 4.0, 4.3, 4.4, 4.2, 4.3],
+                    borderColor: '#4F46E5',
+                    backgroundColor: 'rgba(79, 70, 229, 0.1)',
+                    tension: 0.3,
+                    fill: true
+                },
+                {
+                    label: 'Job Seekers',
+                    data: [4.2, 4.3, 4.1, 4.4, 4.5, 4.3, 4.4],
+                    borderColor: '#3B82F6',
+                    backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                    tension: 0.3,
+                    fill: false
+                },
+                {
+                    label: 'Employers',
+                    data: [3.9, 4.0, 3.8, 4.1, 4.2, 4.0, 4.1],
+                    borderColor: '#10B981',
+                    backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                    tension: 0.3,
+                    fill: false
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                tooltip: {
+                    mode: 'index',
+                    intersect: false,
+                }
+            },
+            scales: {
+                y: {
+                    min: 3,
+                    max: 5,
+                    ticks: {
+                        stepSize: 0.5
+                    }
+                }
+            }
+        }
+    });
+
+    // Feedback Distribution Chart
+    const feedbackDistributionCtx = document.getElementById('feedbackDistributionChart').getContext('2d');
+    const feedbackDistributionChart = new Chart(feedbackDistributionCtx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Platform Experience', 'Job Matching', 'Candidate Quality', 'Customer Support', 'Other'],
+            datasets: [{
+                data: [35, 25, 20, 15, 5],
+                backgroundColor: [
+                    'rgba(79, 70, 229, 0.8)',
+                    'rgba(99, 102, 241, 0.8)',
+                    'rgba(129, 140, 248, 0.8)',
+                    'rgba(165, 180, 252, 0.8)',
+                    'rgba(199, 210, 254, 0.8)'
+                ],
+                borderColor: [
+                    'rgba(79, 70, 229, 1)',
+                    'rgba(99, 102, 241, 1)',
+                    'rgba(129, 140, 248, 1)',
+                    'rgba(165, 180, 252, 1)',
+                    'rgba(199, 210, 254, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'right',
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function (context) {
+                            let label = context.label || '';
+                            if (label) {
+                                label += ': ';
+                            }
+                            label += context.raw + '%';
+                            return label;
+                        }
+                    }
+                }
+            },
+            cutout: '70%'
+        }
+    });
+
+    // Sentiment Chart
+    const sentimentCtx = document.getElementById('sentimentChart').getContext('2d');
+    const sentimentChart = new Chart(sentimentCtx, {
+        type: 'bar',
+        data: {
+            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+            datasets: [
+                {
+                    label: 'Positive',
+                    data: [70, 72, 75, 76, 78, 77, 78],
+                    backgroundColor: 'rgba(16, 185, 129, 0.8)',
+                    borderColor: 'rgba(16, 185, 129, 1)',
+                    borderWidth: 1
+                },
+                {
+                    label: 'Neutral',
+                    data: [18, 17, 15, 14, 13, 14, 15],
+                    backgroundColor: 'rgba(234, 179, 8, 0.8)',
+                    borderColor: 'rgba(234, 179, 8, 1)',
+                    borderWidth: 1
+                },
+                {
+                    label: 'Negative',
+                    data: [12, 11, 10, 10, 9, 9, 7],
+                    backgroundColor: 'rgba(239, 68, 68, 0.8)',
+                    borderColor: 'rgba(239, 68, 68, 1)',
+                    borderWidth: 1
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                tooltip: {
+                    mode: 'index',
+                    intersect: false,
+                    callbacks: {
+                        label: function (context) {
+                            return context.dataset.label + ': ' + context.raw + '%';
+                        }
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    stacked: true,
+                },
+                y: {
+                    stacked: true,
+                    max: 100,
+                    ticks: {
+                        callback: function (value) {
+                            return value + '%';
+                        }
+                    }
+                }
+            }
+        }
+    });
+</script>
+
+
+
+
+{% endblock content %}
+
+
+{% block footer %}
+{% include 'components/admin_footer.html' %}
+{% endblock footer %}

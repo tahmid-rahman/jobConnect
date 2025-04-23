@@ -1,0 +1,577 @@
+{% extends 'base.html' %}
+
+{% block nav %}
+{% include 'components/admin_nav.html' %}
+{% endblock nav %}
+{% block content %}
+
+
+<!-- Main Content Area -->
+<div class="flex-1 overflow-auto p-6">
+    <!-- Job Postings Header -->
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
+        <div class="mb-4 md:mb-0">
+            <h2 class="text-2xl font-bold text-gray-800">Manage Job Postings</h2>
+            <p class="text-gray-600">View, approve, and manage all job listings</p>
+        </div>
+        <div class="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-3">
+            <button
+                class="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 flex items-center justify-center">
+                <i class="fas fa-plus mr-2"></i>
+                Create New Job
+            </button>
+            <div class="relative">
+                <select
+                    class="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                    <option>All Jobs</option>
+                    <option>Active</option>
+                    <option>Pending Approval</option>
+                    <option>Expired</option>
+                    <option>Featured</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <!-- Search and Filter -->
+    <div class="bg-white p-4 rounded-lg shadow mb-6">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div>
+                <label for="job-search" class="block text-sm font-medium text-gray-700 mb-1">Search</label>
+                <div class="relative rounded-md shadow-sm">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <i class="fas fa-search text-gray-400"></i>
+                    </div>
+                    <input type="text" id="job-search"
+                        class="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-10 sm:text-sm border-gray-300 rounded-md"
+                        placeholder="Job title, company, etc.">
+                </div>
+            </div>
+            <div>
+                <label for="job-type" class="block text-sm font-medium text-gray-700 mb-1">Job Type</label>
+                <select id="job-type"
+                    class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                    <option>All Types</option>
+                    <option>Full-time</option>
+                    <option>Part-time</option>
+                    <option>Contract</option>
+                    <option>Internship</option>
+                    <option>Remote</option>
+                </select>
+            </div>
+            <div>
+                <label for="job-category" class="block text-sm font-medium text-gray-700 mb-1">Category</label>
+                <select id="job-category"
+                    class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                    <option>All Categories</option>
+                    <option>Technology</option>
+                    <option>Healthcare</option>
+                    <option>Finance</option>
+                    <option>Education</option>
+                    <option>Marketing</option>
+                </select>
+            </div>
+            <div>
+                <label for="job-date" class="block text-sm font-medium text-gray-700 mb-1">Date
+                    Posted</label>
+                <select id="job-date"
+                    class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                    <option>Any Time</option>
+                    <option>Last 24 hours</option>
+                    <option>Last 7 days</option>
+                    <option>Last 30 days</option>
+                </select>
+            </div>
+        </div>
+        <div class="flex justify-end mt-4">
+            <button
+                class="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 mr-2">
+                Reset Filters
+            </button>
+            <button class="px-4 py-2 bg-indigo-600 text-white rounded-md text-sm font-medium hover:bg-indigo-700">
+                Apply Filters
+            </button>
+        </div>
+    </div>
+    <!-- Bulk Actions -->
+    <div class="bg-white p-4 rounded-lg shadow ">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+            <div class="mb-4 sm:mb-0">
+                <h3 class="text-lg font-medium text-gray-900">Bulk Actions</h3>
+                <p class="text-sm text-gray-500">Apply actions to selected jobs</p>
+            </div>
+            <div class="flex space-x-3">
+                <select
+                    class="block w-40 pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                    <option>Choose action</option>
+                    <option>Approve</option>
+                    <option>Feature</option>
+                    <option>Deactivate</option>
+                    <option>Delete</option>
+                    <option>Extend duration</option>
+                </select>
+                <button class="px-4 py-2 bg-indigo-600 text-white rounded-md text-sm font-medium hover:bg-indigo-700">
+                    Apply
+                </button>
+            </div>
+        </div>
+    </div>
+    <!-- Jobs Table -->
+    <div class="bg-white shadow rounded-lg overflow-hidden mt-6">
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th scope="col"
+                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            <input type="checkbox"
+                                class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded">
+                        </th>
+                        <th scope="col"
+                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Job Title</th>
+                        <th scope="col"
+                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Company</th>
+                        <th scope="col"
+                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Type</th>
+                        <th scope="col"
+                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Status</th>
+                        <th scope="col"
+                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Applications</th>
+                        <th scope="col"
+                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Posted</th>
+                        <th scope="col"
+                            class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    <!-- Job 1 -->
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <input type="checkbox"
+                                class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded">
+                        </td>
+                        <td class="px-6 py-4">
+                            <div class="flex items-center">
+                                <div
+                                    class="flex-shrink-0 h-10 w-10 bg-indigo-100 rounded-md flex items-center justify-center">
+                                    <i class="fas fa-laptop-code text-indigo-600"></i>
+                                </div>
+                                <div class="ml-4">
+                                    <div class="text-sm font-medium text-gray-900">Senior Frontend Developer
+                                    </div>
+                                    <div class="text-sm text-gray-500">San Francisco, CA</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm text-gray-900">TechCorp Inc.</div>
+                            <div class="text-sm text-gray-500">hr@techcorp.com</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span
+                                class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">Full-time</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span
+                                class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Active</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm text-gray-900">42</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2 days ago</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                            <div class="flex justify-end space-x-2">
+                                <button class="text-indigo-600 hover:text-indigo-900" title="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="text-yellow-600 hover:text-yellow-900" title="View">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <button class="text-red-600 hover:text-red-900" title="Deactivate">
+                                    <i class="fas fa-ban"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <!-- Job 2 -->
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <input type="checkbox"
+                                class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded">
+                        </td>
+                        <td class="px-6 py-4">
+                            <div class="flex items-center">
+                                <div
+                                    class="flex-shrink-0 h-10 w-10 bg-green-100 rounded-md flex items-center justify-center">
+                                    <i class="fas fa-stethoscope text-green-600"></i>
+                                </div>
+                                <div class="ml-4">
+                                    <div class="text-sm font-medium text-gray-900">Registered Nurse</div>
+                                    <div class="text-sm text-gray-500">New York, NY</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm text-gray-900">City Medical Center</div>
+                            <div class="text-sm text-gray-500">careers@citymedical.org</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span
+                                class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-purple-100 text-purple-800">Part-time</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span
+                                class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">Pending</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm text-gray-900">0</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">5 hours ago</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                            <div class="flex justify-end space-x-2">
+                                <button class="text-indigo-600 hover:text-indigo-900" title="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="text-yellow-600 hover:text-yellow-900" title="View">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <button class="text-green-600 hover:text-green-900" title="Approve">
+                                    <i class="fas fa-check"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <!-- Job 3 -->
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <input type="checkbox"
+                                class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded">
+                        </td>
+                        <td class="px-6 py-4">
+                            <div class="flex items-center">
+                                <div
+                                    class="flex-shrink-0 h-10 w-10 bg-red-100 rounded-md flex items-center justify-center">
+                                    <i class="fas fa-chart-line text-red-600"></i>
+                                </div>
+                                <div class="ml-4">
+                                    <div class="text-sm font-medium text-gray-900">Marketing Manager</div>
+                                    <div class="text-sm text-gray-500">Remote</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm text-gray-900">Growth Marketing Co.</div>
+                            <div class="text-sm text-gray-500">hiring@growth.com</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span
+                                class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-indigo-100 text-indigo-800">Remote</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span
+                                class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Active</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm text-gray-900">28</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">1 week ago</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                            <div class="flex justify-end space-x-2">
+                                <button class="text-indigo-600 hover:text-indigo-900" title="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="text-yellow-600 hover:text-yellow-900" title="View">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <button class="text-red-600 hover:text-red-900" title="Deactivate">
+                                    <i class="fas fa-ban"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <!-- Job 4 -->
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <input type="checkbox"
+                                class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded">
+                        </td>
+                        <td class="px-6 py-4">
+                            <div class="flex items-center">
+                                <div
+                                    class="flex-shrink-0 h-10 w-10 bg-yellow-100 rounded-md flex items-center justify-center">
+                                    <i class="fas fa-graduation-cap text-yellow-600"></i>
+                                </div>
+                                <div class="ml-4">
+                                    <div class="text-sm font-medium text-gray-900">Software Engineering
+                                        Intern</div>
+                                    <div class="text-sm text-gray-500">Austin, TX</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm text-gray-900">DevSoft Solutions</div>
+                            <div class="text-sm text-gray-500">internships@devsoft.com</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span
+                                class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-pink-100 text-pink-800">Internship</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span
+                                class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">Expired</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm text-gray-900">15</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2 months ago</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                            <div class="flex justify-end space-x-2">
+                                <button class="text-indigo-600 hover:text-indigo-900" title="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="text-yellow-600 hover:text-yellow-900" title="View">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <button class="text-green-600 hover:text-green-900" title="Renew">
+                                    <i class="fas fa-sync-alt"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <!-- Job 5 -->
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <input type="checkbox"
+                                class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded">
+                        </td>
+                        <td class="px-6 py-4">
+                            <div class="flex items-center">
+                                <div
+                                    class="flex-shrink-0 h-10 w-10 bg-blue-100 rounded-md flex items-center justify-center">
+                                    <i class="fas fa-dollar-sign text-blue-600"></i>
+                                </div>
+                                <div class="ml-4">
+                                    <div class="text-sm font-medium text-gray-900">Financial Analyst</div>
+                                    <div class="text-sm text-gray-500">Chicago, IL</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm text-gray-900">Global Finance Partners</div>
+                            <div class="text-sm text-gray-500">careers@gfp.com</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span
+                                class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">Full-time</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span
+                                class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Featured</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm text-gray-900">37</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">3 days ago</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                            <div class="flex justify-end space-x-2">
+                                <button class="text-indigo-600 hover:text-indigo-900" title="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="text-yellow-600 hover:text-yellow-900" title="View">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <button class="text-red-600 hover:text-red-900" title="Remove Feature">
+                                    <i class="fas fa-star"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="bg-gray-50 px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
+            <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+                <div>
+                    <p class="text-sm text-gray-700">
+                        Showing <span class="font-medium">1</span> to <span class="font-medium">5</span> of
+                        <span class="font-medium">128</span> jobs
+                    </p>
+                </div>
+                <div>
+                    <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
+                        <a href="#"
+                            class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                            <span class="sr-only">Previous</span>
+                            <i class="fas fa-chevron-left"></i>
+                        </a>
+                        <a href="#" aria-current="page"
+                            class="z-10 bg-indigo-50 border-indigo-500 text-indigo-600 relative inline-flex items-center px-4 py-2 border text-sm font-medium">
+                            1
+                        </a>
+                        <a href="#"
+                            class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium">
+                            2
+                        </a>
+                        <a href="#"
+                            class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium">
+                            3
+                        </a>
+                        <span
+                            class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700">
+                            ...
+                        </span>
+                        <a href="#"
+                            class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium">
+                            10
+                        </a>
+                        <a href="#"
+                            class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                            <span class="sr-only">Next</span>
+                            <i class="fas fa-chevron-right"></i>
+                        </a>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- Job Statistics -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
+        <div class="bg-white p-6 rounded-lg shadow">
+            <h3 class="text-lg font-medium text-gray-900 mb-4">Job Status Distribution</h3>
+            <div class="flex items-center justify-center h-48">
+                <div class="w-48 h-48 relative">
+                    <div class="absolute inset-0 flex items-center justify-center">
+                        <div class="text-center">
+                            <div class="text-2xl font-bold text-gray-800">128</div>
+                            <div class="text-sm text-gray-500">Total Jobs</div>
+                        </div>
+                    </div>
+                    <svg class="w-full h-full" viewBox="0 0 100 100">
+                        <!-- Active -->
+                        <circle cx="50" cy="50" r="45" fill="none" stroke="#10B981" stroke-width="10"
+                            stroke-dasharray="70 30" stroke-dashoffset="25"></circle>
+                        <!-- Pending -->
+                        <circle cx="50" cy="50" r="45" fill="none" stroke="#F59E0B" stroke-width="10"
+                            stroke-dasharray="20 80" stroke-dashoffset="95"></circle>
+                        <!-- Expired -->
+                        <circle cx="50" cy="50" r="45" fill="none" stroke="#6B7280" stroke-width="10"
+                            stroke-dasharray="10 90" stroke-dashoffset="75"></circle>
+                    </svg>
+                </div>
+            </div>
+            <div class="mt-4 space-y-2">
+                <div class="flex items-center">
+                    <div class="w-3 h-3 bg-green-500 rounded-full mr-2"></div>
+                    <span class="text-sm">Active (70%)</span>
+                </div>
+                <div class="flex items-center">
+                    <div class="w-3 h-3 bg-yellow-500 rounded-full mr-2"></div>
+                    <span class="text-sm">Pending (20%)</span>
+                </div>
+                <div class="flex items-center">
+                    <div class="w-3 h-3 bg-gray-500 rounded-full mr-2"></div>
+                    <span class="text-sm">Expired (10%)</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white p-6 rounded-lg shadow">
+            <h3 class="text-lg font-medium text-gray-900 mb-4">Job Types</h3>
+            <div class="space-y-3">
+                <div>
+                    <div class="flex justify-between mb-1">
+                        <span class="text-sm font-medium text-gray-700">Full-time</span>
+                        <span class="text-sm font-medium text-gray-700">45%</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2">
+                        <div class="bg-blue-600 h-2 rounded-full" style="width: 45%"></div>
+                    </div>
+                </div>
+                <div>
+                    <div class="flex justify-between mb-1">
+                        <span class="text-sm font-medium text-gray-700">Part-time</span>
+                        <span class="text-sm font-medium text-gray-700">25%</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2">
+                        <div class="bg-purple-600 h-2 rounded-full" style="width: 25%"></div>
+                    </div>
+                </div>
+                <div>
+                    <div class="flex justify-between mb-1">
+                        <span class="text-sm font-medium text-gray-700">Remote</span>
+                        <span class="text-sm font-medium text-gray-700">15%</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2">
+                        <div class="bg-indigo-600 h-2 rounded-full" style="width: 15%"></div>
+                    </div>
+                </div>
+                <div>
+                    <div class="flex justify-between mb-1">
+                        <span class="text-sm font-medium text-gray-700">Contract</span>
+                        <span class="text-sm font-medium text-gray-700">10%</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2">
+                        <div class="bg-green-600 h-2 rounded-full" style="width: 10%"></div>
+                    </div>
+                </div>
+                <div>
+                    <div class="flex justify-between mb-1">
+                        <span class="text-sm font-medium text-gray-700">Internship</span>
+                        <span class="text-sm font-medium text-gray-700">5%</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2">
+                        <div class="bg-pink-600 h-2 rounded-full" style="width: 5%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white p-6 rounded-lg shadow">
+            <h3 class="text-lg font-medium text-gray-900 mb-4">Top Categories</h3>
+            <div class="space-y-3">
+                <div class="flex items-center justify-between p-2 bg-gray-50 rounded">
+                    <span class="text-sm font-medium">Technology</span>
+                    <span class="text-sm font-medium bg-blue-100 text-blue-800 px-2 py-1 rounded-full">42</span>
+                </div>
+                <div class="flex items-center justify-between p-2 bg-gray-50 rounded">
+                    <span class="text-sm font-medium">Healthcare</span>
+                    <span class="text-sm font-medium bg-green-100 text-green-800 px-2 py-1 rounded-full">28</span>
+                </div>
+                <div class="flex items-center justify-between p-2 bg-gray-50 rounded">
+                    <span class="text-sm font-medium">Finance</span>
+                    <span class="text-sm font-medium bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full">19</span>
+                </div>
+                <div class="flex items-center justify-between p-2 bg-gray-50 rounded">
+                    <span class="text-sm font-medium">Education</span>
+                    <span class="text-sm font-medium bg-purple-100 text-purple-800 px-2 py-1 rounded-full">15</span>
+                </div>
+                <div class="flex items-center justify-between p-2 bg-gray-50 rounded">
+                    <span class="text-sm font-medium">Marketing</span>
+                    <span class="text-sm font-medium bg-red-100 text-red-800 px-2 py-1 rounded-full">12</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock content %}
+
+
+{% block footer %}
+{% include 'components/admin_footer.html' %}
+{% endblock footer %}

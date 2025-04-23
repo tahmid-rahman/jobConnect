@@ -1,0 +1,164 @@
+<div class="flex h-screen overflow-hidden">
+    <!-- Sidebar -->
+    <div class="hidden md:flex md:flex-shrink-0">
+        <div class="flex flex-col w-64 bg-indigo-800">
+            <a href="/" class="flex items-center justify-center h-16 px-4 bg-indigo-900">
+                <span class="text-white font-bold text-xl">JobConnect Admin</span>
+            </a>
+            <div class="flex flex-col flex-grow px-4 py-4 overflow-y-auto">
+                <nav class="flex-1 space-y-2">
+                    <a href="/"
+                        class="flex items-center px-4 py-2 {% if request.path == '/adminpanel/' %} text-white bg-indigo-700 {% else %}  text-indigo-200 hover:text-white hover:bg-indigo-600 {% endif %} rounded-md">
+                        <i class="fas fa-tachometer-alt mr-3"></i>
+                        Dashboard
+                    </a>
+                    <a href="/adminpanel/user-management/"
+                        class="flex items-center px-4 py-2 {% if '/user-management/' in request.path %} text-white bg-indigo-700 {% else %}  text-indigo-200 hover:text-white hover:bg-indigo-600 {% endif %} rounded-md">
+                        <i class="fas fa-users mr-3"></i>
+                        User Management
+                    </a>
+                    <a href="/adminpanel/job-postings-management/"
+                        class="flex items-center px-4 py-2 {% if '/job-postings-management/' in request.path %} text-white bg-indigo-700 {% else %}  text-indigo-200 hover:text-white hover:bg-indigo-600 {% endif %} rounded-md">
+                        <i class="fas fa-briefcase mr-3"></i>
+                        Job Postings
+                    </a>
+                    <a href="/adminpanel/content-management/"
+                        class="flex items-center px-4 py-2 {% if '/content-management/' in request.path %} text-white bg-indigo-700 {% else %}  text-indigo-200 hover:text-white hover:bg-indigo-600 {% endif %} rounded-md">
+                        <i class="fas fa-file-alt mr-3"></i>
+                        Content Management
+                    </a>
+                    <a href="/adminpanel/feedback-analytics/"
+                        class="flex items-center px-4 py-2 {% if '/feedback-analytics/' in request.path %} text-white bg-indigo-700 {% else %}  text-indigo-200 hover:text-white hover:bg-indigo-600 {% endif %} rounded-md">
+                        <i class="fas fa-comment-alt mr-3"></i>
+                        Feedback Analytics
+                    </a>
+                    <a href="/adminpanel/platform-security/"
+                        class="flex items-center px-4 py-2 {% if '/platform-security/' in request.path %} text-white bg-indigo-700 {% else %}  text-indigo-200 hover:text-white hover:bg-indigo-600 {% endif %} rounded-md">
+                        <i class="fas fa-shield-alt mr-3"></i>
+                        Platform Security
+                    </a>
+                    <a href="/adminpanel/settings/"
+                        class="flex items-center px-4 py-2 {% if '/settings/' in request.path %} text-white bg-indigo-700 {% else %}  text-indigo-200 hover:text-white hover:bg-indigo-600 {% endif %} rounded-md">
+                        <i class="fas fa-cog mr-3"></i>
+                        Settings
+                    </a>
+                </nav>
+            </div>
+            <!-- User Profile Section -->
+            <div class="p-4 border-t border-indigo-700 group">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        <img class="w-10 h-10 rounded-full" src="https://randomuser.me/api/portraits/women/11.jpg"
+                            alt="Admin profile">
+                        <div class="ml-3">
+                            <p class="text-sm font-medium text-white">Sarah Johnson</p>
+                            <p class="text-xs font-medium text-indigo-200">Super Admin</p>
+                        </div>
+                    </div>
+                    <!-- Logout link with hidden text that appears on hover -->
+                    <a href="/accounts/logout/"
+                        class="flex items-center text-indigo-300 hover:text-white focus:outline-none">
+                        <span class="opacity-0 group-hover:opacity-100 transition-opacity duration-200 mr-1 text-sm">
+                            Logout
+                        </span>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="flex flex-col flex-1 overflow-hidden">
+        <!-- Top Navigation -->
+        <div class="flex items-center justify-between h-16 px-6 bg-white border-b border-gray-200">
+            <div class="flex items-center">
+                <button class="text-gray-500 md:hidden" onclick="toggleSidebar()">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1 class="ml-4 text-xl font-semibold text-gray-800">
+                    {% if request.path == '/adminpanel/' %}
+                    Admin Dashboard
+                    {% elif '/user-management/' in request.path %}
+                    User Management
+                    {% elif '/job-postings-management/' in request.path %}
+                    Job Postings
+                    {% elif '/content-management/' in request.path %}
+                    Content Management
+                    {% elif '/feedback-analytics/' in request.path %}
+                    Feedback Analytics
+                    {% elif '/platform-security/' in request.path %}
+                    Platform Security
+                    {% elif '/settings/' in request.path %}
+                    Settings
+                    {% else %}
+                    Unknown Page
+                    {% endif %}
+                </h1>
+            </div>
+            <div class="flex items-center space-x-4">
+                <button class="p-1 text-gray-400 rounded-full hover:text-gray-500 focus:outline-none">
+                    <i class="fas fa-bell"></i>
+                </button>
+                <div class="relative">
+                    <button class="flex items-center space-x-2 text-gray-700 focus:outline-none">
+                        <span class="hidden md:inline">Sarah Johnson</span>
+                        <img class="w-8 h-8 rounded-full" src="https://randomuser.me/api/portraits/women/11.jpg"
+                            alt="User profile">
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Sidebar (hidden by default) -->
+        <div id="mobileSidebar" class="hidden bg-indigo-800 md:hidden">
+            <div class="flex items-center justify-center h-16 px-4 bg-indigo-900">
+                <span class="text-white font-bold text-xl">JobConnect Admin</span>
+            </div>
+            <nav class="px-2 py-4 space-y-1">
+                <a href="/"
+                    class="flex items-center px-4 py-2 {% if request.path == '' %} text-white bg-indigo-700 {% else %}  text-indigo-200 hover:text-white hover:bg-indigo-600 {% endif %} rounded-md">
+                    <i class="fas fa-tachometer-alt mr-3"></i>
+                    Dashboard
+                </a>
+                <a href="/adminpanel/user-management/"
+                    class="flex items-center px-4 py-2 {% if '/user-management/' in request.path %} text-white bg-indigo-700 {% else %}  text-indigo-200 hover:text-white hover:bg-indigo-600 {% endif %} rounded-md">
+                    <i class="fas fa-users mr-3"></i>
+                    User Management
+                </a>
+                <a href="/adminpanel/job-postings-management/"
+                    class="flex items-center px-4 py-2 {% if '/job-postings-management/' in request.path %} text-white bg-indigo-700 {% else %}  text-indigo-200 hover:text-white hover:bg-indigo-600 {% endif %} rounded-md">
+                    <i class="fas fa-briefcase mr-3"></i>
+                    Job Postings
+                </a>
+                <a href="/adminpanel/content-management/"
+                    class="flex items-center px-4 py-2 {% if '/content-management/' in request.path %} text-white bg-indigo-700 {% else %}  text-indigo-200 hover:text-white hover:bg-indigo-600 {% endif %} rounded-md">
+                    <i class="fas fa-file-alt mr-3"></i>
+                    Content Management
+                </a>
+                <a href="/adminpanel/feedback-analytics/"
+                    class="flex items-center px-4 py-2 {% if '/feedback-analytics/' in request.path %} text-white bg-indigo-700 {% else %}  text-indigo-200 hover:text-white hover:bg-indigo-600 {% endif %} rounded-md">
+                    <i class="fas fa-comment-alt mr-3"></i>
+                    Feedback Analytics
+                </a>
+                <a href="/adminpanel/platform-security/"
+                    class="flex items-center px-4 py-2 {% if '/platform-security/' in request.path %} text-white bg-indigo-700 {% else %}  text-indigo-200 hover:text-white hover:bg-indigo-600 {% endif %} rounded-md">
+                    <i class="fas fa-shield-alt mr-3"></i>
+                    Platform Security
+                </a>
+                <a href="/adminpanel/settings/"
+                    class="flex items-center px-4 py-2 {% if '/settings/' in request.path %} text-white bg-indigo-700 {% else %}  text-indigo-200 hover:text-white hover:bg-indigo-600 {% endif %} rounded-md">
+                    <i class="fas fa-cog mr-3"></i>
+                    Settings
+                </a>
+                <a href="/accounts/logout/"
+                    class="flex items-center px-4 py-2 text-indigo-200 hover:text-white hover:bg-indigo-600 rounded-md">
+                    <i class="fas fa-sign-out-alt mr-3"></i>
+                    Logout
+                </a>
+            </nav>
+        </div>

@@ -1,0 +1,605 @@
+{% extends 'base.html' %}
+
+{% block nav %}
+{% include 'components/admin_nav.html' %}
+{% endblock nav %}
+{% block content %}
+
+
+<!-- Main Content Area -->
+<div class="flex-1 overflow-auto p-6">
+    <!-- Content Stats -->
+    <div class="grid grid-cols-1 gap-6 mb-6 md:grid-cols-2 lg:grid-cols-4">
+        <div class="p-6 bg-white rounded-lg shadow">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm font-medium text-gray-500">Total Articles</p>
+                    <p class="mt-1 text-2xl font-semibold text-gray-900">247</p>
+                </div>
+                <div class="p-3 rounded-full bg-blue-100 text-blue-600">
+                    <i class="fas fa-newspaper text-xl"></i>
+                </div>
+            </div>
+            <div class="mt-4">
+                <span class="text-green-600 text-sm font-medium">+12</span>
+                <span class="text-gray-500 text-sm ml-2">this month</span>
+            </div>
+        </div>
+        <div class="p-6 bg-white rounded-lg shadow">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm font-medium text-gray-500">Published</p>
+                    <p class="mt-1 text-2xl font-semibold text-gray-900">189</p>
+                </div>
+                <div class="p-3 rounded-full bg-green-100 text-green-600">
+                    <i class="fas fa-check-circle text-xl"></i>
+                </div>
+            </div>
+            <div class="mt-4">
+                <span class="text-green-600 text-sm font-medium">+8%</span>
+                <span class="text-gray-500 text-sm ml-2">engagement</span>
+            </div>
+        </div>
+        <div class="p-6 bg-white rounded-lg shadow">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm font-medium text-gray-500">Drafts</p>
+                    <p class="mt-1 text-2xl font-semibold text-gray-900">32</p>
+                </div>
+                <div class="p-3 rounded-full bg-yellow-100 text-yellow-600">
+                    <i class="fas fa-edit text-xl"></i>
+                </div>
+            </div>
+            <div class="mt-4">
+                <span class="text-red-600 text-sm font-medium">-3</span>
+                <span class="text-gray-500 text-sm ml-2">in review</span>
+            </div>
+        </div>
+        <div class="p-6 bg-white rounded-lg shadow">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm font-medium text-gray-500">Categories</p>
+                    <p class="mt-1 text-2xl font-semibold text-gray-900">14</p>
+                </div>
+                <div class="p-3 rounded-full bg-purple-100 text-purple-600">
+                    <i class="fas fa-tags text-xl"></i>
+                </div>
+            </div>
+            <div class="mt-4">
+                <span class="text-green-600 text-sm font-medium">+2</span>
+                <span class="text-gray-500 text-sm ml-2">new this quarter</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Content Filter and Search -->
+    <div class="bg-white p-4 rounded-lg shadow mb-6">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div>
+                <label for="content-type" class="block text-sm font-medium text-gray-700 mb-1">Content
+                    Type</label>
+                <select id="content-type"
+                    class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                    <option>All Types</option>
+                    <option>Articles</option>
+                    <option>Blog Posts</option>
+                    <option>News</option>
+                    <option>Guides</option>
+                    <option>Tutorials</option>
+                </select>
+            </div>
+            <div>
+                <label for="content-status" class="block text-sm font-medium text-gray-700 mb-1">Status</label>
+                <select id="content-status"
+                    class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                    <option>All Statuses</option>
+                    <option>Published</option>
+                    <option>Draft</option>
+                    <option>Scheduled</option>
+                    <option>Archived</option>
+                </select>
+            </div>
+            <div>
+                <label for="content-category" class="block text-sm font-medium text-gray-700 mb-1">Category</label>
+                <select id="content-category"
+                    class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                    <option>All Categories</option>
+                    <option>Career Advice</option>
+                    <option>Job Search</option>
+                    <option>Interview Tips</option>
+                    <option>Industry News</option>
+                    <option>Resume Help</option>
+                </select>
+            </div>
+            <div>
+                <label for="content-search" class="block text-sm font-medium text-gray-700 mb-1">Search</label>
+                <div class="relative rounded-md shadow-sm">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <i class="fas fa-search text-gray-400"></i>
+                    </div>
+                    <input type="text" id="content-search"
+                        class="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-10 sm:text-sm border-gray-300 rounded-md"
+                        placeholder="Title, author...">
+                </div>
+            </div>
+        </div>
+        <div class="flex justify-end mt-4">
+            <button
+                class="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 mr-2">
+                Reset
+            </button>
+            <button class="px-4 py-2 bg-indigo-600 text-white rounded-md text-sm font-medium hover:bg-indigo-700">
+                Apply Filters
+            </button>
+        </div>
+    </div>
+
+    <!-- Content Table -->
+    <div class="bg-white shadow rounded-lg overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th scope="col"
+                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Title</th>
+                        <th scope="col"
+                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Author</th>
+                        <th scope="col"
+                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Category</th>
+                        <th scope="col"
+                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Status</th>
+                        <th scope="col"
+                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Last Updated</th>
+                        <th scope="col"
+                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Views</th>
+                        <th scope="col"
+                            class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    <!-- Content 1 -->
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center">
+                                <div
+                                    class="flex-shrink-0 h-10 w-10 bg-blue-100 rounded-md flex items-center justify-center text-blue-600">
+                                    <i class="fas fa-file-alt"></i>
+                                </div>
+                                <div class="ml-4">
+                                    <div class="text-sm font-medium text-gray-900">10 Tips for Acing Your
+                                        Job Interview</div>
+                                    <div class="text-sm text-gray-500">Interview Tips</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center">
+                                <div class="flex-shrink-0 h-8 w-8">
+                                    <img class="h-8 w-8 rounded-full"
+                                        src="https://randomuser.me/api/portraits/men/32.jpg" alt="">
+                                </div>
+                                <div class="ml-3">
+                                    <div class="text-sm font-medium text-gray-900">Michael Brown</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span
+                                class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">Interview
+                                Tips</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span
+                                class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Published</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2 days ago</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">1,245</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                            <div class="flex justify-end space-x-2">
+                                <button class="text-indigo-600 hover:text-indigo-900" title="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="text-yellow-600 hover:text-yellow-900" title="View">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <button class="text-red-600 hover:text-red-900" title="Delete">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <!-- Content 2 -->
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center">
+                                <div
+                                    class="flex-shrink-0 h-10 w-10 bg-purple-100 rounded-md flex items-center justify-center text-purple-600">
+                                    <i class="fas fa-blog"></i>
+                                </div>
+                                <div class="ml-4">
+                                    <div class="text-sm font-medium text-gray-900">The Future of Remote Work
+                                        in 2023</div>
+                                    <div class="text-sm text-gray-500">Industry News</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center">
+                                <div class="flex-shrink-0 h-8 w-8">
+                                    <img class="h-8 w-8 rounded-full"
+                                        src="https://randomuser.me/api/portraits/women/44.jpg" alt="">
+                                </div>
+                                <div class="ml-3">
+                                    <div class="text-sm font-medium text-gray-900">Emma Johnson</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span
+                                class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-purple-100 text-purple-800">Industry
+                                News</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span
+                                class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Published</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">1 week ago</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">3,421</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                            <div class="flex justify-end space-x-2">
+                                <button class="text-indigo-600 hover:text-indigo-900" title="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="text-yellow-600 hover:text-yellow-900" title="View">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <button class="text-red-600 hover:text-red-900" title="Delete">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <!-- Content 3 -->
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center">
+                                <div
+                                    class="flex-shrink-0 h-10 w-10 bg-green-100 rounded-md flex items-center justify-center text-green-600">
+                                    <i class="fas fa-book"></i>
+                                </div>
+                                <div class="ml-4">
+                                    <div class="text-sm font-medium text-gray-900">Ultimate Guide to Writing
+                                        a Winning Resume</div>
+                                    <div class="text-sm text-gray-500">Resume Help</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center">
+                                <div class="flex-shrink-0 h-8 w-8">
+                                    <img class="h-8 w-8 rounded-full"
+                                        src="https://randomuser.me/api/portraits/men/75.jpg" alt="">
+                                </div>
+                                <div class="ml-3">
+                                    <div class="text-sm font-medium text-gray-900">David Wilson</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span
+                                class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Resume
+                                Help</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span
+                                class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">Draft</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">3 days ago</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">-</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                            <div class="flex justify-end space-x-2">
+                                <button class="text-indigo-600 hover:text-indigo-900" title="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="text-yellow-600 hover:text-yellow-900" title="View">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <button class="text-red-600 hover:text-red-900" title="Delete">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <!-- Content 4 -->
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center">
+                                <div
+                                    class="flex-shrink-0 h-10 w-10 bg-red-100 rounded-md flex items-center justify-center text-red-600">
+                                    <i class="fas fa-chart-line"></i>
+                                </div>
+                                <div class="ml-4">
+                                    <div class="text-sm font-medium text-gray-900">Top 5 In-Demand Skills
+                                        for Developers</div>
+                                    <div class="text-sm text-gray-500">Career Advice</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center">
+                                <div class="flex-shrink-0 h-8 w-8">
+                                    <img class="h-8 w-8 rounded-full"
+                                        src="https://randomuser.me/api/portraits/women/68.jpg" alt="">
+                                </div>
+                                <div class="ml-3">
+                                    <div class="text-sm font-medium text-gray-900">Sarah Johnson</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span
+                                class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">Career
+                                Advice</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span
+                                class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">Scheduled</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">1 day ago</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">-</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                            <div class="flex justify-end space-x-2">
+                                <button class="text-indigo-600 hover:text-indigo-900" title="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="text-yellow-600 hover:text-yellow-900" title="View">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <button class="text-red-600 hover:text-red-900" title="Delete">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <!-- Content 5 -->
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center">
+                                <div
+                                    class="flex-shrink-0 h-10 w-10 bg-indigo-100 rounded-md flex items-center justify-center text-indigo-600">
+                                    <i class="fas fa-lightbulb"></i>
+                                </div>
+                                <div class="ml-4">
+                                    <div class="text-sm font-medium text-gray-900">How to Negotiate Your
+                                        Salary Like a Pro</div>
+                                    <div class="text-sm text-gray-500">Career Advice</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center">
+                                <div class="flex-shrink-0 h-8 w-8">
+                                    <img class="h-8 w-8 rounded-full"
+                                        src="https://randomuser.me/api/portraits/men/22.jpg" alt="">
+                                </div>
+                                <div class="ml-3">
+                                    <div class="text-sm font-medium text-gray-900">Robert Chen</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span
+                                class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">Career
+                                Advice</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span
+                                class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Published</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2 weeks ago</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">5,678</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                            <div class="flex justify-end space-x-2">
+                                <button class="text-indigo-600 hover:text-indigo-900" title="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="text-yellow-600 hover:text-yellow-900" title="View">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <button class="text-red-600 hover:text-red-900" title="Delete">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="bg-gray-50 px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
+            <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+                <div>
+                    <p class="text-sm text-gray-700">
+                        Showing <span class="font-medium">1</span> to <span class="font-medium">5</span> of
+                        <span class="font-medium">247</span> results
+                    </p>
+                </div>
+                <div>
+                    <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
+                        <a href="#"
+                            class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                            <span class="sr-only">Previous</span>
+                            <i class="fas fa-chevron-left"></i>
+                        </a>
+                        <a href="#" aria-current="page"
+                            class="z-10 bg-indigo-50 border-indigo-500 text-indigo-600 relative inline-flex items-center px-4 py-2 border text-sm font-medium">
+                            1
+                        </a>
+                        <a href="#"
+                            class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium">
+                            2
+                        </a>
+                        <a href="#"
+                            class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium">
+                            3
+                        </a>
+                        <span
+                            class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700">
+                            ...
+                        </span>
+                        <a href="#"
+                            class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium">
+                            10
+                        </a>
+                        <a href="#"
+                            class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                            <span class="sr-only">Next</span>
+                            <i class="fas fa-chevron-right"></i>
+                        </a>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Content Performance -->
+    <div class="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-3">
+        <!-- Top Performing Content -->
+        <div class="p-6 bg-white rounded-lg shadow lg:col-span-2">
+            <h2 class="text-lg font-semibold text-gray-900 mb-4">Top Performing Content</h2>
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th scope="col"
+                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Title</th>
+                            <th scope="col"
+                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Views</th>
+                            <th scope="col"
+                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Engagement</th>
+                            <th scope="col"
+                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Avg. Time</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">The
+                                Future of Remote Work in 2023</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">3,421</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">72%</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">4:32</td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">How to
+                                Negotiate Your Salary Like a Pro</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2,876</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">68%</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">3:45</td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">10
+                                Tips for Acing Your Job Interview</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2,543</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">65%</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">3:12</td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">5
+                                Common Resume Mistakes to Avoid</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2,134</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">62%</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2:56</td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                Transitioning Careers: A Step-by-Step Guide</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">1,987</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">59%</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2:41</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Content Categories -->
+        <div class="p-6 bg-white rounded-lg shadow">
+            <h2 class="text-lg font-semibold text-gray-900 mb-4">Content Categories</h2>
+            <div class="space-y-4">
+                <div>
+                    <div class="flex items-center justify-between mb-1">
+                        <span class="text-sm font-medium text-gray-700">Career Advice</span>
+                        <span class="text-sm font-medium text-gray-700">42%</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2.5">
+                        <div class="bg-red-500 h-2.5 rounded-full" style="width: 42%"></div>
+                    </div>
+                </div>
+                <div>
+                    <div class="flex items-center justify-between mb-1">
+                        <span class="text-sm font-medium text-gray-700">Interview Tips</span>
+                        <span class="text-sm font-medium text-gray-700">28%</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2.5">
+                        <div class="bg-blue-500 h-2.5 rounded-full" style="width: 28%"></div>
+                    </div>
+                </div>
+                <div>
+                    <div class="flex items-center justify-between mb-1">
+                        <span class="text-sm font-medium text-gray-700">Resume Help</span>
+                        <span class="text-sm font-medium text-gray-700">15%</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2.5">
+                        <div class="bg-green-500 h-2.5 rounded-full" style="width: 15%"></div>
+                    </div>
+                </div>
+                <div>
+                    <div class="flex items-center justify-between mb-1">
+                        <span class="text-sm font-medium text-gray-700">Industry News</span>
+                        <span class="text-sm font-medium text-gray-700">10%</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2.5">
+                        <div class="bg-purple-500 h-2.5 rounded-full" style="width: 10%"></div>
+                    </div>
+                </div>
+                <div>
+                    <div class="flex items-center justify-between mb-1">
+                        <span class="text-sm font-medium text-gray-700">Job Search</span>
+                        <span class="text-sm font-medium text-gray-700">5%</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2.5">
+                        <div class="bg-yellow-500 h-2.5 rounded-full" style="width: 5%"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-6">
+                <button
+                    class="w-full px-4 py-2 border border-dashed border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50">
+                    <i class="fas fa-plus mr-2"></i>
+                    Add New Category
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
+
+
+{% block footer %}
+{% include 'components/admin_footer.html' %}
+{% endblock footer %}

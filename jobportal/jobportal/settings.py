@@ -39,7 +39,7 @@ INSTALLED_APPS = [
 
     'tailwind',
     'theme',
-    'django_browser_reload',  # For live reloading
+    'django_browser_reload', 
     'jobseeker',
     'employer',
     'adminpanel',

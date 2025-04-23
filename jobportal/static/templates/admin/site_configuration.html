@@ -1,0 +1,259 @@
+<!-- Site Configuration -->
+<div class="lg:col-span-2">
+    <!-- General Settings -->
+    <div class="bg-white p-6 rounded-lg shadow mb-6">
+        <h2 class="text-lg font-semibold text-gray-900 mb-6 flex items-center">
+            <i class="fas fa-cog mr-2"></i>
+            General Settings
+        </h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+            <div>
+                <label for="site-name" class="block text-sm font-medium text-gray-700 mb-1">Site
+                    Name</label>
+                <input type="text" id="site-name"
+                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    value="JobConnect">
+            </div>
+            <div>
+                <label for="site-url" class="block text-sm font-medium text-gray-700 mb-1">Site
+                    URL</label>
+                <input type="url" id="site-url"
+                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    value="https://jobconnect.example.com">
+            </div>
+            <div>
+                <label for="timezone" class="block text-sm font-medium text-gray-700 mb-1">Timezone</label>
+                <select id="timezone"
+                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                    <option>(UTC-12:00) International Date Line West</option>
+                    <option>(UTC-11:00) Midway Island, Samoa</option>
+                    <option>(UTC-10:00) Hawaii</option>
+                    <option>(UTC-09:00) Alaska</option>
+                    <option selected>(UTC-08:00) Pacific Time (US & Canada)</option>
+                    <option>(UTC-07:00) Arizona</option>
+                    <option>(UTC-07:00) Mountain Time (US & Canada)</option>
+                    <option>(UTC-06:00) Central Time (US & Canada)</option>
+                    <option>(UTC-05:00) Eastern Time (US & Canada)</option>
+                    <option>(UTC-04:00) Atlantic Time (Canada)</option>
+                </select>
+            </div>
+            <div>
+                <label for="date-format" class="block text-sm font-medium text-gray-700 mb-1">Date
+                    Format</label>
+                <select id="date-format"
+                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                    <option value="F j, Y">January 1, 2023</option>
+                    <option value="j F Y">1 January 2023</option>
+                    <option value="m/d/Y" selected>01/01/2023</option>
+                    <option value="d/m/Y">01/01/2023</option>
+                    <option value="Y-m-d">2023-01-01</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="mb-6">
+            <label for="site-description" class="block text-sm font-medium text-gray-700 mb-1">Site
+                Description</label>
+            <textarea id="site-description" rows="3"
+                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">JobConnect is the leading platform connecting job seekers with employers across multiple industries.</textarea>
+        </div>
+
+        <div class="flex justify-end">
+            <button type="button"
+                class="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                Cancel
+            </button>
+            <button type="submit"
+                class="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                Save Changes
+            </button>
+        </div>
+    </div>
+
+    <!-- Logo & Branding -->
+    <div class="bg-white p-6 rounded-lg shadow mb-6">
+        <h2 class="text-lg font-semibold text-gray-900 mb-6 flex items-center">
+            <i class="fas fa-image mr-2"></i>
+            Logo & Branding
+        </h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Site Logo</label>
+                <div class="mt-1 flex items-center">
+                    <div class="flex-shrink-0 h-16 w-16 overflow-hidden rounded-md border border-gray-300">
+                        <img class="h-full w-full" src="https://via.placeholder.com/150" alt="Site logo">
+                    </div>
+                    <div class="ml-4">
+                        <button type="button"
+                            class="bg-white py-2 px-3 border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                            Change
+                        </button>
+                        <button type="button"
+                            class="ml-3 bg-white py-2 px-3 border border-transparent rounded-md shadow-sm text-sm leading-4 font-medium text-red-600 hover:text-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                            Remove
+                        </button>
+                    </div>
+                </div>
+                <p class="mt-2 text-sm text-gray-500">Recommended size: 150×150 pixels</p>
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Favicon</label>
+                <div class="mt-1 flex items-center">
+                    <div class="flex-shrink-0 h-16 w-16 overflow-hidden rounded-md border border-gray-300">
+                        <img class="h-full w-full" src="https://via.placeholder.com/32" alt="Favicon">
+                    </div>
+                    <div class="ml-4">
+                        <button type="button"
+                            class="bg-white py-2 px-3 border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                            Change
+                        </button>
+                        <button type="button"
+                            class="ml-3 bg-white py-2 px-3 border border-transparent rounded-md shadow-sm text-sm leading-4 font-medium text-red-600 hover:text-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                            Remove
+                        </button>
+                    </div>
+                </div>
+                <p class="mt-2 text-sm text-gray-500">Recommended size: 32×32 pixels</p>
+            </div>
+        </div>
+
+        <div class="mt-6">
+            <label for="primary-color" class="block text-sm font-medium text-gray-700 mb-1">Primary
+                Color</label>
+            <div class="mt-1 flex items-center">
+                <input type="color" id="primary-color" class="h-10 w-10 rounded border border-gray-300" value="#4f46e5">
+                <span class="ml-3 text-sm text-gray-700">#4f46e5 (Indigo)</span>
+            </div>
+        </div>
+
+        <div class="mt-6 flex justify-end">
+            <button type="button"
+                class="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                Cancel
+            </button>
+            <button type="submit"
+                class="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                Save Changes
+            </button>
+        </div>
+    </div>
+
+    <!-- Maintenance Mode -->
+    <div class="bg-white p-6 rounded-lg shadow mb-6">
+        <h2 class="text-lg font-semibold text-gray-900 mb-6 flex items-center">
+            <i class="fas fa-tools mr-2"></i>
+            Maintenance Mode
+        </h2>
+
+        <div class="flex items-start">
+            <div class="flex items-center h-5">
+                <input id="maintenance-mode" name="maintenance-mode" type="checkbox"
+                    class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded">
+            </div>
+            <div class="ml-3 text-sm">
+                <label for="maintenance-mode" class="font-medium text-gray-700">Enable Maintenance
+                    Mode</label>
+                <p class="text-gray-500">When enabled, only administrators can access the site.</p>
+            </div>
+        </div>
+
+        <div class="mt-4" id="maintenance-message-container" style="display: none;">
+            <label for="maintenance-message" class="block text-sm font-medium text-gray-700 mb-1">Maintenance
+                Message</label>
+            <textarea id="maintenance-message" rows="3"
+                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">We're currently performing scheduled maintenance. We'll be back shortly. Thank you for your patience.</textarea>
+        </div>
+
+        <div class="mt-6 flex justify-end">
+            <button type="button"
+                class="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                Cancel
+            </button>
+            <button type="submit"
+                class="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                Save Changes
+            </button>
+        </div>
+    </div>
+
+    <!-- SEO Settings -->
+    <div class="bg-white p-6 rounded-lg shadow">
+        <h2 class="text-lg font-semibold text-gray-900 mb-6 flex items-center">
+            <i class="fas fa-search mr-2"></i>
+            SEO Settings
+        </h2>
+
+        <div class="mb-6">
+            <label for="meta-title" class="block text-sm font-medium text-gray-700 mb-1">Meta
+                Title</label>
+            <input type="text" id="meta-title"
+                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                value="JobConnect - Find Your Dream Job">
+            <p class="mt-2 text-sm text-gray-500">Recommended length: 50-60 characters</p>
+        </div>
+
+        <div class="mb-6">
+            <label for="meta-description" class="block text-sm font-medium text-gray-700 mb-1">Meta
+                Description</label>
+            <textarea id="meta-description" rows="3"
+                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">JobConnect helps job seekers find their perfect career match and employers discover top talent across various industries.</textarea>
+            <p class="mt-2 text-sm text-gray-500">Recommended length: 150-160 characters</p>
+        </div>
+
+        <div class="mb-6">
+            <label for="meta-keywords" class="block text-sm font-medium text-gray-700 mb-1">Meta
+                Keywords</label>
+            <input type="text" id="meta-keywords"
+                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                value="jobs, employment, career, hiring, recruitment">
+            <p class="mt-2 text-sm text-gray-500">Separate keywords with commas</p>
+        </div>
+
+        <div class="flex items-start">
+            <div class="flex items-center h-5">
+                <input id="enable-sitemap" name="enable-sitemap" type="checkbox"
+                    class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded" checked>
+            </div>
+            <div class="ml-3 text-sm">
+                <label for="enable-sitemap" class="font-medium text-gray-700">Enable XML
+                    Sitemap</label>
+                <p class="text-gray-500">Automatically generate sitemap.xml for search engines</p>
+            </div>
+        </div>
+
+        <div class="mt-6 flex justify-end">
+            <button type="button"
+                class="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                Cancel
+            </button>
+            <button type="submit"
+                class="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                Save Changes
+            </button>
+        </div>
+    </div>
+</div>
+
+
+<script>
+
+    // Toggle maintenance message visibility
+    const maintenanceCheckbox = document.getElementById('maintenance-mode');
+    const maintenanceMessageContainer = document.getElementById('maintenance-message-container');
+
+    maintenanceCheckbox.addEventListener('change', function () {
+        if (this.checked) {
+            maintenanceMessageContainer.style.display = 'block';
+        } else {
+            maintenanceMessageContainer.style.display = 'none';
+        }
+    });
+
+    // Initialize based on current checkbox state
+    if (maintenanceCheckbox.checked) {
+        maintenanceMessageContainer.style.display = 'block';
+    }
+</script>

@@ -1,0 +1,346 @@
+{% extends 'base.html' %}
+
+{% block nav %}
+{% include 'components/admin_nav.html' %}
+{% endblock nav %}
+{% block content %}
+
+
+
+<!-- Main Content Area -->
+<div class="flex-1 overflow-auto p-6">
+    <!-- Stats Cards -->
+    <div class="grid grid-cols-1 gap-6 mb-6 md:grid-cols-2 lg:grid-cols-4">
+        <div class="p-6 bg-white rounded-lg shadow">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm font-medium text-gray-500">Total Users</p>
+                    <p class="mt-1 text-2xl font-semibold text-gray-900">8,742</p>
+                </div>
+                <div class="p-3 rounded-full bg-blue-100 text-blue-600">
+                    <i class="fas fa-users text-xl"></i>
+                </div>
+            </div>
+            <div class="mt-4">
+                <span class="text-green-600 text-sm font-medium">+5.2%</span>
+                <span class="text-gray-500 text-sm ml-2">from last month</span>
+            </div>
+        </div>
+        <div class="p-6 bg-white rounded-lg shadow">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm font-medium text-gray-500">Active Jobs</p>
+                    <p class="mt-1 text-2xl font-semibold text-gray-900">1,326</p>
+                </div>
+                <div class="p-3 rounded-full bg-green-100 text-green-600">
+                    <i class="fas fa-briefcase text-xl"></i>
+                </div>
+            </div>
+            <div class="mt-4">
+                <span class="text-green-600 text-sm font-medium">+12.7%</span>
+                <span class="text-gray-500 text-sm ml-2">from last month</span>
+            </div>
+        </div>
+        <div class="p-6 bg-white rounded-lg shadow">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm font-medium text-gray-500">Avg. Rating</p>
+                    <p class="mt-1 text-2xl font-semibold text-gray-900">4.3</p>
+                </div>
+                <div class="p-3 rounded-full bg-yellow-100 text-yellow-600">
+                    <i class="fas fa-star text-xl"></i>
+                </div>
+            </div>
+            <div class="mt-4">
+                <span class="text-green-600 text-sm font-medium">+0.2</span>
+                <span class="text-gray-500 text-sm ml-2">from last month</span>
+            </div>
+        </div>
+        <div class="p-6 bg-white rounded-lg shadow">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm font-medium text-gray-500">Security Alerts</p>
+                    <p class="mt-1 text-2xl font-semibold text-gray-900">3</p>
+                </div>
+                <div class="p-3 rounded-full bg-red-100 text-red-600">
+                    <i class="fas fa-shield-alt text-xl"></i>
+                </div>
+            </div>
+            <div class="mt-4">
+                <span class="text-red-600 text-sm font-medium">+2</span>
+                <span class="text-gray-500 text-sm ml-2">from last week</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Graphs Section -->
+    <div class="grid grid-cols-1 gap-6 lg:grid-cols-2 mb-6">
+        <!-- User Growth Chart -->
+        <div class="p-6 bg-white rounded-lg shadow">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-lg font-semibold text-gray-900">User Growth</h2>
+                <select
+                    class="block w-32 pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                    <option>Last 30 days</option>
+                    <option>Last 90 days</option>
+                    <option>Last year</option>
+                </select>
+            </div>
+            <div class="h-80">
+                <canvas id="userGrowthChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Rating Distribution Chart -->
+        <div class="p-6 bg-white rounded-lg shadow">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-lg font-semibold text-gray-900">Rating Distribution</h2>
+                <select
+                    class="block w-32 pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                    <option>Last 30 days</option>
+                    <option>Last 90 days</option>
+                    <option>Last year</option>
+                </select>
+            </div>
+            <div class="h-80">
+                <canvas id="ratingDistributionChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Activity and Quick Actions -->
+    <div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
+        <!-- Recent Activity -->
+        <div class="lg:col-span-2">
+            <div class="p-6 bg-white rounded-lg shadow">
+                <h2 class="text-lg font-semibold text-gray-900 mb-4">Recent Activity</h2>
+                <div class="space-y-4">
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0 p-2 bg-blue-100 text-blue-600 rounded-full">
+                            <i class="fas fa-user-plus"></i>
+                        </div>
+                        <div class="ml-3">
+                            <p class="text-sm font-medium text-gray-900">New employer registered: TechCorp
+                                Inc.</p>
+                            <p class="text-sm text-gray-500">2 hours ago</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0 p-2 bg-green-100 text-green-600 rounded-full">
+                            <i class="fas fa-briefcase"></i>
+                        </div>
+                        <div class="ml-3">
+                            <p class="text-sm font-medium text-gray-900">New job posted: Senior UX Designer
+                            </p>
+                            <p class="text-sm text-gray-500">5 hours ago</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0 p-2 bg-yellow-100 text-yellow-600 rounded-full">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <div class="ml-3">
+                            <p class="text-sm font-medium text-gray-900">New 5-star rating from Sarah Wilson
+                            </p>
+                            <p class="text-sm text-gray-500">1 day ago</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0 p-2 bg-red-100 text-red-600 rounded-full">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <div class="ml-3">
+                            <p class="text-sm font-medium text-gray-900">Security alert: Unusual login
+                                attempt</p>
+                            <p class="text-sm text-gray-500">2 days ago</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0 p-2 bg-purple-100 text-purple-600 rounded-full">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <div class="ml-3">
+                            <p class="text-sm font-medium text-gray-900">New blog post published: "Hiring
+                                Trends 2023"</p>
+                            <p class="text-sm text-gray-500">3 days ago</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-4 text-right">
+                    <a href="#" class="text-sm font-medium text-indigo-600 hover:text-indigo-500">View all
+                        activity</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="space-y-6">
+            <!-- User Management -->
+            <div class="p-6 bg-white rounded-lg shadow">
+                <h2 class="text-lg font-semibold text-gray-900 mb-4">User Management</h2>
+                <div class="space-y-3">
+                    <a href="#" class="flex items-center p-3 rounded-md bg-gray-50 hover:bg-gray-100">
+                        <div class="p-2 rounded-full bg-blue-100 text-blue-600 mr-3">
+                            <i class="fas fa-user-plus"></i>
+                        </div>
+                        <span class="text-sm font-medium">Add New User</span>
+                    </a>
+                    <a href="#" class="flex items-center p-3 rounded-md bg-gray-50 hover:bg-gray-100">
+                        <div class="p-2 rounded-full bg-orange-100 text-orange-600 mr-3">
+                            <i class="fas fa-user-edit"></i>
+                        </div>
+                        <span class="text-sm font-medium">Manage Users</span>
+                    </a>
+                    <a href="#" class="flex items-center p-3 rounded-md bg-gray-50 hover:bg-gray-100">
+                        <div class="p-2 rounded-full bg-purple-100 text-purple-600 mr-3">
+                            <i class="fas fa-user-shield"></i>
+                        </div>
+                        <span class="text-sm font-medium">User Permissions</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Content Management -->
+            <div class="p-6 bg-white rounded-lg shadow">
+                <h2 class="text-lg font-semibold text-gray-900 mb-4">Content Management</h2>
+                <div class="space-y-3">
+                    <a href="#" class="flex items-center p-3 rounded-md bg-gray-50 hover:bg-gray-100">
+                        <div class="p-2 rounded-full bg-green-100 text-green-600 mr-3">
+                            <i class="fas fa-edit"></i>
+                        </div>
+                        <span class="text-sm font-medium">Create New Post</span>
+                    </a>
+                    <a href="#" class="flex items-center p-3 rounded-md bg-gray-50 hover:bg-gray-100">
+                        <div class="p-2 rounded-full bg-yellow-100 text-yellow-600 mr-3">
+                            <i class="fas fa-list"></i>
+                        </div>
+                        <span class="text-sm font-medium">Manage Content</span>
+                    </a>
+                    <a href="#" class="flex items-center p-3 rounded-md bg-gray-50 hover:bg-gray-100">
+                        <div class="p-2 rounded-full bg-red-100 text-red-600 mr-3">
+                            <i class="fas fa-tags"></i>
+                        </div>
+                        <span class="text-sm font-medium">Categories & Tags</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // User Growth Chart
+    const userGrowthCtx = document.getElementById('userGrowthChart').getContext('2d');
+    const userGrowthChart = new Chart(userGrowthCtx, {
+        type: 'line',
+        data: {
+            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+            datasets: [
+                {
+                    label: 'Job Seekers',
+                    data: [1200, 1900, 1700, 2100, 2300, 2500, 2800],
+                    borderColor: '#4F46E5',
+                    backgroundColor: 'rgba(79, 70, 229, 0.1)',
+                    tension: 0.3,
+                    fill: true
+                },
+                {
+                    label: 'Employers',
+                    data: [400, 600, 550, 700, 800, 850, 900],
+                    borderColor: '#10B981',
+                    backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                    tension: 0.3,
+                    fill: true
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                tooltip: {
+                    mode: 'index',
+                    intersect: false,
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        callback: function (value) {
+                            return value.toLocaleString();
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+    // Rating Distribution Chart
+    const ratingDistributionCtx = document.getElementById('ratingDistributionChart').getContext('2d');
+    const ratingDistributionChart = new Chart(ratingDistributionCtx, {
+        type: 'bar',
+        data: {
+            labels: ['1 Star', '2 Stars', '3 Stars', '4 Stars', '5 Stars'],
+            datasets: [{
+                label: 'Number of Ratings',
+                data: [65, 91, 187, 423, 782],
+                backgroundColor: [
+                    'rgba(239, 68, 68, 0.7)',
+                    'rgba(249, 115, 22, 0.7)',
+                    'rgba(234, 179, 8, 0.7)',
+                    'rgba(16, 185, 129, 0.7)',
+                    'rgba(5, 150, 105, 0.7)'
+                ],
+                borderColor: [
+                    'rgba(239, 68, 68, 1)',
+                    'rgba(249, 115, 22, 1)',
+                    'rgba(234, 179, 8, 1)',
+                    'rgba(16, 185, 129, 1)',
+                    'rgba(5, 150, 105, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function (context) {
+                            let label = context.dataset.label || '';
+                            if (label) {
+                                label += ': ';
+                            }
+                            label += context.raw;
+                            return label;
+                        }
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        stepSize: 100
+                    }
+                }
+            }
+        }
+    });
+</script>
+
+
+{% endblock content %}
+
+
+{% block footer %}
+{% include 'components/admin_footer.html' %}
+{% endblock footer %}

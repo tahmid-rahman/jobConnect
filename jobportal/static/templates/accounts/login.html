@@ -1,125 +1,287 @@
 {% extends 'base.html' %}
 {% block content %}
-<nav class="bg-transparent fixed top-0 left-10 z-50">
-    <div class="flex justify-between items-center h-16">
-        <div class="flex items-center px-4">
-            <a href="/" class="text-2xl font-bold text-white">JobConnect</a>
+{% load static %}
+<div class="bg-gradient-to-br from-white to-[#a7b5d8] min-h-screen">
+
+    <nav class="bg-white shadow-md w-full z-50 px-6 sticky top-0">
+        <div class="flex justify-between items-center h-16 max-w-7xl mx-auto">
+            <div class="flex items-center">
+                <a href="/"
+                    class="text-2xl font-bold text-[#3c70b4] hover:text-[#2c5790] transition-colors flex items-center">
+                    JobConnect
+                </a>
+            </div>
         </div>
-    </div>
-</nav>
-<div class="font-[sans-serif] bg-gray-900 md:h-screen">
-    <div class="grid md:grid-cols-2 items-center gap-8 h-full">
-        <div class="max-md:order-0 p-4 z-0">
-            <img src="https://readymadeui.com/signin-image.webp"
-                class="lg:max-w-[80%] w-full h-full object-contain block mx-auto" alt="login-image" />
-        </div>
+    </nav>
 
-        <div class="flex items-center md:p-8 p-6 bg-white md:rounded-tl-[55px] md:rounded-bl-[55px] h-full">
-            <form method="POST" class="max-w-lg w-full mx-auto">
-                {% csrf_token %}
-                <div class="mb-12">
-                    <h3 class="text-gray-800 text-4xl font-bold">Sign in</h3>
-                    <p class="text-gray-800 text-sm mt-4 ">Don't have an account <a href="/accounts/register/"
-                            class="text-blue-600 font-semibold hover:underline ml-1 whitespace-nowrap">Register here</a>
-                    </p>
-                </div>
+    <div class="font-[sans-serif]">
+        <div class="flex items-center justify-center min-h-[calc(100vh-64px)]">
+            <!-- Form Section with Background Image -->
+            <div class="w-full max-w-4xl mx-4 my-8">
+                <div class="relative overflow-hidden rounded-2xl shadow-2xl">
+                    <!-- Background Image -->
+                    <div class="absolute inset-0 bg-gray-900">
+                        <img src="{% static 'image/premium_photo.jpeg' %}" class="w-full h-full object-cover"
+                            alt="login-background">
+                    </div>
 
-                <div>
-                    <label class="text-gray-800 text-xs block mb-2">Email</label>
-                    <div class="relative flex items-center">
-                        <input name="email" type="email" required
-                            class="w-full text-sm border-b border-gray-300 focus:border-gray-800 pl-2 pr-8 py-3 outline-none"
-                            placeholder="Enter email" />
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="#bbb" stroke="#bbb"
-                            class="w-[18px] h-[18px] absolute right-2" viewBox="0 0 682.667 682.667">
-                            <defs>
-                                <clipPath id="a" clipPathUnits="userSpaceOnUse">
-                                    <path d="M0 512h512V0H0Z" data-original="#000000"></path>
-                                </clipPath>
-                            </defs>
-                            <g clip-path="url(#a)" transform="matrix(1.33 0 0 -1.33 0 682.667)">
-                                <path fill="none" stroke-miterlimit="10" stroke-width="40"
-                                    d="M452 444H60c-22.091 0-40-17.909-40-40v-39.446l212.127-157.782c14.17-10.54 33.576-10.54 47.746 0L492 364.554V404c0 22.091-17.909 40-40 40Z"
-                                    data-original="#000000"></path>
-                                <path
-                                    d="M472 274.9V107.999c0-11.027-8.972-20-20-20H60c-11.028 0-20 8.973-20 20V274.9L0 304.652V107.999c0-33.084 26.916-60 60-60h392c33.084 0 60 26.916 60 60v196.653Z"
-                                    data-original="#000000"></path>
-                            </g>
-                        </svg>
+                    <!-- Form Container -->
+                    <div class="relative flex flex-col md:flex-row">
+                        <!-- Left Side - Form Content -->
+                        <div class="w-full md:w-1/2 p-8 md:p-10">
+                            <form method="POST" class="w-full">
+                                {% csrf_token %}
+                                <div class="mb-8">
+                                    <h3 class="text-gray-900 text-3xl font-bold">Welcome back</h3>
+                                    <p class="text-gray-600 text-sm mt-2">Sign in to access the universe of
+                                        opportunities
+                                    </p>
+                                </div>
+
+                                <!-- Flash Messages -->
+                                <div id="flash-message" class="hidden mb-6 p-3 rounded-lg text-sm font-medium"></div>
+
+                                <!-- Email Field -->
+                                <div class="mb-6">
+                                    <label class="text-gray-700 text-sm font-medium block mb-2">Email Address</label>
+                                    <div class="relative">
+                                        <input name="email" type="email" required
+                                            class="w-full px-4 py-3 text-sm shadow-inner bg-white/70 border-0 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all peer"
+                                            placeholder="you@example.com" />
+                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                            class="w-5 h-5 absolute right-3 top-3.5 text-gray-400 peer-focus:text-blue-500 transition-colors"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round">
+                                            <path
+                                                d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z">
+                                            </path>
+                                            <polyline points="22,6 12,13 2,6"></polyline>
+                                        </svg>
+                                    </div>
+                                    <p class="text-xs text-red-500 mt-1 hidden" id="email-error">Please enter a valid
+                                        email address
+                                    </p>
+                                </div>
+
+                                <!-- Password Field -->
+                                <div class="mb-6">
+                                    <div class="flex items-center justify-between mb-2">
+                                        <label class="text-gray-700 text-sm font-medium block">Password</label>
+                                        <a href="#" class="text-blue-600 text-xs font-medium hover:underline">Forgot
+                                            password?</a>
+                                    </div>
+                                    <div class="relative">
+                                        <input name="password" type="password" required
+                                            class="w-full px-4 py-3 text-sm shadow-inner bg-white/70 border-0 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all peer"
+                                            placeholder="••••••••" id="password-input" />
+                                        <button type="button" id="toggle-password"
+                                            class="absolute right-3 top-3.5 text-gray-400 hover:text-gray-600 peer-focus:text-blue-500 transition-colors">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24"
+                                                fill="none" stroke="currentColor" stroke-width="2"
+                                                stroke-linecap="round" stroke-linejoin="round" id="eye-icon">
+                                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                                <circle cx="12" cy="12" r="3"></circle>
+                                            </svg>
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 hidden"
+                                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                                stroke-linecap="round" stroke-linejoin="round" id="eye-off-icon">
+                                                <path
+                                                    d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24">
+                                                </path>
+                                                <line x1="1" y1="1" x2="23" y2="23"></line>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                    <p class="text-xs text-red-500 mt-1 hidden" id="password-error">Password must be at
+                                        least 8
+                                        characters</p>
+                                </div>
+
+                                <!-- Remember Me -->
+                                <div class="flex items-center mb-6">
+                                    <input id="remember-me" name="remember-me" type="checkbox"
+                                        class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded shadow-inner bg-white/60 border-0" />
+                                    <label for="remember-me" class="text-gray-700 ml-2 block text-sm">
+                                        Remember me
+                                    </label>
+                                </div>
+
+                                <!-- Submit Button -->
+                                <button type="submit" id="submit-btn"
+                                    class="w-full py-3 px-6 text-sm font-semibold tracking-wider rounded-lg text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-300 shadow-md hover:shadow-lg flex items-center justify-center">
+                                    <svg id="spinner" class="hidden w-5 h-5 mr-2 text-white animate-spin"
+                                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
+                                            stroke-width="4">
+                                        </circle>
+                                        <path class="opacity-75" fill="currentColor"
+                                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                                        </path>
+                                    </svg>
+                                    <span id="btn-text">Sign in</span>
+                                </button>
+
+                                <!-- Divider -->
+                                <div class="my-6 flex items-center">
+                                    <div class="flex-grow border-t border-gray-200"></div>
+                                    <span class="mx-4 text-gray-500 text-sm">or continue with</span>
+                                    <div class="flex-grow border-t border-gray-200"></div>
+                                </div>
+
+                                <!-- Social Login -->
+                                <div class="grid grid-cols-2 gap-4">
+                                    <button type="button"
+                                        class="w-full flex items-center justify-center gap-3 py-2.5 px-6 text-sm font-medium text-gray-700 border bg-white/70 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-200 transition-colors hover:-translate-y-0.5">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"
+                                            viewBox="0 0 24 24" fill="currentColor">
+                                            <path
+                                                d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+                                                fill="#4285F4" />
+                                            <path
+                                                d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+                                                fill="#34A853" />
+                                            <path
+                                                d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
+                                                fill="#FBBC05" />
+                                            <path
+                                                d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+                                                fill="#EA4335" />
+                                        </svg>
+                                        Google
+                                    </button>
+                                    <button type="button"
+                                        class="w-full flex items-center justify-center gap-3 py-2.5 px-6 text-sm font-medium text-gray-700 border bg-white/70 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-200 transition-colors hover:-translate-y-0.5">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"
+                                            viewBox="0 0 24 24" fill="#1877F2">
+                                            <path
+                                                d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" />
+                                        </svg>
+                                        Facebook
+                                    </button>
+                                </div>
+
+                                <!-- Sign Up Link -->
+                                <div class="mt-8 text-center text-sm text-gray-600">
+                                    Don't have an account? <a href="/accounts/register/"
+                                        class="text-blue-600 font-medium hover:underline transition-colors">Sign up</a>
+                                </div>
+                            </form>
+                        </div>
+
+                        <!-- Right Side - Empty Space (Visible only on larger screens) -->
+                        <div class="hidden md:block md:w-1/2"></div>
                     </div>
                 </div>
-
-                <div class="mt-8">
-                    <label class="text-gray-800 text-xs block mb-2">Password</label>
-                    <div class="relative flex items-center">
-                        <input name="password" type="password" required
-                            class="w-full text-sm border-b border-gray-300 focus:border-gray-800 pl-2 pr-8 py-3 outline-none"
-                            placeholder="Enter password" />
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="#bbb" stroke="#bbb"
-                            class="w-[18px] h-[18px] absolute right-2 cursor-pointer" viewBox="0 0 128 128">
-                            <path
-                                d="M64 104C22.127 104 1.367 67.496.504 65.943a4 4 0 0 1 0-3.887C1.367 60.504 22.127 24 64 24s62.633 36.504 63.496 38.057a4 4 0 0 1 0 3.887C126.633 67.496 105.873 104 64 104zM8.707 63.994C13.465 71.205 32.146 96 64 96c31.955 0 50.553-24.775 55.293-31.994C114.535 56.795 95.854 32 64 32 32.045 32 13.447 56.775 8.707 63.994zM64 88c-13.234 0-24-10.766-24-24s10.766-24 24-24 24 10.766 24 24-10.766 24-24 24zm0-40c-8.822 0-16 7.178-16 16s7.178 16 16 16 16-7.178 16-16-7.178-16-16-16z"
-                                data-original="#000000"></path>
-                        </svg>
-                    </div>
-                </div>
-
-                <div class="flex flex-wrap items-center justify-between gap-4 mt-6">
-                    <div class="flex items-center">
-                        <input id="remember-me" name="remember-me" type="checkbox"
-                            class="h-4 w-4 shrink-0 text-blue-600 focus:ring-blue-500 border-gray-300 rounded" />
-                        <label for="remember-me" class="text-gray-800 ml-3 block text-sm">
-                            Remember me
-                        </label>
-                    </div>
-                    <div>
-                        <a href="jajvascript:void(0);" class="text-blue-600 font-semibold text-sm hover:underline">
-                            Forgot Password?
-                        </a>
-                    </div>
-                </div>
-
-                <div class="mt-12">
-                    <button type="submit"
-                        class="w-full py-3 px-6 text-sm font-semibold tracking-wider rounded-full text-white bg-gray-800 hover:bg-[#222] focus:outline-none">
-                        Sign in
-                    </button>
-                </div>
-
-                <div class="my-4 flex items-center gap-4">
-                    <hr class="w-full border-gray-300" />
-                    <p class="text-sm text-gray-800 text-center">or</p>
-                    <hr class="w-full border-gray-300" />
-                </div>
-
-                <button type="button"
-                    class="w-full flex items-center justify-center gap-4 py-3 px-6 text-sm font-semibold tracking-wider text-gray-800 border border-gray-300 rounded-full bg-gray-50 hover:bg-gray-100 focus:outline-none">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20px" class="inline" viewBox="0 0 512 512">
-                        <path fill="#fbbd00"
-                            d="M120 256c0-25.367 6.989-49.13 19.131-69.477v-86.308H52.823C18.568 144.703 0 198.922 0 256s18.568 111.297 52.823 155.785h86.308v-86.308C126.989 305.13 120 281.367 120 256z"
-                            data-original="#fbbd00" />
-                        <path fill="#0f9d58"
-                            d="m256 392-60 60 60 60c57.079 0 111.297-18.568 155.785-52.823v-86.216h-86.216C305.044 385.147 281.181 392 256 392z"
-                            data-original="#0f9d58" />
-                        <path fill="#31aa52"
-                            d="m139.131 325.477-86.308 86.308a260.085 260.085 0 0 0 22.158 25.235C123.333 485.371 187.62 512 256 512V392c-49.624 0-93.117-26.72-116.869-66.523z"
-                            data-original="#31aa52" />
-                        <path fill="#3c79e6"
-                            d="M512 256a258.24 258.24 0 0 0-4.192-46.377l-2.251-12.299H256v120h121.452a135.385 135.385 0 0 1-51.884 55.638l86.216 86.216a260.085 260.085 0 0 0 25.235-22.158C485.371 388.667 512 324.38 512 256z"
-                            data-original="#3c79e6" />
-                        <path fill="#cf2d48"
-                            d="m352.167 159.833 10.606 10.606 84.853-84.852-10.606-10.606C388.668 26.629 324.381 0 256 0l-60 60 60 60c36.326 0 70.479 14.146 96.167 39.833z"
-                            data-original="#cf2d48" />
-                        <path fill="#eb4132"
-                            d="M256 120V0C187.62 0 123.333 26.629 74.98 74.98a259.849 259.849 0 0 0-22.158 25.235l86.308 86.308C162.883 146.72 206.376 120 256 120z"
-                            data-original="#eb4132" />
-                    </svg>
-                    Continue with google
-                </button>
-            </form>
+            </div>
         </div>
     </div>
 </div>
 
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Password visibility toggle
+        const passwordInput = document.getElementById('password-input');
+        const togglePassword = document.getElementById('toggle-password');
+        const eyeIcon = document.getElementById('eye-icon');
+        const eyeOffIcon = document.getElementById('eye-off-icon');
+
+        togglePassword.addEventListener('click', function () {
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            eyeIcon.classList.toggle('hidden');
+            eyeOffIcon.classList.toggle('hidden');
+        });
+
+        // Form validation
+        const form = document.querySelector('form');
+        const emailInput = form.querySelector('input[name="email"]');
+        const passwordField = form.querySelector('input[name="password"]');
+        const emailError = document.getElementById('email-error');
+        const passwordError = document.getElementById('password-error');
+        const flashMessage = document.getElementById('flash-message');
+        const submitBtn = document.getElementById('submit-btn');
+        const btnText = document.getElementById('btn-text');
+        const spinner = document.getElementById('spinner');
+
+        form.addEventListener('submit', function (e) {
+            let isValid = true;
+
+            // Validate email
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInput.value)) {
+                emailError.classList.remove('hidden');
+                emailInput.classList.add('border-red-500');
+                isValid = false;
+            } else {
+                emailError.classList.add('hidden');
+                emailInput.classList.remove('border-red-500');
+            }
+
+            // Validate password
+            if (passwordInput.value.length < 1) {
+                passwordError.classList.remove('hidden');
+                passwordInput.classList.add('border-red-500');
+                isValid = false;
+            } else {
+                passwordError.classList.add('hidden');
+                passwordInput.classList.remove('border-red-500');
+            }
+
+            if (!isValid) {
+                e.preventDefault();
+                showFlashMessage('Please fix the errors in the form', 'error');
+            } else {
+                // Simulate form submission
+                submitBtn.disabled = true;
+                btnText.textContent = 'Signing in...';
+                spinner.classList.remove('hidden');
+
+                // In a real app, this would be an actual form submission
+                setTimeout(() => {
+                    // This is just for demo purposes
+                    // showFlashMessage('Login successful! Redirecting...', 'success');
+                    // window.location.href = '/dashboard';
+                }, 1500);
+            }
+        });
+
+        function showFlashMessage(message, type) {
+            flashMessage.textContent = message;
+            flashMessage.classList.remove('hidden');
+
+            if (type === 'error') {
+                flashMessage.classList.add('bg-red-100', 'text-red-700');
+                flashMessage.classList.remove('bg-green-100', 'text-green-700');
+            } else {
+                flashMessage.classList.add('bg-green-100', 'text-green-700');
+                flashMessage.classList.remove('bg-red-100', 'text-red-700');
+            }
+
+            setTimeout(() => {
+                flashMessage.classList.add('hidden');
+            }, 5000);
+        }
+
+        // Add input validation on blur
+        emailInput.addEventListener('blur', function () {
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.value)) {
+                emailError.classList.remove('hidden');
+                this.classList.add('border-red-500');
+            } else {
+                emailError.classList.add('hidden');
+                this.classList.remove('border-red-500');
+            }
+        });
+
+        passwordInput.addEventListener('blur', function () {
+            if (this.value.length < 8) {
+                passwordError.classList.remove('hidden');
+                this.classList.add('border-red-500');
+            } else {
+                passwordError.classList.add('hidden');
+                this.classList.remove('border-red-500');
+            }
+        });
+    });
+</script>
 
 {% endblock content %}

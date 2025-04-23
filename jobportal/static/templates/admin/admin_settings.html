@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% block nav %}
+{% include 'components/admin_nav.html' %}
+{% endblock nav %}
+{% block content %}
+
+
+
+<!-- Main Content Area -->
+<div class="flex-1 overflow-auto p-6">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Settings Navigation -->
+        <div class="lg:col-span-1">
+            <div class="bg-white p-4 rounded-lg shadow">
+                <h2 class="text-lg font-semibold text-gray-900 mb-4">Settings Menu</h2>
+                <nav class="space-y-1">
+                    <a href="/adminpanel/settings/"
+                        class="flex items-center px-3 py-2 {% if request.path == '/adminpanel/settings/' %} text-white bg-indigo-600 {% else %}  text-gray-600 hover:text-gray-900 hover:bg-gray-50 {% endif %} rounded-md group">
+                        <i class="fas fa-user-cog mr-3"></i>
+                        Account Settings
+                    </a>
+                    <a href="/adminpanel/settings/site-configuration/"
+                        class="flex items-center px-3 py-2 {% if request.path == '/adminpanel/settings/site-configuration/' %} text-white bg-indigo-600 {% else %} text-gray-600 hover:text-gray-900 hover:bg-gray-50 {% endif %} rounded-md group">
+                        <i class="fas fa-globe mr-3"></i>
+                        Site Configuration
+                    </a>
+                    <a href="#"
+                        class="flex items-center px-3 py-2 text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-md group">
+                        <i class="fas fa-envelope mr-3"></i>
+                        Email Settings
+                    </a>
+                    <a href="#"
+                        class="flex items-center px-3 py-2 text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-md group">
+                        <i class="fas fa-credit-card mr-3"></i>
+                        Payment Gateway
+                    </a>
+                    <a href="#"
+                        class="flex items-center px-3 py-2 text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-md group">
+                        <i class="fas fa-bell mr-3"></i>
+                        Notification Preferences
+                    </a>
+                    <a href="#"
+                        class="flex items-center px-3 py-2 text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-md group">
+                        <i class="fas fa-database mr-3"></i>
+                        Backup & Restore
+                    </a>
+                    <a href="#"
+                        class="flex items-center px-3 py-2 text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-md group">
+                        <i class="fas fa-plug mr-3"></i>
+                        API Integration
+                    </a>
+                </nav>
+            </div>
+        </div>
+        {% if request.path == '/adminpanel/settings/' %}
+        {% include 'admin/settings.html' %}
+        {% elif request.path == '/adminpanel/settings/site-configuration/' %}
+        {% include 'admin/site_configuration.html' %}
+        {% endif %}
+    </div>
+</div>
+
+
+
+
+
+{% endblock content %}
+
+
+{% block footer %}
+{% include 'components/admin_footer.html' %}
+{% endblock footer %}
