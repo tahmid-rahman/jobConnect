@@ -137,17 +137,17 @@ def company_settings(request):
                 user.email = new_email
                 updated = True
 
-        if new_phone and str(user.phone_no) != new_phone:
-            if User.objects.exclude(id=user.id).filter(phone_no=new_phone).exists():
-                messages.error(request, 'Phone number is already in use.')
-                return redirect('employer:company_settings')
-            else:
-                try:
-                    user.phone_no = int(new_phone)
-                    updated = True
-                except ValueError:
-                    messages.error(request, 'Phone number must be numeric.')
-                    return redirect('employer:company_settings')
+        # if new_phone and str(user.phone_no) != new_phone:
+        #     if User.objects.exclude(id=user.id).filter(phone_no=new_phone).exists():
+        #         messages.error(request, 'Phone number is already in use.')
+        #         return redirect('employer:company_settings')
+        #     else:
+        #         try:
+        #             user.phone_no = int(new_phone)
+        #             updated = True
+        #         except ValueError:
+        #             messages.error(request, 'Phone number must be numeric.')
+        #             return redirect('employer:company_settings')
 
         # --- Password Change ---
         if current_password or new_password or confirm_password:
