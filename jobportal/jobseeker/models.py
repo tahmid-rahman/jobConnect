@@ -9,6 +9,7 @@ class Profile(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name='profile')
     profile_id = models.AutoField(primary_key=True)
     profile_picture = models.ImageField(upload_to='profile_pics/', blank=True, null=True,default='profile_pics/profile_1.png')
+    google_picture_url = models.URLField(blank=True, null=True)
     first_name = models.CharField(max_length=50, blank=True, null=True)
     last_name = models.CharField(max_length=50, blank=True, null=True)
     job_title = models.CharField(max_length=100, blank=True, null=True)

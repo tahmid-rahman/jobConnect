@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Your Account is Under Review</title>
+    <style>
+        /* Base Styles */
+        body {
+            font-family: 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            line-height: 1.6;
+            color: #444;
+            background-color: #f7f9fc;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            background: #ffffff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #ff9a44, #ff6b6b);
+            color: white;
+            padding: 30px 25px;
+            text-align: center;
+            position: relative;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 28px;
+            font-weight: 600;
+        }
+
+        .header-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+            display: inline-block;
+        }
+
+        /* Content */
+        .content {
+            padding: 25px;
+        }
+
+        .message-text {
+            font-size: 16px;
+            margin-bottom: 20px;
+            color: #555;
+        }
+
+        .status-box {
+            background: #fff9f2;
+            border-left: 4px solid #ff9a44;
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 0 4px 4px 0;
+        }
+
+        .status-title {
+            font-weight: 600;
+            color: #ff6b6b;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .status-title svg {
+            margin-right: 10px;
+        }
+
+        .timeline {
+            margin: 25px 0 15px 15px;
+            padding-left: 20px;
+            border-left: 2px solid #eee;
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-bottom: 20px;
+        }
+
+        .timeline-item:last-child {
+            padding-bottom: 0;
+        }
+
+        .timeline-dot {
+            position: absolute;
+            left: -26px;
+            top: 0;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #ff9a44;
+        }
+
+        .timeline-dot.active {
+            background: #4caf50;
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
+        }
+
+        .timeline-content {
+            font-size: 14px;
+        }
+
+        .timeline-date {
+            font-size: 12px;
+            color: #888;
+            margin-top: 5px;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 20px;
+            background: #f1f3f9;
+            color: #6c757d;
+            font-size: 14px;
+        }
+
+        .support-contact {
+            margin: 20px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 6px;
+        }
+
+        .company-info {
+            margin-top: 15px;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        /* Responsive */
+        @media only screen and (max-width: 600px) {
+            .container {
+                margin: 0;
+                border-radius: 0;
+            }
+
+            .header {
+                padding: 25px 15px;
+            }
+
+            .header h1 {
+                font-size: 24px;
+            }
+
+            .content {
+                padding: 20px 15px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="header-icon">⏳</div>
+            <h1>Your Account is Under Review</h1>
+        </div>
+
+        <div class="content">
+            <p class="message-text">Dear {{ name }},</p>
+
+            <p class="message-text">Thank you for registering with {{ company_name }}! We've received your application
+                and it's currently being reviewed by our team.</p>
+
+            <div class="status-box">
+                <div class="status-title">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="12" y1="8" x2="12" y2="12"></line>
+                        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                    </svg>
+                    Application Status: Pending Approval
+                </div>
+                <p>Our team typically reviews applications within {{ review_timeframe }}. You'll receive another email
+                    once your account has been approved.</p>
+            </div>
+
+            <h3 style="margin-top: 30px; color: #333;">What to Expect Next:</h3>
+
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-dot active"></div>
+                    <div class="timeline-content">
+                        <strong>Application Submitted</strong>
+                        <p>We've received your registration details.</p>
+                        <div class="timeline-date">{{ submission_date }}</div>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <strong>Under Review</strong>
+                        <p>Our team is verifying your information.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <strong>Approval Decision</strong>
+                        <p>You'll receive an email notification with the outcome.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="support-contact">
+                <p><strong>Need help or have questions?</strong></p>
+                <p>Contact our support team at <a href="mailto:support@{{ company_domain }}"
+                        style="color: #ff6b6b; text-decoration: none;">support@{{ company_domain }}</a> or reply to this
+                    email.</p>
+            </div>
+
+            <p class="message-text" style="margin-top: 20px;">We appreciate your patience and look forward to welcoming
+                you to our platform!</p>
+        </div>
+
+        <div class="footer">
+            <p>The {{ company_name }} Team</p>
+
+            <div class="company-info">
+                © {{ current_year }} {{ company_name }}. All rights reserved.<br>
+                <a href="#" style="color: #ff6b6b; text-decoration: none;">Privacy Policy</a> |
+                <a href="#" style="color: #ff6b6b; text-decoration: none;">Terms of Service</a>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

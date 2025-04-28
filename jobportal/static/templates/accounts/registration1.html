@@ -1,12 +1,9 @@
 {% extends 'base.html' %}
+{% block nav %}
+{% include 'components/nav.html' %}
+{% endblock nav %}
 {% block content %}
-<nav class="bg-transparent fixed top-0 left-10 z-50">
-    <div class="flex justify-between items-center h-16">
-        <div class="flex items-center px-4">
-            <a href="/" class="text-2xl font-bold text-blue-600">JobConnect</a>
-        </div>
-    </div>
-</nav>
+<!-- accounts/register.html -->
 <div class="font-[sans-serif] bg-white md:h-screen">
     <div class="grid md:grid-cols-2 items-center gap-8 h-full">
         <div class="max-md:order-0 p-4 bg-gray-50 h-full">

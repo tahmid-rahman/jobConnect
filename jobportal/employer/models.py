@@ -6,8 +6,8 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 class Company(models.Model):
     company_id = models.AutoField(primary_key=True)
     user = models.ForeignKey('accounts.CustomUser', on_delete=models.CASCADE)
-    name = models.CharField(max_length=255)
-    location = models.CharField(max_length=255)
+    name = models.CharField(max_length=255, null=True, blank=True)
+    location = models.CharField(max_length=255, null=True, blank=True)
     # logo = models.ImageField(upload_to='company_logos/', null=True, blank=True)
     logo = models.URLField(null=True, blank=True)
     description = models.TextField()

@@ -1,5 +1,11 @@
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.db import models
+import random
+import string
+from django.utils import timezone
+from datetime import timedelta
+from django.contrib.auth import get_user_model
+# User = get_user_model()
 
 class CustomUserManager(BaseUserManager):
     def create_user(self, username, email, password=None, **extra_fields):
@@ -37,7 +43,8 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     ],default='pending')
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
-
+    google_id = models.CharField(max_length=255, blank=True, null=True)
+    email_verified = models.BooleanField(default=False)
     objects = CustomUserManager()
 
     USERNAME_FIELD = 'email'
@@ -45,3 +52,25 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.username
+
+
+class OTP(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    otp_code = models.CharField(max_length=6)
+    created_at = models.DateTimeField(auto_now_add=True)
+    is_verified = models.BooleanField(default=False)
+    
+    def __str__(self):
+        return f"{self.user.email} - {self.otp_code}"
+    
+    def is_expired(self):
+        return timezone.now() > self.created_at + timedelta(minutes=5)
+    
+    @classmethod
+    def generate_otp(cls, user):
+        # Delete any existing OTPs for this user
+        cls.objects.filter(user=user).delete()
+        
+        # Generate a 6-digit numeric OTP
+        otp_code = ''.join(random.choices(string.digits, k=6))
+        return cls.objects.create(user=user, otp_code=otp_code)
